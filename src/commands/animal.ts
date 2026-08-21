@@ -154,7 +154,6 @@ export default {
       return;
     }
 
-    // relacher
     if (!player.animal) {
       await interaction.reply({
         embeds: [errorEmbed("Tu n'as pas d'animal à relâcher.")],

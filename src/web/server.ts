@@ -3,6 +3,8 @@ import type { Client } from "discord.js";
 import { asBotClient } from "../types.js";
 import { config } from "../config.js";
 import { renderWiki } from "./wiki.js";
+import { renderHome } from "./home.js";
+import { LOGO_SVG } from "./logo.js";
 
 function send(
   response: ServerResponse,
@@ -14,40 +16,56 @@ function send(
   response.end(body);
 }
 
-/** Répond aux requêtes du serveur web intégré. */
 function handleRequest(
   request: IncomingMessage,
   response: ServerResponse,
   client: Client,
 ): void {
   const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
+  const commands = asBotClient(client).commands;
 
   if (url.pathname === "/health") {
-    send(response, 200, JSON.stringify({ status: "ok", bot: config.botName }), "application/json");
+    send(
+      response,
+      200,
+      JSON.stringify({ status: "ok", bot: config.botName }),
+      "application/json",
+    );
     return;
   }
 
   if (url.pathname === "/api/commands") {
-    const commands = asBotClient(client).commands;
     const payload = commands.map((command) => ({
       name: command.data.name,
       description: command.data.description,
     }));
-    send(response, 200, JSON.stringify({ count: payload.length, commands: payload }), "application/json");
+    send(
+      response,
+      200,
+      JSON.stringify({ count: payload.length, commands: payload }),
+      "application/json",
+    );
     return;
   }
 
-  if (url.pathname === "/" || url.pathname === "/wiki") {
-    // Régénérée à chaque requête : la page reste toujours à jour
-    const html = renderWiki(asBotClient(client).commands);
-    send(response, 200, html);
+  if (url.pathname === "/logo.svg") {
+    send(response, 200, LOGO_SVG, "image/svg+xml");
+    return;
+  }
+
+  if (url.pathname === "/wiki") {
+    send(response, 200, renderWiki(commands));
+    return;
+  }
+
+  if (url.pathname === "/") {
+    send(response, 200, renderHome(commands.size));
     return;
   }
 
   send(response, 404, "Not found", "text/plain; charset=UTF-8");
 }
 
-/** Démarre le serveur web (wiki + API). */
 export function startWebServer(client: Client): void {
   const server = createServer((request, response) =>
     handleRequest(request, response, client),
@@ -58,6 +76,6 @@ export function startWebServer(client: Client): void {
   });
 
   server.listen(config.webPort, () => {
-    console.log(`🌐 Wiki disponible sur ${config.publicUrl} (port ${config.webPort})`);
+    console.log(`🌐 Site et wiki disponibles sur ${config.publicUrl} (port ${config.webPort})`);
   });
 }

@@ -70,14 +70,14 @@ Everything runs from a single Node.js process with an **embedded SQLite database
 
 **Platform**
 
-- Built-in web server serving an auto-generated dark-themed wiki page
+- Built-in website: landing page, dark-themed wiki with one-click copyable commands, SVG logo
 - JSON endpoint listing all commands (`/api/commands`)
 - Clean embeds with configurable color, consistent footer and timestamps
 - Zero database setup — one local SQLite file
 
 ### Commands
 
-Twenty-nine commands, grouped by category:
+Thirty commands, grouped by category:
 
 | Command | Description |
 |---|---|
@@ -108,6 +108,7 @@ Twenty-nine commands, grouped by category:
 | `/slowmode <seconds>` | Set the current channel's slowmode |
 | `/warn ajouter\|liste\|retirer` | Manage a member's warnings |
 | `/admin …` | Role-based game administration (below) |
+| `/aide` | Open the site and the wiki (embed with logo and quick links) |
 | `/wiki` | Link to the built-in wiki page |
 | `/ping` | Show bot latency |
 
@@ -125,17 +126,19 @@ The flagship flow is **join-to-create**: the staff sets up a hub channel once wi
 
 House rules are handled automatically: joining the hub while already owning a room simply teleports you back to it, the panel is usable **only by the owner**, ownership transfers to the next member when the owner leaves, and the room is **deleted once empty**. Prefer manual creation? `/vocal creer [name]` still works anywhere.
 
-### Web wiki
+### Built-in website & wiki
 
-The bot embeds a small HTTP server that serves its own documentation:
+The bot starts its own HTTP server alongside Discord — no reverse proxy required to try it locally:
 
 | Route | Description |
 |---|---|
-| `/` or `/wiki` | Dark-themed wiki page, auto-generated from the live command list |
+| `/` | Landing page: project presentation, feature overview, author card, stats |
+| `/wiki` | Dark-themed wiki, auto-generated from the live command list — **click any command to copy it** |
+| `/logo.svg` | The project logo (SVG), also used in the `/aide` embed |
 | `/api/commands` | JSON list of every registered command |
 | `/health` | Simple availability probe |
 
-The page regenerates on each request, so it always reflects the running bot. Configure the port with `WEB_PORT` and expose it publicly with `PUBLIC_URL`.
+`/aide` posts an embed with the logo, a timestamp and direct buttons to the site, the wiki and GitHub. Pages regenerate on each request so they always reflect the running bot. Set the port with `WEB_PORT`; when hosting behind a reverse proxy, set `PUBLIC_URL` so links and embed images resolve publicly.
 
 ### Administration & moderation
 
@@ -219,8 +222,11 @@ src/
 │   ├── animals.ts         # Pet catalog & coin bonuses
 │   └── monsters.ts        # Adventure monsters
 ├── web/
-│   ├── server.ts          # Embedded HTTP server (wiki + API)
-│   └── wiki.ts            # Wiki page generator (dark theme)
+│   ├── server.ts          # Embedded HTTP server (home, wiki, logo, API)
+│   ├── home.ts            # Landing page generator
+│   ├── wiki.ts            # Wiki page generator (dark theme, copyable commands)
+│   ├── styles.ts          # Shared CSS and copy-to-clipboard script
+│   └── logo.ts            # SVG logo, GitHub/author URLs
 └── utils/                 # Embeds, formatting, randomness, moderation guards
 ```
 
@@ -286,14 +292,14 @@ Tout tourne dans un seul processus Node.js avec une **base SQLite embarquée** :
 
 **Plateforme**
 
-- Serveur web intégré qui sert une page wiki sombre auto-générée
+- Site web intégré : page d'accueil, wiki sombre aux commandes copiables en un clic, logo SVG
 - Endpoint JSON listant toutes les commandes (`/api/commands`)
 - Embeds soignés avec couleur configurable, footer et horodatage cohérents
 - Zéro configuration de base — un simple fichier SQLite local
 
 ### Commandes
 
-Vingt-neuf commandes, regroupées par catégorie :
+Trente commandes, regroupées par catégorie :
 
 | Commande | Description |
 |---|---|
@@ -324,6 +330,7 @@ Vingt-neuf commandes, regroupées par catégorie :
 | `/slowmode <secondes>` | Définit le mode lent du salon actuel |
 | `/warn ajouter\|liste\|retirer` | Gère les avertissements d'un membre |
 | `/admin …` | Administration du jeu par rôles (ci-dessous) |
+| `/aide` | Ouvre le site et le wiki (embed avec logo et liens rapides) |
 | `/wiki` | Lien vers la page wiki intégrée |
 | `/ping` | Affiche la latence du bot |
 
@@ -341,17 +348,19 @@ Le fonctionnement phare est le **« rejoindre pour créer »** : le staff place 
 
 Les règles sont automatiques : entrer dans le hub en possédant déjà un salon te téléporte simplement vers lui, le panneau n'est utilisable **que par le propriétaire**, la propriété est transférée au membre suivant si le propriétaire part, et le salon est **supprimé dès qu'il devient vide**. Tu préfères la création manuelle ? `/vocal creer [nom]` fonctionne toujours partout.
 
-### Wiki intégré
+### Site et wiki intégrés
 
-Le bot embarque un petit serveur HTTP qui sert sa propre documentation :
+Le bot démarre son propre serveur HTTP en même temps que Discord — aucun reverse proxy nécessaire pour tester en local :
 
 | Route | Description |
 |---|---|
-| `/` ou `/wiki` | Page wiki au thème sombre, générée depuis la liste des commandes en direct |
+| `/` | Page d'accueil : présentation du projet, points forts, carte de l'auteur, statistiques |
+| `/wiki` | Wiki au thème sombre, généré depuis la liste des commandes en direct — **clique une commande pour la copier** |
+| `/logo.svg` | Le logo du projet (SVG), également utilisé dans l'embed de `/aide` |
 | `/api/commands` | Liste JSON de toutes les commandes enregistrées |
 | `/health` | Sonde de disponibilité |
 
-La page se régénère à chaque requête : elle reflète toujours le bot en cours d'exécution. Configure le port avec `WEB_PORT` et expose-la publiquement avec `PUBLIC_URL`.
+`/aide` publie un embed avec le logo, l'horodatage et des boutons directs vers le site, le wiki et GitHub. Les pages se régénèrent à chaque requête : elles reflètent toujours le bot en cours d'exécution. Règle le port avec `WEB_PORT` ; derrière un reverse proxy, renseigne `PUBLIC_URL` pour que les liens et images d'embed restent accessibles publiquement.
 
 ### Administration & modération
 

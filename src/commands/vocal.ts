@@ -149,7 +149,6 @@ export default {
       return;
     }
 
-    // supprimer
     const row = findVoiceChannelByOwner(
       interaction.guildId,
       interaction.user.id,
@@ -175,8 +174,6 @@ export default {
     });
   },
 } satisfies Command;
-
-// ── Configuration du hub « rejoindre pour créer » ────────────────────────────
 
 async function handleHub(
   interaction: import("discord.js").ChatInputCommandInteraction,
@@ -232,7 +229,6 @@ async function handleHub(
     return;
   }
 
-  // retirer
   const hub = getVoiceHub(guildId);
   removeVoiceHubByGuild(guildId);
   await interaction.reply({

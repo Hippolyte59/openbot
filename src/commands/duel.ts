@@ -144,12 +144,11 @@ export default {
             components: [disabledRow],
           });
         } catch {
-          // Message supprimé entre-temps
+
         }
         return;
       }
 
-      // ── Résolution du duel ──────────────────────────────────────────────
       const freshOpponent = getPlayer(guildId, opponent.id);
       if (
         !removeBalance(guildId, challenger.id, stake) ||

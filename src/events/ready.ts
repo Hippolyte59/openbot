@@ -10,10 +10,9 @@ export function execute(client: Client): void {
   console.log(`🌐 Présent sur ${client.guilds.cache.size} serveur(s).`);
 
   client.user?.setActivity({
-    name: "/wiki • open source",
+    name: "/aide • open source",
     type: ActivityType.Watching,
   });
 
-  // Serveur web intégré : page wiki + API JSON
   startWebServer(client);
 }

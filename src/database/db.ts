@@ -62,7 +62,6 @@ db.exec(`
   );
 `);
 
-// Migrations légères : ajoute les colonnes récentes aux bases existantes
 const migrations = [
   "ALTER TABLE players ADD COLUMN hp INTEGER NOT NULL DEFAULT 100",
   "ALTER TABLE players ADD COLUMN last_regen INTEGER NOT NULL DEFAULT 0",
@@ -79,6 +78,6 @@ for (const sql of migrations) {
   try {
     db.exec(sql);
   } catch {
-    // Colonne déjà présente : rien à faire
+
   }
 }

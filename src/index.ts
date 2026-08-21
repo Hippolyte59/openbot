@@ -8,9 +8,6 @@ import * as messageCreateEvent from "./events/messageCreate.js";
 import * as voiceStateUpdateEvent from "./events/voiceStateUpdate.js";
 import * as channelDeleteEvent from "./events/channelDelete.js";
 
-// ── Création du client ───────────────────────────────────────────────────────
-// MessageContent est un intent "privilégié" : pense à l'activer sur
-// https://discord.com/developers/applications > Bot > Privileged Gateway Intents
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -20,11 +17,9 @@ const client = new Client({
   ],
 });
 
-// ── Chargement des commandes slash ───────────────────────────────────────────
 asBotClient(client).commands = new Collection();
 await loadCommands(asBotClient(client).commands);
 
-// ── Enregistrement des événements ────────────────────────────────────────────
 client.once(readyEvent.name, () => readyEvent.execute(client));
 client.on(
   interactionCreateEvent.name,
@@ -47,6 +42,5 @@ process.on("unhandledRejection", (error) => {
   console.error("❌ Erreur non gérée :", error);
 });
 
-// ── Connexion ────────────────────────────────────────────────────────────────
 console.log(`🚀 Démarrage de ${config.botName}…`);
 await client.login(config.token);

@@ -28,7 +28,6 @@ import { progressBar } from "../utils/format.js";
 import { randomInt } from "../utils/random.js";
 import { config } from "../config.js";
 
-/** Cooldown entre deux aventures. */
 export const ADVENTURE_COOLDOWN = 5 * 60 * 1000;
 
 const POTION_HEAL = 40;
@@ -52,7 +51,6 @@ interface ActiveFight {
   ended: boolean;
 }
 
-/** Combats en cours, indexés par utilisateur. */
 const activeFights = new Map<string, ActiveFight>();
 
 function weaponPower(userId: string, guildId: string): number {
@@ -158,7 +156,6 @@ async function finishFight(
     outro = `\n🏃 Tu prends la fuite et te mets à l'abri. Aucune récompense cette fois.`;
   }
 
-  // Dernière mise à jour des PV du joueur dans la base
   updatePlayer(fight.guildId, fight.userId, {
     last_adventure: Date.now(),
   });
@@ -250,7 +247,6 @@ export async function startAdventure(
 
   await interaction.deferReply();
 
-  // ── Création du combat ──────────────────────────────────────────────────
   const monster = pickMonster(player.level);
   const bonus = Math.floor(player.level / 3);
 
@@ -283,7 +279,6 @@ export async function startAdventure(
   });
   fight.messageId = message.id;
 
-  // ── Collecteur de boutons ───────────────────────────────────────────────
   const collector = message.createMessageComponentCollector({
     componentType: ComponentType.Button,
     time: 120_000,
@@ -341,7 +336,6 @@ export async function startAdventure(
       monsterAttack(fight);
     }
 
-    // Mise à jour persistante des PV après chaque tour
     setHp(guildId, userId, fight.playerHp);
 
     if (fight.playerHp <= 0) {
@@ -359,7 +353,7 @@ export async function startAdventure(
 
   collector.on("end", async (_collected, reason) => {
     if (reason === "ended" || fight.ended) return;
-    // Temps écoulé : le joueur s'échappe sans récompense
+
     fight.ended = true;
     setHp(guildId, userId, fight.playerHp);
     updatePlayer(guildId, userId, { last_adventure: Date.now() });

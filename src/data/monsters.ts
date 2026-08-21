@@ -1,14 +1,14 @@
 export interface Monster {
   name: string;
   emoji: string;
-  /** Niveau minimum du joueur pour rencontrer ce monstre */
+
   minLevel: number;
   baseHp: number;
-  /** Dégâts de base [min, max] */
+
   attack: [number, number];
-  /** Récompense en pièces [min, max] */
+
   reward: [number, number];
-  /** Récompense en XP [min, max] */
+
   xpReward: [number, number];
 }
 
@@ -87,14 +87,10 @@ export const MONSTERS: Monster[] = [
   },
 ];
 
-/**
- * Choisit un monstre adapté au niveau du joueur :
- * parmi les monstres accessibles, on privilégie les plus puissants.
- */
 export function pickMonster(playerLevel: number): Monster {
   const eligible = MONSTERS.filter((m) => m.minLevel <= playerLevel);
   const strongest = eligible[eligible.length - 1].minLevel;
-  // 60 % de chance de tomber sur le palier le plus élevé atteignable
+
   const pool =
     Math.random() < 0.6
       ? eligible.filter((m) => m.minLevel === strongest)

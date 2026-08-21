@@ -5,11 +5,6 @@ import {
 } from "discord.js";
 import { getAdminRoles } from "../database/guilds.js";
 
-/**
- * Accès autorisé si le membre est administrateur du serveur,
- * s'il possède un rôle enregistré via /admin roles ajouter,
- * ou s'il dispose d'une des permissions Discord fournies.
- */
 export function hasModAccess(
   interaction: ChatInputCommandInteraction,
   ...permissions: bigint[]
@@ -36,10 +31,6 @@ export interface ModerationTarget {
   user: import("discord.js").User;
 }
 
-/**
- * Vérifications de sécurité communes aux commandes de modération.
- * @returns un message d'erreur, ou null si tout est bon.
- */
 export function moderationError(
   interaction: ChatInputCommandInteraction,
   targetMember: GuildMember | null,

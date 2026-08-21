@@ -50,7 +50,6 @@ export default {
         embeds: [createEmbed("success").setDescription(description)],
       });
 
-      // Nettoyage automatique de la confirmation
       setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
     } catch {
       await interaction.editReply({

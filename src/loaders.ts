@@ -4,10 +4,6 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 import type { Collection } from "discord.js";
 import type { Command, CommandData } from "./types.js";
 
-/**
- * Charge dynamiquement toutes les commandes du dossier `commands/`.
- * Fonctionne en dev (`tsx`, fichiers .ts) comme en prod (`node dist`, fichiers .js).
- */
 export async function loadCommands(
   collection: Collection<string, Command>,
 ): Promise<CommandData[]> {

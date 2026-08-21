@@ -1,17 +1,10 @@
-/**
- * Déploie les commandes slash sur Discord.
- *
- * Usage : npm run deploy
- * - Si GUILD_ID est défini dans .env : déploie instantanément sur ce serveur (idéal en dev).
- * - Sinon : déploiement global (peut prendre jusqu'à ~1 h pour apparaître partout).
- */
+
 import { Collection, REST, Routes } from "discord.js";
 import { config } from "./config.js";
 import { loadCommands } from "./loaders.js";
 
 const rest = new REST().setToken(config.token);
 
-// Si CLIENT_ID n'est pas renseigné, on le récupère automatiquement via l'API
 let applicationId = config.clientId;
 if (!applicationId) {
   const app = (await rest.get(Routes.oauth2CurrentApplication())) as {

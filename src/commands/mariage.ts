@@ -114,7 +114,6 @@ export default {
       return;
     }
 
-    // proposer
     const target = interaction.options.getUser("membre", true);
     const targetMember = interaction.options.getMember("membre");
 

@@ -17,10 +17,10 @@ export default {
             [
               `Toute la documentation est disponible en ligne :`,
               "",
-              `**${config.publicUrl}**`,
+              `**${config.publicUrl}/wiki**`,
               "",
               "Tu y trouveras toutes les commandes classées par catégorie,",
-              "le guide d'installation et la personnalisation.",
+              "copiables en un clic, ainsi que le guide d'installation.",
             ].join("\n"),
           ),
       ],

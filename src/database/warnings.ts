@@ -34,7 +34,6 @@ export function getWarnings(guildId: string, userId: string): Warning[] {
   return selectWarnings.all(guildId, userId);
 }
 
-/** @returns true si l'avertissement existait et a été supprimé. */
 export function removeWarningById(
   guildId: string,
   userId: string,

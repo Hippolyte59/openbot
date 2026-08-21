@@ -9,7 +9,7 @@ import {
 export const name = Events.InteractionCreate;
 
 export async function execute(interaction: Interaction): Promise<void> {
-  // Boutons du panneau vocal (salons personnels)
+
   if (interaction.isButton()) {
     try {
       const consumed = await handleVocalButton(interaction);
@@ -17,11 +17,10 @@ export async function execute(interaction: Interaction): Promise<void> {
     } catch (error) {
       console.error("❌ Erreur dans un bouton du panneau vocal :", error);
     }
-    // Bouton non lié au panneau : géré par les collecteurs des commandes
+
     return;
   }
 
-  // Modales du panneau vocal (places / renommage)
   if (interaction.isModalSubmit()) {
     try {
       await handleVocalModal(interaction);
@@ -50,7 +49,6 @@ export async function execute(interaction: Interaction): Promise<void> {
     return;
   }
 
-  // Toutes les commandes sont liées aux données d'un serveur
   if (!interaction.inGuild()) {
     await interaction.reply({
       embeds: [errorEmbed("Cette commande doit être utilisée dans un serveur.")],

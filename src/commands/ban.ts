@@ -45,7 +45,7 @@ export default {
       `Banni par ${interaction.user.username}`;
 
     if (!targetMember) {
-      // Membre parti du serveur : bannissement direct par identifiant
+
       await interaction.guild!.members.ban(targetUser.id, {
         deleteMessageSeconds: 86_400,
         reason,
@@ -76,7 +76,7 @@ export default {
         `🔨 Tu as été banni de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
       );
     } catch {
-      // MP fermés : on continue
+
     }
 
     await interaction.guild!.members.ban(targetUser.id, {

@@ -130,7 +130,6 @@ export default {
       return;
     }
 
-    // retirer
     const numero = interaction.options.getInteger("numero", true);
     const warning = warnings[numero - 1];
     if (!warning) {

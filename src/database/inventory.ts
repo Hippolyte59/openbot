@@ -41,10 +41,6 @@ export function addItem(
   upsertItem.run(guildId, userId, itemId, quantity);
 }
 
-/**
- * Consomme un objet de l'inventaire.
- * @returns true si l'objet a bien été consommé.
- */
 export function consumeItem(
   guildId: string,
   userId: string,
@@ -55,7 +51,6 @@ export function consumeItem(
   return result.changes > 0;
 }
 
-/** Vide entièrement l'inventaire d'un joueur (commande admin). */
 export function clearInventory(guildId: string, userId: string): void {
   db.prepare(
     "DELETE FROM inventory WHERE guild_id = ? AND user_id = ?",

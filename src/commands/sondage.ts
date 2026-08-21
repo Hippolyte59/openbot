@@ -61,7 +61,6 @@ export default {
       return;
     }
 
-    // Sondage oui/non si aucun choix fourni
     if (choices.length === 0) {
       const embed = createEmbed()
         .setTitle("📊 Sondage")
@@ -78,7 +77,6 @@ export default {
       return;
     }
 
-    // Sondage à choix multiples
     const lines = choices.map(
       (choice, index) => `${POLL_EMOJIS[index]} ${choice}`,
     );

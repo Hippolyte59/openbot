@@ -20,15 +20,12 @@ export interface Player {
   wins: number;
 }
 
-/** PV maximum selon le niveau. */
 export function maxHp(level: number): number {
   return 90 + level * 10;
 }
 
-/** Régénération : 1 PV toutes les 30 secondes. */
 const REGEN_INTERVAL = 30_000;
 
-/** XP totale nécessaire pour passer du niveau `level` au suivant. */
 export function xpNeededFor(level: number): number {
   return 100 * level * level;
 }
@@ -48,7 +45,6 @@ export function updatePlayer(
   const columns = Object.keys(fields);
   if (columns.length === 0) return;
 
-  // Garantit que la ligne existe (UPDATE sans effet sinon)
   insertPlayer.run(guildId, userId, Date.now());
 
   const setSql = columns.map((c) => `${c} = ?`).join(", ");
@@ -60,10 +56,6 @@ export function updatePlayer(
   ).run(...values, guildId, userId);
 }
 
-/**
- * Récupère le joueur (le crée si besoin) et applique la régénération
- * passive des PV depuis la dernière visite.
- */
 export function getPlayer(guildId: string, userId: string): Player {
   insertPlayer.run(guildId, userId, Date.now());
   const player = selectPlayer.get(guildId, userId) as Player;
@@ -85,7 +77,6 @@ export function getPlayer(guildId: string, userId: string): Player {
   return player;
 }
 
-/** Modifie les PV et réinitialise le compteur de régénération. */
 export function setHp(
   guildId: string,
   userId: string,
@@ -105,10 +96,6 @@ export function addBalance(
   ).run(amount, guildId, userId);
 }
 
-/**
- * Retire de l'argent si le joueur en a assez.
- * @returns true si le retrait a réussi.
- */
 export function removeBalance(
   guildId: string,
   userId: string,
@@ -129,7 +116,6 @@ export interface XpResult {
   levelsGained: number;
 }
 
-/** Ajoute de l'XP et gère les montées de niveau. */
 export function addXp(
   guildId: string,
   userId: string,
@@ -170,14 +156,12 @@ export function getLeaderboard(
     .all(guildId, limit);
 }
 
-/** Supprime complètement le profil d'un joueur (commande admin). */
 export function resetPlayer(guildId: string, userId: string): void {
   db.prepare(
     "DELETE FROM players WHERE guild_id = ? AND user_id = ?",
   ).run(guildId, userId);
 }
 
-/** Compte une victoire d'aventure supplémentaire. */
 export function incrementWins(guildId: string, userId: string): void {
   getPlayer(guildId, userId);
   db.prepare(

@@ -10,7 +10,6 @@ const colors: Record<EmbedColor, number> = {
   warning: 0xfee75c,
 };
 
-/** Embed de base personnalisé : couleur du serveur, footer et timestamp automatiques. */
 export function createEmbed(color: EmbedColor = "primary"): EmbedBuilder {
   return new EmbedBuilder()
     .setColor(colors[color])
@@ -18,12 +17,10 @@ export function createEmbed(color: EmbedColor = "primary"): EmbedBuilder {
     .setTimestamp();
 }
 
-/** Embed d'erreur rouge avec ❌. */
 export function errorEmbed(description: string): EmbedBuilder {
   return createEmbed("error").setDescription(`❌ ${description}`);
 }
 
-/** Embed de succès vert avec ✅. */
 export function successEmbed(description: string): EmbedBuilder {
   return createEmbed("success").setDescription(`✅ ${description}`);
 }

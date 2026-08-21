@@ -13,7 +13,6 @@ function equipmentLabel(itemId: string | null): string {
   return item ? `${item.emoji} ${item.name}` : "_Aucun_";
 }
 
-/** Badges calculés dynamiquement à partir du profil (comme DraftBot). */
 function badgesFor(player: {
   level: number;
   balance: number;

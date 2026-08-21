@@ -7,12 +7,12 @@ export interface ShopItem {
   price: number;
   description: string;
   kind: ItemKind;
-  /** Bonus de dégâts (arme) ou de défense (armure) */
+
   power?: number;
 }
 
 export const SHOP_ITEMS: ShopItem[] = [
-  // ── Consommables ─────────────────────────────────────────────────────────
+
   {
     id: "boite-mystere",
     name: "Boîte mystère",
@@ -47,7 +47,6 @@ export const SHOP_ITEMS: ShopItem[] = [
     kind: "consumable",
   },
 
-  // ── Équipement (équipé automatiquement à l'achat) ────────────────────────
   {
     id: "epee-bois",
     name: "Épée en bois",

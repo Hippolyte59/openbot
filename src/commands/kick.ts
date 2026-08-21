@@ -68,7 +68,7 @@ export default {
         `👢 Tu as été expulsé de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
       );
     } catch {
-      // MP fermés : on continue
+
     }
 
     await targetMember!.kick(reason);

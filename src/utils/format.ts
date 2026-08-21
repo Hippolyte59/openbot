@@ -1,11 +1,9 @@
 const numberFormatter = new Intl.NumberFormat("fr-FR");
 
-/** Formate un nombre à la française : 1234567 -> 1 234 567 */
 export function formatNumber(value: number): string {
   return numberFormatter.format(value);
 }
 
-/** Barre de progression visuelle. */
 export function progressBar(
   current: number,
   max: number,
@@ -17,7 +15,6 @@ export function progressBar(
   return "▰".repeat(filled) + "▱".repeat(empty);
 }
 
-/** Formate une durée en millisecondes : "2 h 05 min", "3 min", "45 s". */
 export function formatDuration(ms: number): string {
   const totalSeconds = Math.ceil(ms / 1000);
   const hours = Math.floor(totalSeconds / 3600);

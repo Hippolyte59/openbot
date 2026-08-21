@@ -6,7 +6,6 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatDuration, formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
-/** Fenêtre max pour conserver sa série : 48 h */
 const STREAK_WINDOW = 2 * config.cooldowns.daily;
 
 export default {
@@ -32,7 +31,6 @@ export default {
       return;
     }
 
-    // Série conservée si on revient sous 48 h, sinon elle retombe à 1
     const streak =
       player.last_daily > 0 && elapsed <= STREAK_WINDOW
         ? player.daily_streak + 1

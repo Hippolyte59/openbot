@@ -23,10 +23,6 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
-/**
- * Accès autorisé si le membre est administrateur du serveur
- * ou s'il possède un rôle enregistré via /admin roles ajouter.
- */
 function hasAdminAccess(
   interaction: ChatInputCommandInteraction,
 ): boolean {
@@ -164,7 +160,6 @@ export default {
   async execute(interaction) {
     if (!interaction.inGuild()) return;
 
-    // ── Vérification des permissions ──────────────────────────────────────
     if (!hasAdminAccess(interaction)) {
       await interaction.reply({
         embeds: [
@@ -185,7 +180,6 @@ export default {
     const group = interaction.options.getSubcommandGroup(false);
     const sub = interaction.options.getSubcommand(true);
 
-    // ── /admin roles ──────────────────────────────────────────────────────
     if (group === "roles") {
       if (sub === "ajouter" || sub === "retirer") {
         const role = interaction.options.getRole("role", true);
@@ -213,7 +207,6 @@ export default {
         return;
       }
 
-      // liste
       const roles = getAdminRoles(guildId);
       const lines = roles.length
         ? roles.map((id) => `- <@&${id}>`).join("\n")
@@ -230,7 +223,6 @@ export default {
       return;
     }
 
-    // ── /admin argent ─────────────────────────────────────────────────────
     if (group === "argent") {
       const target = interaction.options.getUser("membre", true);
       const amount = interaction.options.getInteger("montant", true);
@@ -264,7 +256,6 @@ export default {
       return;
     }
 
-    // ── /admin reinitialiser ──────────────────────────────────────────────
     if (sub === "reinitialiser") {
       const target = interaction.options.getUser("membre", true);
       if (target.bot) {
@@ -288,7 +279,6 @@ export default {
       return;
     }
 
-    // ── /admin annoncer ───────────────────────────────────────────────────
     if (sub === "annoncer") {
       const titre = interaction.options.getString("titre", true);
       const message = interaction.options.getString("message", true);

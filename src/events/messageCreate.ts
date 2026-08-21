@@ -11,7 +11,6 @@ import { randomInt } from "../utils/random.js";
 
 export const name = Events.MessageCreate;
 
-/** Cooldown XP par utilisateur : clé "guildId:userId" -> timestamp */
 const xpCooldowns = new Map<string, number>();
 
 function pruneCooldowns(now: number): void {
@@ -41,7 +40,6 @@ export async function execute(message: Message): Promise<void> {
   if (!result.leveledUp) return;
   if (!("send" in message.channel)) return;
 
-  // Bonus de pièces à chaque montée de niveau
   const bonus = result.level * 10 * result.levelsGained;
   addBalance(message.guild.id, message.author.id, bonus);
 
@@ -59,6 +57,6 @@ export async function execute(message: Message): Promise<void> {
 
     await message.channel.send({ embeds: [embed] });
   } catch {
-    // Permissions manquantes pour envoyer dans ce salon : on ignore
+
   }
 }

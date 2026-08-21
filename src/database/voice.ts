@@ -69,8 +69,6 @@ export function transferVoiceOwnership(
   updateOwner.run(newOwnerId, channelId);
 }
 
-// ── Salons « rejoindre pour créer » (hubs) ───────────────────────────────────
-
 export interface VoiceHubRow {
   guild_id: string;
   channel_id: string;

@@ -30,7 +30,6 @@ import {
   successEmbed,
 } from "../utils/embeds.js";
 
-/** Délai avant suppression d'un salon vocal devenu vide. */
 const EMPTY_GRACE_MS = 10_000;
 
 type AccessState = "open" | "locked" | "hidden";
@@ -40,8 +39,6 @@ const ACCESS_LABELS: Record<AccessState, string> = {
   locked: "Verrouillé",
   hidden: "Caché",
 };
-
-// ── Construction du panneau ──────────────────────────────────────────────────
 
 export function accessOf(channel: VoiceBasedChannel): AccessState {
   const everyone = channel.guild.roles.everyone;
@@ -117,11 +114,10 @@ async function postPanel(
     });
     setVoicePanelMessage(channel.id, message.id);
   } catch {
-    // Salon sans chat texte actif : le panneau est simplement absent
+
   }
 }
 
-/** Rafraîchit le panneau affiché dans un salon vocal géré. */
 export async function refreshPanel(
   guild: import("discord.js").Guild,
   channelId: string,
@@ -147,9 +143,6 @@ export async function refreshPanel(
     .catch(() => {});
 }
 
-// ── Création ─────────────────────────────────────────────────────────────────
-
-/** Crée le salon personnel d'un membre et y publie son panneau. */
 async function createVoiceRoom(
   member: GuildMember,
   name: string | null,
@@ -209,7 +202,6 @@ export async function createPersonalChannel(
     member.voice.channel?.parentId ?? undefined,
   );
 
-  // Déplace le membre s'il est déjà en vocal
   let moved = false;
   if (member.voice.channel) {
     moved = await member.voice.setChannel(channel).then(() => true, () => false);
@@ -230,8 +222,6 @@ export async function createPersonalChannel(
     ephemeral: true,
   });
 }
-
-// ── Interactions du panneau ──────────────────────────────────────────────────
 
 export async function handleVocalButton(
   interaction: ButtonInteraction,
@@ -387,8 +377,6 @@ export async function handleVocalModal(
   return true;
 }
 
-// ── Cycle de vie (départ, transfert, suppression auto) ───────────────────────
-
 export async function handleVoiceStateUpdate(
   oldState: VoiceState,
   newState: VoiceState,
@@ -397,9 +385,6 @@ export async function handleVoiceStateUpdate(
   processDeparture(oldState);
 }
 
-// ── « Rejoindre pour créer » : entrer dans le hub ouvre un salon perso ──────
-
-/** Anti-doublon : événements vocaux multiples pour un même membre. */
 const pendingCreations = new Set<string>();
 
 async function processArrival(state: VoiceState): Promise<void> {
@@ -410,7 +395,6 @@ async function processArrival(state: VoiceState): Promise<void> {
   const hubId = getVoiceHub(guild.id)?.channel_id;
   if (!hubId || state.channelId !== hubId) return;
 
-  // Le membre possède déjà un salon : on le redirige simplement dessus
   const existing = findVoiceChannelByOwner(guild.id, member.id);
   if (existing) {
     const owned = await guild.channels.fetch(existing.channel_id).catch(() => null);
@@ -425,7 +409,7 @@ async function processArrival(state: VoiceState): Promise<void> {
   pendingCreations.add(key);
 
   try {
-    // Le salon hérite de la catégorie du hub (« rejoindre pour créer »)
+
     const hub = state.channel;
     const parentId = hub?.parentId ?? undefined;
 
@@ -443,8 +427,6 @@ async function processArrival(state: VoiceState): Promise<void> {
   }
 }
 
-// ── Départ : suppression auto si vide / transfert de propriété ───────────────
-
 function processDeparture(oldState: VoiceState): void {
   const leftChannel = oldState.channel;
   if (!leftChannel) return;
@@ -452,7 +434,6 @@ function processDeparture(oldState: VoiceState): void {
   const row = getVoiceChannel(leftChannel.id);
   if (!row) return;
 
-  // Différé : laisse le temps aux autres de bouger avant les décisions
   setTimeout(async () => {
     const channel = await leftChannel.guild.channels
       .fetch(leftChannel.id)
@@ -471,7 +452,6 @@ function processDeparture(oldState: VoiceState): void {
       return;
     }
 
-    // Transfert de propriété si le propriétaire part
     if (oldState.id === row.owner_id && oldState.member) {
       const nextOwner = humans.first();
       if (!nextOwner || nextOwner.id === row.owner_id) return;

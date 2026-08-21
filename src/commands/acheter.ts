@@ -78,7 +78,6 @@ export default {
 
     removeBalance(interaction.guildId, interaction.user.id, total);
 
-    // L'équipement remplace l'objet équipé au lieu d'aller dans l'inventaire
     if (item.kind === "weapon" || item.kind === "armor") {
       updatePlayer(
         interaction.guildId,
