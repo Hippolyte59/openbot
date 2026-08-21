@@ -20,7 +20,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("proposer")
-        .setDescription("Demande un membre en mariage")
+        .setDescription("💌 Demande un membre en mariage")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -31,13 +31,13 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("statut")
-        .setDescription("Affiche ta situation amoureuse"),
+        .setDescription("💕 Affiche ta situation amoureuse"),
     )
     .addSubcommand((sub) =>
       sub
         .setName("divorcer")
         .setDescription(
-          `Divorce (frais : ${DIVORCE_COST} pièces)`,
+          `💔 Divorce (frais : ${DIVORCE_COST} pièces)`,
         ),
     ),
 

@@ -14,12 +14,12 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("voir")
-        .setDescription("Affiche ton animal de compagnie"),
+        .setDescription("👀 Affiche ton animal de compagnie"),
     )
     .addSubcommand((sub) =>
       sub
         .setName("acheter")
-        .setDescription("Achète un animal de compagnie")
+        .setDescription("🛒 Achète un animal de compagnie")
         .addStringOption((option) =>
           option
             .setName("type")
@@ -36,7 +36,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("nommer")
-        .setDescription("Renomme ton animal de compagnie")
+        .setDescription("✏️ Renomme ton animal de compagnie")
         .addStringOption((option) =>
           option
             .setName("nom")
@@ -50,7 +50,7 @@ export default {
       sub
         .setName("relacher")
         .setDescription(
-          "Relâche ton animal (remboursement de 50 % de son prix)",
+          "🕊️ Relâche ton animal (remboursement de 50 % de son prix)",
         ),
     ),
 

@@ -38,16 +38,16 @@ export default {
   data: new SlashCommandBuilder()
     .setName("admin")
     .setDescription(
-      "Commandes d'administration (admins et rôles autorisés uniquement)",
+      "🛠️ Commandes d'administration (admins et rôles autorisés uniquement)",
     )
     .addSubcommandGroup((group) =>
       group
         .setName("roles")
-        .setDescription("Gère les rôles autorisés à utiliser /admin")
+        .setDescription("🔐 Gère les rôles autorisés à utiliser /admin")
         .addSubcommand((sub) =>
           sub
             .setName("ajouter")
-            .setDescription("Autorise un rôle à utiliser les commandes admin")
+            .setDescription("✅ Autorise un rôle à utiliser les commandes admin")
             .addRoleOption((option) =>
               option
                 .setName("role")
@@ -58,7 +58,7 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("retirer")
-            .setDescription("Retire l'accès admin d'un rôle")
+            .setDescription("⛔ Retire l'accès admin d'un rôle")
             .addRoleOption((option) =>
               option
                 .setName("role")
@@ -69,17 +69,17 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("liste")
-            .setDescription("Liste les rôles ayant accès aux commandes admin"),
+            .setDescription("📋 Liste les rôles ayant accès aux commandes admin"),
         ),
     )
     .addSubcommandGroup((group) =>
       group
         .setName("argent")
-        .setDescription("Gère l'économie du serveur")
+        .setDescription("💰 Gère l'économie du serveur")
         .addSubcommand((sub) =>
           sub
             .setName("donner")
-            .setDescription("Crée et donne des pièces à un membre")
+            .setDescription("➕ Crée et donne des pièces à un membre")
             .addUserOption((option) =>
               option
                 .setName("membre")
@@ -97,7 +97,7 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("retirer")
-            .setDescription("Retire des pièces à un membre")
+            .setDescription("➖ Retire des pièces à un membre")
             .addUserOption((option) =>
               option
                 .setName("membre")
@@ -116,7 +116,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("reinitialiser")
-        .setDescription("Remet à zéro le profil complet d'un membre")
+        .setDescription("♻️ Remet à zéro le profil complet d'un membre")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -127,7 +127,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("annoncer")
-        .setDescription("Publie une annonce officielle dans un salon")
+        .setDescription("📢 Publie une annonce officielle dans un salon")
         .addStringOption((option) =>
           option
             .setName("titre")

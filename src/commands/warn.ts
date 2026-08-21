@@ -18,7 +18,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("ajouter")
-        .setDescription("Avertit un membre")
+        .setDescription("⚠️ Avertit un membre")
         .addUserOption((option) =>
           option.setName("membre").setDescription("Le membre à avertir").setRequired(true),
         )
@@ -33,7 +33,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("liste")
-        .setDescription("Affiche les avertissements d'un membre")
+        .setDescription("📋 Affiche les avertissements d'un membre")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -44,7 +44,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("retirer")
-        .setDescription("Retire un avertissement par son numéro")
+        .setDescription("🗑️ Retire un avertissement par son numéro")
         .addUserOption((option) =>
           option
             .setName("membre")
