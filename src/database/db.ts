@@ -55,6 +55,11 @@ db.exec(`
     owner_id    TEXT NOT NULL,
     message_id  TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS voice_hubs (
+    guild_id    TEXT PRIMARY KEY,
+    channel_id  TEXT NOT NULL
+  );
 `);
 
 // Migrations légères : ajoute les colonnes récentes aux bases existantes

@@ -68,3 +68,42 @@ export function transferVoiceOwnership(
 ): void {
   updateOwner.run(newOwnerId, channelId);
 }
+
+// ── Salons « rejoindre pour créer » (hubs) ───────────────────────────────────
+
+export interface VoiceHubRow {
+  guild_id: string;
+  channel_id: string;
+}
+
+const upsertHub = db.prepare<[string, string]>(
+  "INSERT OR REPLACE INTO voice_hubs (guild_id, channel_id) VALUES (?, ?)",
+);
+
+const selectHub = db.prepare<[string], VoiceHubRow>(
+  "SELECT * FROM voice_hubs WHERE guild_id = ?",
+);
+
+const deleteHubByGuild = db.prepare<[string]>(
+  "DELETE FROM voice_hubs WHERE guild_id = ?",
+);
+
+const deleteHubByChannel = db.prepare<[string]>(
+  "DELETE FROM voice_hubs WHERE channel_id = ?",
+);
+
+export function setVoiceHub(guildId: string, channelId: string): void {
+  upsertHub.run(guildId, channelId);
+}
+
+export function getVoiceHub(guildId: string): VoiceHubRow | undefined {
+  return selectHub.get(guildId);
+}
+
+export function removeVoiceHubByGuild(guildId: string): void {
+  deleteHubByGuild.run(guildId);
+}
+
+export function removeVoiceHubByChannel(channelId: string): void {
+  deleteHubByChannel.run(channelId);
+}

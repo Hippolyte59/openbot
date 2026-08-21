@@ -19,6 +19,7 @@ import {
   deleteVoiceChannel,
   findVoiceChannelByOwner,
   getVoiceChannel,
+  getVoiceHub,
   saveVoiceChannel,
   setVoicePanelMessage,
   transferVoiceOwnership,
@@ -148,27 +149,13 @@ export async function refreshPanel(
 
 // ── Création ─────────────────────────────────────────────────────────────────
 
-export async function createPersonalChannel(
-  interaction: ChatInputCommandInteraction,
+/** Crée le salon personnel d'un membre et y publie son panneau. */
+async function createVoiceRoom(
+  member: GuildMember,
   name: string | null,
-): Promise<void> {
-  const guild = interaction.guild!;
-  const member = interaction.member as GuildMember;
-
-  if (findVoiceChannelByOwner(guild.id, member.id)) {
-    await interaction.reply({
-      embeds: [
-        errorEmbed(
-          "Tu possèdes déjà un salon vocal. Utilise `/vocal info` pour le retrouver ou supprime-le d'abord.",
-        ),
-      ],
-      ephemeral: true,
-    });
-    return;
-  }
-
-  // Hérite de la catégorie du vocal actuel du membre, sinon aucun parent
-  const parentId = member.voice.channel?.parentId ?? undefined;
+  parentId?: string | null,
+): Promise<VoiceBasedChannel> {
+  const guild = member.guild;
 
   const channel = await guild.channels.create({
     name: (name ?? `Vocal de ${member.displayName}`).slice(0, 32),
@@ -194,6 +181,33 @@ export async function createPersonalChannel(
 
   saveVoiceChannel(channel.id, guild.id, member.id, null);
   await postPanel(channel, member.id);
+
+  return channel;
+}
+
+export async function createPersonalChannel(
+  interaction: ChatInputCommandInteraction,
+  name: string | null,
+): Promise<void> {
+  const member = interaction.member as GuildMember;
+
+  if (findVoiceChannelByOwner(interaction.guildId!, member.id)) {
+    await interaction.reply({
+      embeds: [
+        errorEmbed(
+          "Tu possèdes déjà un salon vocal. Utilise `/vocal info` pour le retrouver ou supprime-le d'abord.",
+        ),
+      ],
+      ephemeral: true,
+    });
+    return;
+  }
+
+  const channel = await createVoiceRoom(
+    member,
+    name,
+    member.voice.channel?.parentId ?? undefined,
+  );
 
   // Déplace le membre s'il est déjà en vocal
   let moved = false;
@@ -221,10 +235,12 @@ export async function createPersonalChannel(
 
 export async function handleVocalButton(
   interaction: ButtonInteraction,
-): Promise<void> {
-  if (!interaction.inGuild()) return;
+): Promise<boolean> {
+  if (!interaction.inGuild() || !interaction.channelId) return false;
+  if (!interaction.customId.startsWith("vc-")) return false;
+
   const row = getVoiceChannel(interaction.channelId);
-  if (!row) return;
+  if (!row) return false;
 
   const action = interaction.customId;
 
@@ -233,7 +249,7 @@ export async function handleVocalButton(
       embeds: [errorEmbed("Seul le propriétaire du salon peut utiliser ce panneau.")],
       ephemeral: true,
     });
-    return;
+    return true;
   }
 
   const channel = interaction.channel;
@@ -243,7 +259,7 @@ export async function handleVocalButton(
       embeds: [errorEmbed("Ce panneau n'est plus lié à un salon valide.")],
       ephemeral: true,
     });
-    return;
+    return true;
   }
 
   if (action === "vc-limit") {
@@ -262,7 +278,7 @@ export async function handleVocalButton(
         ),
       );
     await interaction.showModal(modal);
-    return;
+    return true;
   }
 
   if (action === "vc-name") {
@@ -281,7 +297,7 @@ export async function handleVocalButton(
         ),
       );
     await interaction.showModal(modal);
-    return;
+    return true;
   }
 
   const everyone = interaction.guild!.roles.everyone.id;
@@ -295,7 +311,7 @@ export async function handleVocalButton(
       embeds: [panelEmbed(channel, row.owner_id)],
       components: [panelRow()],
     });
-    return;
+    return true;
   }
 
   if (action === "vc-hide") {
@@ -308,14 +324,17 @@ export async function handleVocalButton(
       embeds: [panelEmbed(channel, row.owner_id)],
       components: [panelRow()],
     });
-    return;
+    return true;
   }
 
   if (action === "vc-close") {
     await interaction.deferUpdate();
     deleteVoiceChannel(channel.id);
     await channel.delete("Salon vocal fermé par son propriétaire");
+    return true;
   }
+
+  return true;
 }
 
 export async function handleVocalModal(
@@ -372,7 +391,61 @@ export async function handleVocalModal(
 
 export async function handleVoiceStateUpdate(
   oldState: VoiceState,
+  newState: VoiceState,
 ): Promise<void> {
+  await processArrival(newState);
+  processDeparture(oldState);
+}
+
+// ── « Rejoindre pour créer » : entrer dans le hub ouvre un salon perso ──────
+
+/** Anti-doublon : événements vocaux multiples pour un même membre. */
+const pendingCreations = new Set<string>();
+
+async function processArrival(state: VoiceState): Promise<void> {
+  const guild = state.guild;
+  const member = state.member;
+  if (!guild || !member || member.user.bot || !state.channelId) return;
+
+  const hubId = getVoiceHub(guild.id)?.channel_id;
+  if (!hubId || state.channelId !== hubId) return;
+
+  // Le membre possède déjà un salon : on le redirige simplement dessus
+  const existing = findVoiceChannelByOwner(guild.id, member.id);
+  if (existing) {
+    const owned = await guild.channels.fetch(existing.channel_id).catch(() => null);
+    if (owned?.isVoiceBased()) {
+      await member.voice.setChannel(owned).catch(() => {});
+    }
+    return;
+  }
+
+  const key = `${guild.id}:${member.id}`;
+  if (pendingCreations.has(key)) return;
+  pendingCreations.add(key);
+
+  try {
+    // Le salon hérite de la catégorie du hub (« rejoindre pour créer »)
+    const hub = state.channel;
+    const parentId = hub?.parentId ?? undefined;
+
+    const channel = await createVoiceRoom(member, null, parentId);
+    await member.voice.setChannel(channel).catch(() => {});
+    await channel.send({
+      embeds: [
+        successEmbed(
+          `Bienvenue ${member} ! Ce salon t'appartient — utilise le panneau ci-dessus pour le gérer.`,
+        ),
+      ],
+    });
+  } finally {
+    setTimeout(() => pendingCreations.delete(key), 5_000);
+  }
+}
+
+// ── Départ : suppression auto si vide / transfert de propriété ───────────────
+
+function processDeparture(oldState: VoiceState): void {
   const leftChannel = oldState.channel;
   if (!leftChannel) return;
 

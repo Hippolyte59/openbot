@@ -1,11 +1,26 @@
 import { Events, type Interaction } from "discord.js";
 import { asBotClient } from "../types.js";
 import { errorEmbed } from "../utils/embeds.js";
-import { handleVocalModal } from "../systems/vocal.js";
+import {
+  handleVocalButton,
+  handleVocalModal,
+} from "../systems/vocal.js";
 
 export const name = Events.InteractionCreate;
 
 export async function execute(interaction: Interaction): Promise<void> {
+  // Boutons du panneau vocal (salons personnels)
+  if (interaction.isButton()) {
+    try {
+      const consumed = await handleVocalButton(interaction);
+      if (consumed) return;
+    } catch (error) {
+      console.error("❌ Erreur dans un bouton du panneau vocal :", error);
+    }
+    // Bouton non lié au panneau : géré par les collecteurs des commandes
+    return;
+  }
+
   // Modales du panneau vocal (places / renommage)
   if (interaction.isModalSubmit()) {
     try {

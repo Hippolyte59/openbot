@@ -1,13 +1,19 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, ChannelType, PermissionFlagsBits } from "discord.js";
 import type { Command } from "../types.js";
 import {
   deleteVoiceChannel,
   findVoiceChannelByOwner,
+  getVoiceHub,
+  removeVoiceHubByGuild,
+  setVoiceHub,
 } from "../database/voice.js";
 import {
   accessOf,
   createPersonalChannel,
 } from "../systems/vocal.js";
+import {
+  hasModAccess,
+} from "../utils/moderation.js";
 import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 
 const ACCESS_LABELS = {
@@ -20,6 +26,41 @@ export default {
   data: new SlashCommandBuilder()
     .setName("vocal")
     .setDescription("🔊 Gère ton salon vocal personnel")
+    .addSubcommandGroup((group) =>
+      group
+        .setName("hub")
+        .setDescription(
+          "Configure le salon « rejoindre pour créer » du serveur",
+        )
+        .addSubcommand((sub) =>
+          sub
+            .setName("creer")
+            .setDescription("Crée le salon hub : y entrer ouvre un vocal perso")
+            .addStringOption((option) =>
+              option
+                .setName("nom")
+                .setDescription("Nom du hub (défaut : « ➕ Créer un salon »)")
+                .setMaxLength(32),
+            ),
+        )
+        .addSubcommand((sub) =>
+          sub
+            .setName("definir")
+            .setDescription("Désigne un salon vocal existant comme hub")
+            .addChannelOption((option) =>
+              option
+                .setName("salon")
+                .setDescription("Le salon vocal à transformer en hub")
+                .setRequired(true)
+                .addChannelTypes(ChannelType.GuildVoice),
+            ),
+        )
+        .addSubcommand((sub) =>
+          sub
+            .setName("retirer")
+            .setDescription("Désactive le « rejoindre pour créer »"),
+        ),
+    )
     .addSubcommand((sub) =>
       sub
         .setName("creer")
@@ -43,9 +84,15 @@ export default {
   async execute(interaction) {
     if (!interaction.inGuild()) return;
 
-    const sub = interaction.options.getSubcommand(true);
+    const sub = interaction.options.getSubcommandGroup(false);
+    if (sub === "hub") {
+      await handleHub(interaction);
+      return;
+    }
 
-    if (sub === "creer") {
+    const command = interaction.options.getSubcommand(true);
+
+    if (command === "creer") {
       await createPersonalChannel(
         interaction,
         interaction.options.getString("nom"),
@@ -53,7 +100,7 @@ export default {
       return;
     }
 
-    if (sub === "info") {
+    if (command === "info") {
       const row = findVoiceChannelByOwner(
         interaction.guildId,
         interaction.user.id,
@@ -128,3 +175,73 @@ export default {
     });
   },
 } satisfies Command;
+
+// ── Configuration du hub « rejoindre pour créer » ────────────────────────────
+
+async function handleHub(
+  interaction: import("discord.js").ChatInputCommandInteraction,
+): Promise<void> {
+  if (!interaction.inGuild()) return;
+  const guildId = interaction.guildId;
+
+  if (!hasModAccess(interaction, PermissionFlagsBits.ManageChannels)) {
+    await interaction.reply({
+      embeds: [
+        errorEmbed(
+          "Seuls les administrateurs (ou rôles autorisés via `/admin roles ajouter`) peuvent configurer le hub.",
+        ),
+      ],
+      ephemeral: true,
+    });
+    return;
+  }
+
+  const sub = interaction.options.getSubcommand(true);
+
+  if (sub === "creer") {
+    const name =
+      interaction.options.getString("nom") ?? "➕ Créer un salon";
+
+    const channel = await interaction.guild!.channels.create({
+      name: name.slice(0, 32),
+      type: ChannelType.GuildVoice,
+      reason: `Hub « rejoindre pour créer » configuré par ${interaction.user.username}`,
+    });
+    setVoiceHub(guildId, channel.id);
+
+    await interaction.reply({
+      embeds: [
+        successEmbed(
+          `Le hub ${channel} est en place : dès qu'un membre y entre, son salon personnel est créé et il y est déplacé automatiquement.`,
+        ),
+      ],
+    });
+    return;
+  }
+
+  if (sub === "definir") {
+    const channel = interaction.options.getChannel("salon", true);
+    setVoiceHub(guildId, channel.id);
+    await interaction.reply({
+      embeds: [
+        successEmbed(
+          `${channel} est maintenant le hub : y entrer crée un salon vocal personnel.`,
+        ),
+      ],
+    });
+    return;
+  }
+
+  // retirer
+  const hub = getVoiceHub(guildId);
+  removeVoiceHubByGuild(guildId);
+  await interaction.reply({
+    embeds: [
+      createEmbed("warning").setDescription(
+        hub
+          ? `Le « rejoindre pour créer » est désactivé (<#${hub.channel_id}> redevient un salon normal).`
+          : "Aucun hub n'était configuré.",
+      ),
+    ],
+  });
+}

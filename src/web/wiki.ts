@@ -170,6 +170,30 @@ export function renderWiki(commands: Collection<string, Command>): string {
 <nav class="toc">${nav}</nav>
 
 <main>
+  <section class="card" id="vocaux">
+    <h2>Salons vocaux personnels</h2>
+    <p class="muted">Ton propre vocal, créé en un clic — ou en un saut.</p>
+    <p>
+      Le staff place un salon <em>« rejoindre pour créer »</em> avec
+      <code>/vocal hub creer</code>. Dès qu'un membre y entre, un salon vocal
+      personnel est créé et il y est déplacé automatiquement : le panneau de
+      contrôle apparaît dans le chat du salon.
+    </p>
+    <table>
+      <thead><tr><th>Bouton du panneau</th><th>Effet</th></tr></thead>
+      <tbody>
+        <tr><td><code>Verrouiller / Déverrouiller</code></td><td>Autorise ou interdit l'accès au salon</td></tr>
+        <tr><td><code>Cacher / Afficher</code></td><td>Rend le salon invisible aux autres membres</td></tr>
+        <tr><td><code>Places</code></td><td>Fixe la capacité maximale (0 = illimité)</td></tr>
+        <tr><td><code>Renommer</code></td><td>Change le nom du salon</td></tr>
+        <tr><td><code>Fermer</code></td><td>Supprime immédiatement le salon</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top:14px">
+      Réservé au propriétaire. Si le propriétaire part, la propriété passe au membre suivant ;
+      un salon vide est supprimé automatiquement.
+    </p>
+  </section>
   ${sections}
 </main>
 

@@ -58,7 +58,7 @@ Everything runs from a single Node.js process with an **embedded SQLite database
 
 **Voice channels**
 
-- Personal temporary voice channels created on demand
+- Join-to-create hub: entering it instantly opens your own private room
 - A control panel with buttons: lock, hide, user limit, rename, close
 - Ownership transfer when the owner leaves; automatic deletion when empty
 
@@ -98,6 +98,7 @@ Twenty-nine commands, grouped by category:
 | `/mariage proposer\|statut\|divorcer` | Propose to another member (buttons) |
 | `/sondage <question> [choices]` | Create a reaction poll |
 | `/vocal creer\|info\|supprimer` | Manage your personal voice channel |
+| `/vocal hub creer\|definir\|retirer` | Configure the server's join-to-create channel |
 | `/piece` | Flip a coin |
 | `/de [faces]` | Roll a dice |
 | `/clear <count> [member]` | Bulk delete messages |
@@ -112,7 +113,7 @@ Twenty-nine commands, grouped by category:
 
 ### Personal voice channels
 
-`/vocal creer` creates a temporary voice channel owned by the invoker and posts a **control panel** inside it:
+The flagship flow is **join-to-create**: the staff sets up a hub channel once with `/vocal hub creer` (or turns an existing channel into one with `/vocal hub definir`). From then on, whenever a member **joins that channel, they are instantly redirected into their own fresh voice room** — created in the same category, named after them — and the control panel is posted right in the room's text chat.
 
 | Panel button | Effect |
 |---|---|
@@ -122,7 +123,7 @@ Twenty-nine commands, grouped by category:
 | Rename | Opens a modal to rename the channel |
 | Close | Deletes the channel immediately |
 
-House rules are handled automatically: the panel is usable **only by the owner**, ownership transfers to the next member when the owner leaves, and the channel is **deleted once empty**.
+House rules are handled automatically: joining the hub while already owning a room simply teleports you back to it, the panel is usable **only by the owner**, ownership transfers to the next member when the owner leaves, and the room is **deleted once empty**. Prefer manual creation? `/vocal creer [name]` still works anywhere.
 
 ### Web wiki
 
@@ -273,7 +274,7 @@ Tout tourne dans un seul processus Node.js avec une **base SQLite embarquée** :
 
 **Salons vocaux**
 
-- Salons vocaux temporaires personnels créés à la demande
+- Salon hub « rejoindre pour créer » : y entrer ouvre instantanément ton vocal perso
 - Panneau de contrôle à boutons : verrouiller, cacher, places, renommer, fermer
 - Transfert de propriété quand le propriétaire part ; suppression automatique si vide
 
@@ -313,6 +314,7 @@ Vingt-neuf commandes, regroupées par catégorie :
 | `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons) |
 | `/sondage <question> [choix]` | Crée un sondage à réactions |
 | `/vocal creer\|info\|supprimer` | Gère ton salon vocal personnel |
+| `/vocal hub creer\|definir\|retirer` | Configure le salon « rejoindre pour créer » du serveur |
 | `/piece` | Lance une pièce |
 | `/de [faces]` | Lance un dé |
 | `/clear <nombre> [membre]` | Supprime des messages en masse |
@@ -327,7 +329,7 @@ Vingt-neuf commandes, regroupées par catégorie :
 
 ### Salons vocaux personnels
 
-`/vocal creer` crée un salon vocal temporaire possédé par l'auteur et y publie un **panneau de contrôle** :
+Le fonctionnement phare est le **« rejoindre pour créer »** : le staff place une fois un salon hub avec `/vocal hub creer` (ou transforme un salon existant avec `/vocal hub definir`). Ensuite, dès qu'un membre **entre dans ce salon, il est instantanément redirigé vers son propre vocal tout neuf** — créé dans la même catégorie, nommé à son nom — et le panneau de contrôle apparaît directement dans le chat du salon.
 
 | Bouton du panneau | Effet |
 |---|---|
@@ -337,7 +339,7 @@ Vingt-neuf commandes, regroupées par catégorie :
 | Renommer | Ouvre une modale pour renommer le salon |
 | Fermer | Supprime immédiatement le salon |
 
-Les règles sont automatiques : le panneau n'est utilisable **que par le propriétaire**, la propriété est transférée au membre suivant si le propriétaire part, et le salon est **supprimé dès qu'il devient vide**.
+Les règles sont automatiques : entrer dans le hub en possédant déjà un salon te téléporte simplement vers lui, le panneau n'est utilisable **que par le propriétaire**, la propriété est transférée au membre suivant si le propriétaire part, et le salon est **supprimé dès qu'il devient vide**. Tu préfères la création manuelle ? `/vocal creer [nom]` fonctionne toujours partout.
 
 ### Wiki intégré
 
