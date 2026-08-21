@@ -1,146 +1,236 @@
 <div align="center">
 
-# 🤖 OpenBot
+# OpenBot
 
-**Un bot Discord open source d'économie et de progression — une alternative libre à DraftBot.**
+**Open-source Discord bot for economy and progression systems — a free, self-hostable alternative to DraftBot.**
 
-Héberge-le toi-même, personnalise tout, contribue librement.
+[English](#english) | [Français](#français)
 
 ![License](https://img.shields.io/badge/license-MIT-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 ![Discord.js](https://img.shields.io/badge/discord.js-v14-5865F2?logo=discord&logoColor=white)
-![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js&logoColor=white)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen?logo=node.js&logoColor=white)
 
 </div>
 
 ---
 
-## ✨ Fonctionnalités
+<a id="english"></a>
 
-- 💰 **Économie complète** : récompense quotidienne avec bonus de série, travail, paris, dons entre joueurs
-- ⭐ **Système de niveaux** : XP gagnée en discutant, montées de niveau annoncées avec bonus de pièces
-- 🛒 **Boutique & inventaire** : boîtes mystère, tickets de loterie, cafés…
-- 🏆 **Classements du serveur** : top 10 par argent, niveau ou XP
-- 🎨 **Embeds personnalisés** : couleur configurable, footer et horodatage automatiques
-- 🗄️ **Zéro configuration de base de données** : SQLite embarqué (fichier local)
-- 🧩 **Architecture simple** : ajouter une commande = ajouter un fichier dans `src/commands/`
+## English
 
-## 📋 Commandes
+### Overview
 
-| Commande | Description |
+OpenBot provides economy, leveling, shop and mini-game systems through slash commands.
+It is designed to be simple to host, easy to customize, and free for everyone.
+
+### Features
+
+- **Economy** — daily rewards with streak bonuses, hourly jobs, betting, player-to-player transfers
+- **Leveling** — XP earned by chatting, level-up announcements with coin rewards
+- **Shop & inventory** — mystery boxes, lottery tickets, coffee boosts, extensible item catalog
+- **Server leaderboards** — top 10 by balance, level or total XP
+- **Custom embeds** — configurable color, consistent footer and timestamps
+- **Zero database setup** — embedded SQLite storage (single local file)
+- **Simple architecture** — adding a command means adding one file
+
+### Commands
+
+| Command | Description |
 |---|---|
-| `/ping` | 🏓 Affiche la latence du bot |
-| `/aide` | 📖 Liste toutes les commandes |
-| `/profil [membre]` | 👤 Niveau, XP, argent et série d'un membre |
-| `/classement <type>` | 🏆 Top 10 du serveur (argent / niveau / XP) |
-| `/quotidien` | 🎁 Récompense quotidienne (+ bonus de série) |
-| `/travail` | 💼 Un salaire toutes les heures |
-| `/parier <montant>` | 🎲 Pile ou face : double la mise ou perd tout |
-| `/donner <membre> <montant>` | 🎁 Offre des pièces à un membre |
-| `/boutique` | 🛒 Affiche les objets en vente |
-| `/acheter <objet> [quantité]` | 🛍️ Achète un objet |
-| `/inventaire` | 🎒 Affiche tes objets |
-| `/utiliser <objet>` | ✨ Consomme un objet (boîte mystère, loterie…) |
-| `/piece` | 🪙 Lance une pièce pour le fun |
-| `/de [faces]` | 🎲 Lance un dé à X faces |
-| `/8ball <question>` | 🎱 Pose une question au bot magique |
+| `/ping` | Show bot latency |
+| `/aide` | List all commands |
+| `/profil [member]` | View a member's level, XP, balance and streak |
+| `/classement <type>` | Server top 10 (balance / level / XP) |
+| `/quotidien` | Claim your daily reward (streak bonus) |
+| `/travail` | Earn coins once per hour |
+| `/parier <amount>` | Coin flip: double your bet or lose it |
+| `/donner <member> <amount>` | Give coins to another member |
+| `/boutique` | Browse the shop |
+| `/acheter <item> [quantity]` | Purchase an item |
+| `/inventaire` | View your items |
+| `/utiliser <item>` | Use an item (mystery box, lottery…) |
+| `/piece` | Flip a coin |
+| `/de [faces]` | Roll a dice |
+| `/8ball <question>` | Ask the magic bot a question |
 
-## 🚀 Installation
+### Requirements
 
-### 1. Prérequis
+- [Node.js](https://nodejs.org/) 20 or later
+- A Discord application (see below)
 
-- [Node.js](https://nodejs.org/) **20 ou supérieur**
-- Un compte Discord + un serveur où tu as les droits d'administration
+### Setup
 
-### 2. Créer le bot sur Discord
+1. Create the application on the [Discord Developer Portal](https://discord.com/developers/applications):
+   - **Bot** tab: click *Reset Token* and copy the token; enable the privileged **Message Content Intent**
+   - **General Information** tab: copy the **Application ID**
+2. Invite the bot to your server:
 
-1. Va sur le [Discord Developer Portal](https://discord.com/developers/applications) → **New Application**
-2. Onglet **Bot** :
-   - Clique sur **Reset Token** et copie le token
-   - Active l'intent privilégié **Message Content Intent** (nécessaire pour l'XP de discussion)
-3. Onglet **General Information** : copie l'**Application ID**
+   ```
+   https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&permissions=2147568640&scope=bot%20applications.commands
+   ```
 
-### 3. Inviter le bot sur ton serveur
+3. Install and run:
 
-Remplace `TON_APPLICATION_ID` dans ce lien puis ouvre-le :
+   ```bash
+   git clone https://github.com/Hippolyte59/openbot.git
+   cd openbot
 
-```
-https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=2147568640&scope=bot%20applications.commands
-```
+   npm install          # or: pnpm install
+   cp .env.example .env # fill in DISCORD_TOKEN and CLIENT_ID
 
-### 4. Lancer le projet
+   npm run deploy       # register slash commands with Discord
+   npm run build && npm start
 
-```bash
-# 1. Cloner le dépôt
-git clone https://github.com/Hippolyte59/openbot.git
-cd openbot
+   # development mode (auto-restart):
+   npm run dev
+   ```
 
-# 2. Installer les dépendances
-npm install        # ou : pnpm install
+### Environment variables (.env)
 
-# 3. Configurer les variables d'environnement
-cp .env.example .env   # puis remplis DISCORD_TOKEN et CLIENT_ID
-
-# 4. Déployer les commandes slash sur Discord
-npm run deploy
-
-# 5a. Démarrer en production
-npm run build && npm start
-
-# 5b. …ou démarrer en développement (redémarrage auto)
-npm run dev
-```
-
-## ⚙️ Configuration (.env)
-
-| Variable | Obligatoire | Description |
+| Variable | Required | Description |
 |---|---|---|
-| `DISCORD_TOKEN` | ✅ | Token du bot (Developer Portal → Bot) |
-| `CLIENT_ID` | ⚠️ | Application ID — optionnel : déduit automatiquement par `npm run deploy` |
-| `GUILD_ID` | ❌ | ID d'un serveur de test : y déploie les commandes instantanément au lieu d'attendre ~1 h |
-| `EMBED_COLOR` | ❌ | Couleur des embeds en hexadécimal (défaut : `#5865F2`) |
-| `BOT_NAME` | ❌ | Nom affiché dans le pied des embeds (défaut : `OpenBot`) |
+| `DISCORD_TOKEN` | Yes | Bot token (Developer Portal → Bot) |
+| `CLIENT_ID` | Recommended | Application ID — auto-detected by `npm run deploy` if omitted |
+| `GUILD_ID` | No | Test server ID: deploys commands instantly instead of waiting up to 1 hour |
+| `EMBED_COLOR` | No | Embed color in hexadecimal (default: `#5865F2`) |
+| `BOT_NAME` | No | Name shown in embed footers (default: `OpenBot`) |
 
-## 🔧 Personnalisation
+### Customization
 
-Tout est pensé pour être modifié facilement :
+- **Add a command**: create a file in `src/commands/`, following the existing examples — it is loaded automatically
+- **Add a shop item**: edit `src/data/items.ts`
+- **Tune the economy**: cooldowns and XP rates live in `src/config.ts`
 
-- **Ajouter une commande** : crée `src/commands/ma-commande.ts` sur le modèle des autres, elle est chargée automatiquement.
-- **Ajouter un objet en boutique** : édite `src/data/items.ts`, il apparaît partout (boutique, achat, inventaire, utilisation).
-- **Ajuster l'économie** : cooldowns et gains XP dans `src/config.ts`.
-- **Changer la couleur des embeds** : variable `EMBED_COLOR`.
-
-## 📂 Structure du projet
+### Project structure
 
 ```
 src/
-├── index.ts               # Point d'entrée : client, événements, connexion
-├── deploy.ts              # Déploiement des commandes slash
-├── config.ts              # Variables d'environnement & réglages
-├── loaders.ts             # Chargement automatique des commandes
-├── types.ts               # Types partagés (interface Command…)
-├── commands/              # Une commande = un fichier (chargement auto)
-├── events/                # ready, interactions, XP par message
+├── index.ts               # Entry point: client, events, login
+├── deploy.ts              # Slash command deployment script
+├── config.ts              # Environment variables & settings
+├── loaders.ts             # Automatic command loading
+├── types.ts               # Shared types (Command interface…)
+├── commands/              # One command = one file (auto-loaded)
+├── events/                # ready, interactions, message XP
 ├── database/
-│   ├── db.ts              # Connexion SQLite + schéma
-│   ├── players.ts         # Argent, XP, niveaux, classements
-│   └── inventory.ts       # Inventaires
+│   ├── db.ts              # SQLite connection + schema
+│   ├── players.ts         # Balance, XP, levels, leaderboards
+│   └── inventory.ts       # Player inventories
 ├── data/
-│   └── items.ts           # Catalogue de la boutique
-└── utils/                 # Embeds, formatage, aléatoire
+│   └── items.ts           # Shop catalog
+└── utils/                 # Embeds, formatting, randomness
 ```
 
-## 🤝 Contribuer
+### Contributing
 
-Les contributions sont les bienvenues ! Idées acceptées avec plaisir :
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-- 🗡️ Combats RPG contre des monstres
-- 🐾 Animaux de compagnie
-- 🏰 Guildes
-- 🏅 Badges et récompenses
+Ideas that would fit well: RPG battles, pets, guilds, badges.
 
-Consulte [CONTRIBUTING.md](CONTRIBUTING.md) pour démarrer.
+### License
 
-## 📄 Licence
+Released under the [MIT](LICENSE) license.
 
-Distribué sous licence [MIT](LICENSE) — utilise-le, modifie-le, partage-le. 🎉
+---
+
+<a id="français"></a>
+
+## Français
+
+### Aperçu
+
+OpenBot propose des systèmes d'économie, de niveaux, de boutique et de mini-jeux accessibles en commandes slash.
+Le bot est pensé pour être simple à héberger, facile à personnaliser et libre pour tous.
+
+### Fonctionnalités
+
+- **Économie** — récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs
+- **Niveaux** — XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces
+- **Boutique et inventaire** — boîtes mystère, tickets de loterie, cafés, catalogue d'objets extensible
+- **Classements du serveur** — top 10 par argent, niveau ou XP totale
+- **Embeds personnalisés** — couleur configurable, footer et horodatage cohérents
+- **Zéro configuration de base de données** — stockage SQLite embarqué (un fichier local)
+- **Architecture simple** — ajouter une commande revient à ajouter un fichier
+
+### Commandes
+
+| Commande | Description |
+|---|---|
+| `/ping` | Affiche la latence du bot |
+| `/aide` | Liste toutes les commandes |
+| `/profil [membre]` | Niveau, XP, argent et série d'un membre |
+| `/classement <type>` | Top 10 du serveur (argent / niveau / XP) |
+| `/quotidien` | Récompense quotidienne (bonus de série) |
+| `/travail` | Gagne des pièces une fois par heure |
+| `/parier <montant>` | Pile ou face : double la mise ou la perd |
+| `/donner <membre> <montant>` | Offre des pièces à un membre |
+| `/boutique` | Affiche la boutique |
+| `/acheter <objet> [quantité]` | Achète un objet |
+| `/inventaire` | Affiche tes objets |
+| `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie…) |
+| `/piece` | Lance une pièce |
+| `/de [faces]` | Lance un dé |
+| `/8ball <question>` | Pose une question au bot magique |
+
+### Prérequis
+
+- [Node.js](https://nodejs.org/) 20 ou supérieur
+- Une application Discord (voir ci-dessous)
+
+### Mise en place
+
+1. Crée l'application sur le [Discord Developer Portal](https://discord.com/developers/applications) :
+   - Onglet **Bot** : clique sur *Reset Token*, copie le token ; active l'intent privilégié **Message Content Intent**
+   - Onglet **General Information** : copie l'**Application ID**
+2. Invite le bot sur ton serveur :
+
+   ```
+   https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=2147568640&scope=bot%20applications.commands
+   ```
+
+3. Installe et lance :
+
+   ```bash
+   git clone https://github.com/Hippolyte59/openbot.git
+   cd openbot
+
+   npm install          # ou : pnpm install
+   cp .env.example .env # remplis DISCORD_TOKEN et CLIENT_ID
+
+   npm run deploy       # enregistre les commandes slash sur Discord
+   npm run build && npm start
+
+   # mode développement (redémarrage automatique) :
+   npm run dev
+   ```
+
+### Variables d'environnement (.env)
+
+| Variable | Obligatoire | Description |
+|---|---|---|
+| `DISCORD_TOKEN` | Oui | Token du bot (Developer Portal → Bot) |
+| `CLIENT_ID` | Recommandé | Application ID — déduit automatiquement par `npm run deploy` si absent |
+| `GUILD_ID` | Non | ID d'un serveur de test : déploie les commandes instantanément au lieu d'attendre ~1 h |
+| `EMBED_COLOR` | Non | Couleur des embeds en hexadécimal (défaut : `#5865F2`) |
+| `BOT_NAME` | Non | Nom affiché dans le pied des embeds (défaut : `OpenBot`) |
+
+### Personnalisation
+
+- **Ajouter une commande** : crée un fichier dans `src/commands/` sur le modèle des existantes — il est chargé automatiquement
+- **Ajouter un objet en boutique** : modifie `src/data/items.ts`
+- **Ajuster l'économie** : les cooldowns et gains d'XP sont dans `src/config.ts`
+
+### Structure du projet
+
+Voir la section [anglaise](#english) pour l'arborescence détaillée.
+
+### Contribuer
+
+Les contributions sont les bienvenues. Consulte [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Idées bienvenues : combats RPG, animaux de compagnie, guildes, badges.
+
+### Licence
+
+Distribué sous licence [MIT](LICENSE).
