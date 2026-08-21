@@ -19,6 +19,7 @@ import {
   maxHp,
   setHp,
   updatePlayer,
+  incrementWins,
 } from "../database/players.js";
 import { getShopItem } from "../data/items.js";
 import { pickMonster } from "../data/monsters.js";
@@ -129,6 +130,7 @@ async function finishFight(
     const xpGain = randomInt(fight.xpReward[0], fight.xpReward[1]);
     addBalance(fight.guildId, fight.userId, coins);
     const xpResult = addXp(fight.guildId, fight.userId, xpGain);
+    incrementWins(fight.guildId, fight.userId);
 
     outro = `\n🏆 **Victoire !** Tu remportes **+${coins} ${config.currency}** et **+${xpGain} XP** !`;
 

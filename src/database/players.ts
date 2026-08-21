@@ -14,6 +14,10 @@ export interface Player {
   last_adventure: number;
   weapon: string | null;
   armor: string | null;
+  animal: string | null;
+  animal_name: string | null;
+  partner: string | null;
+  wins: number;
 }
 
 /** PV maximum selon le niveau. */
@@ -43,6 +47,9 @@ export function updatePlayer(
 ): void {
   const columns = Object.keys(fields);
   if (columns.length === 0) return;
+
+  // Garantit que la ligne existe (UPDATE sans effet sinon)
+  insertPlayer.run(guildId, userId, Date.now());
 
   const setSql = columns.map((c) => `${c} = ?`).join(", ");
   const values = columns.map(
@@ -167,5 +174,13 @@ export function getLeaderboard(
 export function resetPlayer(guildId: string, userId: string): void {
   db.prepare(
     "DELETE FROM players WHERE guild_id = ? AND user_id = ?",
+  ).run(guildId, userId);
+}
+
+/** Compte une victoire d'aventure supplémentaire. */
+export function incrementWins(guildId: string, userId: string): void {
+  getPlayer(guildId, userId);
+  db.prepare(
+    "UPDATE players SET wins = wins + 1 WHERE guild_id = ? AND user_id = ?",
   ).run(guildId, userId);
 }

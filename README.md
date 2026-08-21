@@ -27,12 +27,14 @@ OpenBot is an open-source Discord bot written in TypeScript with [discord.js](ht
 
 **What does it include?**
 
-The bot ships with twenty commands built around four systems:
+The bot ships with twenty-eight commands built around six systems:
 
 - an **economy**: daily rewards with streak bonuses, hourly jobs, betting, transfers between players;
 - a **leveling system**: XP earned while chatting, level-up announcements with coin rewards, per-server leaderboards;
 - a **shop and inventory**: consumables, weapons and armor, with an extensible item catalog;
-- an **adventure mode**: turn-based monster battles played with buttons — attack, drink a potion or flee — with HP, passive regeneration, equipment bonuses and loot drops.
+- an **adventure mode**: turn-based monster battles played with buttons — attack, drink a potion or flee — with HP, passive regeneration, equipment bonuses and loot drops;
+- a **social life**: adoptable pets that boost your earnings, marriage proposals with accept/refuse buttons, reaction polls;
+- **moderation tools**: kick, ban, timeout, message cleanup, slowmode and a warning system.
 
 Everything is stored in an embedded SQLite database — no external database server required — which makes a full installation as simple as cloning the repository and running `npm install`.
 
@@ -50,6 +52,9 @@ Popular progression bots such as DraftBot are widely used, but they remain close
 - **Economy** — daily rewards with streak bonuses, hourly jobs, betting, player-to-player transfers
 - **Leveling** — XP earned by chatting, level-up announcements with coin rewards
 - **Adventure mode** — turn-based monster battles played with buttons (attack / potion / flee), HP with passive regeneration, weapons, armor and loot drops
+- **Pets & marriage** — adopt a companion that boosts your coin gains, propose to another member and get married
+- **Automatic badges** — profiles display badges earned through progression (level, wealth, victories…)
+- **Moderation suite** — kick, ban, timeout, bulk message cleanup, channel slowmode and per-member warnings
 - **Community tools** — PvP duels with wagers, rock-paper-scissors against the bot, reaction polls
 - **Shop & inventory** — mystery boxes, lottery tickets, potions, equipment, extensible item catalog
 - **Server leaderboards** — top 10 by balance, level or total XP
@@ -77,15 +82,23 @@ Popular progression bots such as DraftBot are widely used, but they remain close
 | `/aventure` | Embark on an adventure and fight a monster |
 | `/duel <member> <stake>` | Challenge a member to a wagered duel |
 | `/pfc` | Rock-paper-scissors against the bot |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopt and care for a pet that boosts your coin gains |
+| `/mariage proposer\|statut\|divorcer` | Propose to another member (accept/refuse buttons) |
 | `/sondage <question> [choices]` | Create a reaction poll |
 | `/piece` | Flip a coin |
 | `/de [faces]` | Roll a dice |
 | `/8ball <question>` | Ask the magic bot a question |
 | `/admin` | Administration — restricted access (see below) |
+| `/clear <count> [member]` | Bulk delete messages (optionally from one member) |
+| `/kick <member> [reason]` | Kick a member |
+| `/ban <member> [reason]` | Ban a member |
+| `/timeout <member> <duration> [reason]` | Temporarily mute a member |
+| `/slowmode <seconds>` | Set the current channel's slowmode |
+| `/warn ajouter\|liste\|retirer` | Manage a member's warnings |
 
 ### Administration
 
-`/admin` is available to server **administrators** plus any roles explicitly allowed. An administrator grants access with `/admin roles ajouter <role>`, so staff members can moderate the game without full server permissions.
+Game administration is handled by `/admin`, available to server **administrators** plus any roles explicitly allowed. An administrator grants access with `/admin roles ajouter <role>`, so staff members can moderate the game without full server permissions.
 
 | Subcommand | Description |
 |---|---|
@@ -93,6 +106,8 @@ Popular progression bots such as DraftBot are widely used, but they remain close
 | `/admin argent donner\|retirer <member> <amount>` | Create or remove coins for a member |
 | `/admin reinitialiser <member>` | Completely reset a member's profile and inventory |
 | `/admin annoncer <title> <message> [#channel]` | Publish an official announcement embed |
+
+Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) relies on Discord's native permissions — but members holding an `/admin` role also gain access, so your staff setup stays consistent across both toolkits. Safety checks are built in: no self-moderation, no action against the server owner or higher-ranked members.
 
 ### Requirements
 
@@ -156,9 +171,13 @@ src/
 ├── database/
 │   ├── db.ts              # SQLite connection + schema
 │   ├── players.ts         # Balance, XP, levels, leaderboards
-│   └── inventory.ts       # Player inventories
+│   ├── inventory.ts       # Player inventories
+│   ├── guilds.ts          # Per-guild settings (admin roles)
+│   └── warnings.ts        # Moderation warnings
 ├── data/
-│   └── items.ts           # Shop catalog
+│   ├── items.ts           # Shop catalog
+│   ├── animals.ts         # Pets catalog & bonuses
+│   └── monsters.ts        # Adventure monsters
 └── utils/                 # Embeds, formatting, randomness
 ```
 
@@ -166,7 +185,7 @@ src/
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Ideas that would fit well: RPG battles, pets, guilds, badges.
+Ideas that would fit well: guilds, RPG classes, fishing, seasonal events.
 
 ### License
 
@@ -186,12 +205,14 @@ OpenBot est un bot Discord open source développé en TypeScript avec [discord.j
 
 **De quoi se compose-t-il ?**
 
-Le bot propose vingt commandes organisées autour de quatre systèmes :
+Le bot propose vingt-huit commandes organisées autour de six systèmes :
 
 - une **économie** : récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs ;
 - un **système de niveaux** : XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces, classements par serveur ;
 - une **boutique et un inventaire** : consommables, armes et armures, avec un catalogue extensible ;
-- un **mode aventure** : combats au tour par tour contre des monstres pilotés par boutons — attaquer, boire une potion ou fuir — avec PV, régénération passive, bonus d'équipement et butin.
+- un **mode aventure** : combats au tour par tour contre des monstres pilotés par boutons — attaquer, boire une potion ou fuir — avec PV, régénération passive, bonus d'équipement et butin ;
+- une **vie sociale** : animaux de compagnie adoptables qui boostent tes gains, demandes en mariage avec boutons d'acceptation, sondages à réactions ;
+- des **outils de modération** : kick, ban, timeout, nettoyage de messages, mode lent et système d'avertissements.
 
 Toutes les données sont stockées dans une base SQLite embarquée — aucun serveur de base de données externe n'est nécessaire. Installer le bot revient simplement à cloner le dépôt puis à lancer `npm install`.
 
@@ -209,6 +230,9 @@ Les bots de progression populaires comme DraftBot sont très utilisés, mais ils
 - **Économie** — récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs
 - **Niveaux** — XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces
 - **Mode aventure** — combats au tour par tour contre des monstres avec boutons (attaquer / potion / fuir), PV avec régénération passive, armes, armures et butin
+- **Animaux et mariage** — adopte un compagnon qui booste tes gains de pièces, demande un membre en mariage
+- **Badges automatiques** — les profils affichent des badges gagnés via la progression (niveau, richesse, victoires…)
+- **Modération** — kick, ban, timeout, suppression en masse, mode lent de salon et avertissements par membre
 - **Outils communautaires** — duels avec mise, pierre-feuille-ciseaux contre le bot, sondages à réactions
 - **Boutique et inventaire** — boîtes mystère, tickets de loterie, potions, équipement, catalogue extensible
 - **Classements du serveur** — top 10 par argent, niveau ou XP totale
@@ -236,15 +260,23 @@ Les bots de progression populaires comme DraftBot sont très utilisés, mais ils
 | `/aventure` | Pars à l'aventure et affronte un monstre |
 | `/duel <adversaire> <mise>` | Défie un membre en duel avec mise |
 | `/pfc` | Pierre-feuille-ciseaux contre le bot |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopte un animal qui booste tes gains de pièces |
+| `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons accepter/refuser) |
 | `/sondage <question> [choix]` | Crée un sondage à réactions |
 | `/piece` | Lance une pièce |
 | `/de [faces]` | Lance un dé |
 | `/8ball <question>` | Pose une question au bot magique |
 | `/admin` | Administration — accès restreint (voir ci-dessous) |
+| `/clear <nombre> [membre]` | Supprime des messages en masse (d'un seul membre si précisé) |
+| `/kick <membre> [raison]` | Expulse un membre |
+| `/ban <membre> [raison]` | Bannit un membre |
+| `/timeout <membre> <durée> [raison]` | Rend un membre muet temporairement |
+| `/slowmode <secondes>` | Définit le mode lent du salon actuel |
+| `/warn ajouter\|liste\|retirer` | Gère les avertissements d'un membre |
 
 ### Administration
 
-`/admin` est réservé aux **administrateurs** du serveur, plus les rôles explicitement autorisés. Un administrateur accorde l'accès avec `/admin roles ajouter <role>` : le staff peut ainsi modérer le jeu sans disposer des permissions complètes du serveur.
+L'administration du jeu passe par `/admin`, réservé aux **administrateurs** du serveur plus les rôles explicitement autorisés. Un administrateur accorde l'accès avec `/admin roles ajouter <role>` : le staff peut ainsi modérer le jeu sans disposer des permissions complètes du serveur.
 
 | Sous-commande | Description |
 |---|---|
@@ -252,6 +284,8 @@ Les bots de progression populaires comme DraftBot sont très utilisés, mais ils
 | `/admin argent donner\|retirer <membre> <montant>` | Crée ou retire des pièces pour un membre |
 | `/admin reinitialiser <membre>` | Remet entièrement à zéro le profil et l'inventaire d'un membre |
 | `/admin annoncer <titre> <message> [#salon]` | Publie une annonce officielle en embed |
+
+La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) s'appuie sur les permissions Discord natives — mais les membres disposant d'un rôle `/admin` y accèdent aussi, pour une organisation du staff cohérente sur les deux tableaux. Des garde-fous sont intégrés : pas d'auto-modération, aucune action possible contre le propriétaire ou les membres mieux gradés.
 
 ### Prérequis
 
@@ -309,7 +343,7 @@ Voir la section [anglaise](#english) pour l'arborescence détaillée.
 
 Les contributions sont les bienvenues. Consulte [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Idées bienvenues : combats RPG, animaux de compagnie, guildes, badges.
+Idées bienvenues : guildes, classes RPG, pêche, événements saisonniers.
 
 ### Licence
 

@@ -39,6 +39,15 @@ db.exec(`
     role_id    TEXT NOT NULL,
     PRIMARY KEY (guild_id, role_id)
   );
+
+  CREATE TABLE IF NOT EXISTS warnings (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id      TEXT NOT NULL,
+    user_id       TEXT NOT NULL,
+    reason        TEXT NOT NULL,
+    moderator_id  TEXT NOT NULL,
+    created_at    INTEGER NOT NULL DEFAULT (unixepoch())
+  );
 `);
 
 // Migrations légères : ajoute les colonnes récentes aux bases existantes
@@ -48,6 +57,10 @@ const migrations = [
   "ALTER TABLE players ADD COLUMN last_adventure INTEGER NOT NULL DEFAULT 0",
   "ALTER TABLE players ADD COLUMN weapon TEXT",
   "ALTER TABLE players ADD COLUMN armor TEXT",
+  "ALTER TABLE players ADD COLUMN animal TEXT",
+  "ALTER TABLE players ADD COLUMN animal_name TEXT",
+  "ALTER TABLE players ADD COLUMN partner TEXT",
+  "ALTER TABLE players ADD COLUMN wins INTEGER NOT NULL DEFAULT 0",
 ];
 
 for (const sql of migrations) {

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
 import { addBalance, getPlayer, updatePlayer } from "../database/players.js";
+import { applyAnimalBonus } from "../data/animals.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatDuration, formatNumber } from "../utils/format.js";
 import { randomInt } from "../utils/random.js";
@@ -40,7 +41,9 @@ export default {
       return;
     }
 
-    const salary = randomInt(60, 140);
+    const baseSalary = randomInt(60, 140);
+    const salary = applyAnimalBonus(player.animal, baseSalary);
+    const bonus = salary - baseSalary;
     const job = randomInt(0, JOBS.length - 1);
 
     addBalance(interaction.guildId, interaction.user.id, salary);
@@ -55,7 +58,12 @@ export default {
           `${JOBS[job]}… et tu reçois ton salaire !`,
           "",
           `💰 Salaire : **+${formatNumber(salary)} ${config.currency}**`,
-        ].join("\n"),
+          bonus > 0
+            ? `\n🐾 Ton animal t'a bien aidé : **+${bonus} ${config.currency}** de bonus.`
+            : "",
+        ]
+          .filter(Boolean)
+          .join("\n"),
       );
 
     await interaction.reply({ embeds: [embed] });

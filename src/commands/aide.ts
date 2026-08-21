@@ -20,8 +20,16 @@ const GROUPS: Array<{ title: string; commands: string[] }> = [
       "utiliser",
     ],
   },
-  { title: "⚔️ Aventure & communauté", commands: ["aventure", "duel", "pfc", "sondage"] },
+  {
+    title: "🐾 Vie sociale",
+    commands: ["animal", "mariage", "sondage"],
+  },
+  { title: "⚔️ Aventure & jeux", commands: ["aventure", "duel", "pfc"] },
   { title: "🎲 Mini-jeux", commands: ["piece", "de", "8ball"] },
+  {
+    title: "🛡️ Modération",
+    commands: ["clear", "kick", "ban", "timeout", "slowmode", "warn"],
+  },
   { title: "🔐 Administration", commands: ["admin"] },
   { title: "🛠️ Utilitaires", commands: ["ping", "aide"] },
 ];
@@ -69,9 +77,9 @@ export default {
     }
 
     embed.addFields({
-      name: "🔐 Administration",
+      name: "🔐 Administration & modération",
       value:
-        "`/admin` est réservé aux administrateurs et aux rôles configurés avec `/admin roles ajouter`.",
+        "`/admin` est réservé aux administrateurs et aux rôles configurés avec `/admin roles ajouter`. Les commandes de modération (`kick`, `ban`, `timeout`…) nécessitent la permission Discord correspondante, ou un rôle enregistré.",
     });
 
     await interaction.reply({ embeds: [embed] });

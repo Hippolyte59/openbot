@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
 import { addBalance, getPlayer, updatePlayer } from "../database/players.js";
+import { applyAnimalBonus } from "../data/animals.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatDuration, formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
@@ -37,7 +38,9 @@ export default {
         ? player.daily_streak + 1
         : 1;
 
-    const reward = 100 + Math.min(streak - 1, 10) * 25;
+    const baseReward = 100 + Math.min(streak - 1, 10) * 25;
+    const reward = applyAnimalBonus(player.animal, baseReward);
+    const bonus = reward - baseReward;
 
     addBalance(interaction.guildId, interaction.user.id, reward);
     updatePlayer(interaction.guildId, interaction.user.id, {
@@ -50,10 +53,15 @@ export default {
       .setDescription(
         [
           `Tu récupères **+${formatNumber(reward)} ${config.currency}** !`,
+          bonus > 0
+            ? `\n🐾 Ton animal ajoute **+${bonus} ${config.currency}** de bonus.`
+            : "",
           "",
           `🔥 Série : **${streak}** jour(s) — continue chaque jour pour augmenter le bonus !`,
           `⏳ Prochaine récompense dans 24 h.`,
-        ].join("\n"),
+        ]
+          .filter(Boolean)
+          .join("\n"),
       );
 
     await interaction.reply({ embeds: [embed] });
