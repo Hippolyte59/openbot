@@ -5,6 +5,8 @@ import { loadCommands } from "./loaders.js";
 import * as readyEvent from "./events/ready.js";
 import * as interactionCreateEvent from "./events/interactionCreate.js";
 import * as messageCreateEvent from "./events/messageCreate.js";
+import * as voiceStateUpdateEvent from "./events/voiceStateUpdate.js";
+import * as channelDeleteEvent from "./events/channelDelete.js";
 
 // ── Création du client ───────────────────────────────────────────────────────
 // MessageContent est un intent "privilégié" : pense à l'activer sur
@@ -14,6 +16,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
   ],
 });
 
@@ -30,6 +33,14 @@ client.on(
 client.on(
   messageCreateEvent.name,
   async (...args) => void messageCreateEvent.execute(...args),
+);
+client.on(
+  voiceStateUpdateEvent.name,
+  async (...args) => void voiceStateUpdateEvent.execute(...args),
+);
+client.on(
+  channelDeleteEvent.name,
+  async (...args) => void channelDeleteEvent.execute(...args),
 );
 
 process.on("unhandledRejection", (error) => {

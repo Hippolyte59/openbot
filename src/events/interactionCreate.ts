@@ -1,10 +1,30 @@
 import { Events, type Interaction } from "discord.js";
 import { asBotClient } from "../types.js";
 import { errorEmbed } from "../utils/embeds.js";
+import { handleVocalModal } from "../systems/vocal.js";
 
 export const name = Events.InteractionCreate;
 
 export async function execute(interaction: Interaction): Promise<void> {
+  // Modales du panneau vocal (places / renommage)
+  if (interaction.isModalSubmit()) {
+    try {
+      await handleVocalModal(interaction);
+    } catch (error) {
+      console.error("❌ Erreur dans une modale :", error);
+      const payload = {
+        embeds: [errorEmbed("Une erreur est survenue.")],
+        ephemeral: true,
+      };
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp(payload);
+      } else {
+        await interaction.reply(payload);
+      }
+    }
+    return;
+  }
+
   if (!interaction.isChatInputCommand()) return;
 
   const command = asBotClient(interaction.client).commands.get(

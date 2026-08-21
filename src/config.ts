@@ -19,6 +19,13 @@ export const config = {
   botName: process.env.BOT_NAME ?? "OpenBot",
   currency: "🪙",
 
+  /** Serveur web intégré (wiki, API) */
+  webPort: Number(process.env.WEB_PORT ?? 3000),
+  /** URL publique du wiki (derrière un reverse proxy, sinon http://localhost:<port>) */
+  publicUrl:
+    process.env.PUBLIC_URL?.replace(/\/$/, "") ||
+    `http://localhost:${process.env.WEB_PORT ?? 3000}`,
+
   /** Cooldowns en millisecondes */
   cooldowns: {
     daily: 24 * 60 * 60 * 1000,

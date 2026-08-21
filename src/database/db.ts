@@ -48,6 +48,13 @@ db.exec(`
     moderator_id  TEXT NOT NULL,
     created_at    INTEGER NOT NULL DEFAULT (unixepoch())
   );
+
+  CREATE TABLE IF NOT EXISTS voice_channels (
+    channel_id  TEXT PRIMARY KEY,
+    guild_id    TEXT NOT NULL,
+    owner_id    TEXT NOT NULL,
+    message_id  TEXT
+  );
 `);
 
 // Migrations légères : ajoute les colonnes récentes aux bases existantes

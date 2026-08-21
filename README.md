@@ -2,14 +2,17 @@
 
 # OpenBot
 
-**Open-source Discord bot for economy and progression systems — a free, self-hostable alternative to DraftBot.**
+**An open-source Discord bot for economy, progression and community life — a free, self-hostable alternative to DraftBot.**
 
-[English](#english) | [Français](#français)
+Economy · Leveling · Adventure · Pets · Voice channels · Moderation
 
-![License](https://img.shields.io/badge/license-MIT-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
-![Discord.js](https://img.shields.io/badge/discord.js-v14-5865F2?logo=discord&logoColor=white)
-![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen?logo=node.js&logoColor=white)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![discord.js](https://img.shields.io/badge/discord.js-v14-5865F2?logo=discord&logoColor=white)](https://discord.js.org)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen?logo=node.js&logoColor=white)](https://nodejs.org)
+[![SQLite](https://img.shields.io/badge/storage-SQLite%20embedded-003B57?logo=sqlite&logoColor=white)](https://sqlite.org)
+
+[English](#english) · [Français](#français)
 
 </div>
 
@@ -19,110 +22,137 @@
 
 ## English
 
-### About the project
+### Overview
 
-**What is OpenBot?**
+OpenBot brings the classic "progression bot" experience to any Discord server: members earn coins and experience, fight monsters in turn-based battles, adopt pets, marry each other, claim their own voice channels — while your staff gets a complete moderation toolkit.
 
-OpenBot is an open-source Discord bot written in TypeScript with [discord.js](https://discord.js.org) v14. It brings classic progression features to any Discord server — economy, experience levels, a shop and mini-games — through native slash commands and clean, customizable embeds.
+Everything runs from a single Node.js process with an **embedded SQLite database**: no external services, no dashboard to configure, no premium tier. Clone it, run it, own it.
 
-**What does it include?**
+|                    | OpenBot            | Typical hosted bots |
+| ------------------ | ------------------ | ------------------- |
+| Source code        | Open (MIT)         | Closed              |
+| Hosting            | Your machine       | Third party         |
+| Data ownership     | 100 % yours        | On their servers    |
+| Customization      | Every file editable| Fixed options       |
+| Locked features    | None               | Premium tiers       |
 
-The bot ships with twenty-eight commands built around six systems:
+### Feature highlights
 
-- an **economy**: daily rewards with streak bonuses, hourly jobs, betting, transfers between players;
-- a **leveling system**: XP earned while chatting, level-up announcements with coin rewards, per-server leaderboards;
-- a **shop and inventory**: consumables, weapons and armor, with an extensible item catalog;
-- an **adventure mode**: turn-based monster battles played with buttons — attack, drink a potion or flee — with HP, passive regeneration, equipment bonuses and loot drops;
-- a **social life**: adoptable pets that boost your earnings, marriage proposals with accept/refuse buttons, reaction polls;
-- **moderation tools**: kick, ban, timeout, message cleanup, slowmode and a warning system.
+**Progression**
 
-Everything is stored in an embedded SQLite database — no external database server required — which makes a full installation as simple as cloning the repository and running `npm install`.
+- XP earned by chatting, level-up announcements with coin rewards
+- Daily rewards with streak bonuses and hourly paid jobs
+- Per-server leaderboards by balance, level or total XP
 
-**Why does it exist?**
+**Adventure & fun**
 
-Popular progression bots such as DraftBot are widely used, but they remain closed-source and hosted by someone else. OpenBot was created as a free and transparent alternative that anyone can:
+- Turn-based monster battles driven by buttons — attack, drink a potion or flee
+- HP with passive regeneration, weapons, armor and loot drops
+- PvP duels with wagers, rock-paper-scissors, coin flips and dice rolls
 
-- **self-host** — your community's data stays on your own machine;
-- **customize freely** — every cooldown, item and command lives in a readable file; adding one means adding one file;
-- **learn from** — the codebase is intentionally small and structured, making it a solid starting point to discover discord.js and TypeScript;
-- **contribute to** — features evolve with the community, with no premium tiers and no locked commands.
+**Social life**
 
-### Features
+- Adoptable pets that boost every coin gain (dog, owl, wolf, baby dragon…)
+- Marriage proposals with accept/refuse buttons, divorce for a fee
+- Reaction polls and automatic profile badges (veteran, rich, hero…)
 
-- **Economy** — daily rewards with streak bonuses, hourly jobs, betting, player-to-player transfers
-- **Leveling** — XP earned by chatting, level-up announcements with coin rewards
-- **Adventure mode** — turn-based monster battles played with buttons (attack / potion / flee), HP with passive regeneration, weapons, armor and loot drops
-- **Pets & marriage** — adopt a companion that boosts your coin gains, propose to another member and get married
-- **Automatic badges** — profiles display badges earned through progression (level, wealth, victories…)
-- **Moderation suite** — kick, ban, timeout, bulk message cleanup, channel slowmode and per-member warnings
-- **Community tools** — PvP duels with wagers, rock-paper-scissors against the bot, reaction polls
-- **Shop & inventory** — mystery boxes, lottery tickets, potions, equipment, extensible item catalog
-- **Server leaderboards** — top 10 by balance, level or total XP
-- **Admin toolkit** — role-based access control, economy management, announcements, profile resets
-- **Custom embeds** — configurable color, consistent footer and timestamps
-- **Zero database setup** — embedded SQLite storage (single local file)
-- **Simple architecture** — adding a command means adding one file
+**Voice channels**
+
+- Personal temporary voice channels created on demand
+- A control panel with buttons: lock, hide, user limit, rename, close
+- Ownership transfer when the owner leaves; automatic deletion when empty
+
+**Moderation & administration**
+
+- Kick, ban, timeout, bulk message cleanup, channel slowmode
+- Per-member warning system stored in the database
+- Game administration (`/admin`) delegated through configured roles
+
+**Platform**
+
+- Built-in web server serving an auto-generated dark-themed wiki page
+- JSON endpoint listing all commands (`/api/commands`)
+- Clean embeds with configurable color, consistent footer and timestamps
+- Zero database setup — one local SQLite file
 
 ### Commands
 
+Twenty-nine commands, grouped by category:
+
 | Command | Description |
 |---|---|
-| `/ping` | Show bot latency |
-| `/aide` | List all commands |
-| `/profil [member]` | View a member's level, XP, balance and streak |
+| `/profil [member]` | View a member's level, XP, balance, badges and more |
 | `/classement <type>` | Server top 10 (balance / level / XP) |
 | `/quotidien` | Claim your daily reward (streak bonus) |
 | `/travail` | Earn coins once per hour |
-| `/parier <amount>` | Coin flip: double your bet or lose it |
+| `/parier <amount>` | Coin flip bet: double or lose |
 | `/donner <member> <amount>` | Give coins to another member |
 | `/boutique` | Browse the shop |
 | `/acheter <item> [quantity]` | Purchase an item |
 | `/inventaire` | View your items |
 | `/utiliser <item>` | Use an item (mystery box, lottery, potion…) |
-| `/aventure` | Embark on an adventure and fight a monster |
+| `/aventure` | Fight a monster in a button-driven battle |
 | `/duel <member> <stake>` | Challenge a member to a wagered duel |
 | `/pfc` | Rock-paper-scissors against the bot |
-| `/animal voir\|acheter\|nommer\|relacher` | Adopt and care for a pet that boosts your coin gains |
-| `/mariage proposer\|statut\|divorcer` | Propose to another member (accept/refuse buttons) |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopt and care for a pet that boosts your earnings |
+| `/mariage proposer\|statut\|divorcer` | Propose to another member (buttons) |
 | `/sondage <question> [choices]` | Create a reaction poll |
+| `/vocal creer\|info\|supprimer` | Manage your personal voice channel |
 | `/piece` | Flip a coin |
 | `/de [faces]` | Roll a dice |
-| `/8ball <question>` | Ask the magic bot a question |
-| `/admin` | Administration — restricted access (see below) |
-| `/clear <count> [member]` | Bulk delete messages (optionally from one member) |
+| `/clear <count> [member]` | Bulk delete messages |
 | `/kick <member> [reason]` | Kick a member |
 | `/ban <member> [reason]` | Ban a member |
 | `/timeout <member> <duration> [reason]` | Temporarily mute a member |
 | `/slowmode <seconds>` | Set the current channel's slowmode |
 | `/warn ajouter\|liste\|retirer` | Manage a member's warnings |
+| `/admin …` | Role-based game administration (below) |
+| `/wiki` | Link to the built-in wiki page |
+| `/ping` | Show bot latency |
 
-### Administration
+### Personal voice channels
 
-Game administration is handled by `/admin`, available to server **administrators** plus any roles explicitly allowed. An administrator grants access with `/admin roles ajouter <role>`, so staff members can moderate the game without full server permissions.
+`/vocal creer` creates a temporary voice channel owned by the invoker and posts a **control panel** inside it:
 
-| Subcommand | Description |
+| Panel button | Effect |
 |---|---|
-| `/admin roles ajouter\|retirer\|liste` | Manage which roles may use `/admin` |
-| `/admin argent donner\|retirer <member> <amount>` | Create or remove coins for a member |
-| `/admin reinitialiser <member>` | Completely reset a member's profile and inventory |
-| `/admin annoncer <title> <message> [#channel]` | Publish an official announcement embed |
+| Lock / Unlock | Allow or deny `Connect` for everyone |
+| Hide / Show | Make the channel invisible (or visible) to members |
+| User limit | Opens a modal to set a capacity (0 = unlimited) |
+| Rename | Opens a modal to rename the channel |
+| Close | Deletes the channel immediately |
 
-Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) relies on Discord's native permissions — but members holding an `/admin` role also gain access, so your staff setup stays consistent across both toolkits. Safety checks are built in: no self-moderation, no action against the server owner or higher-ranked members.
+House rules are handled automatically: the panel is usable **only by the owner**, ownership transfers to the next member when the owner leaves, and the channel is **deleted once empty**.
 
-### Requirements
+### Web wiki
 
-- [Node.js](https://nodejs.org/) 20 or later
-- A Discord application (see below)
+The bot embeds a small HTTP server that serves its own documentation:
 
-### Setup
+| Route | Description |
+|---|---|
+| `/` or `/wiki` | Dark-themed wiki page, auto-generated from the live command list |
+| `/api/commands` | JSON list of every registered command |
+| `/health` | Simple availability probe |
+
+The page regenerates on each request, so it always reflects the running bot. Configure the port with `WEB_PORT` and expose it publicly with `PUBLIC_URL`.
+
+### Administration & moderation
+
+Game administration is handled by `/admin`, available to server **administrators** plus any roles explicitly allowed via `/admin roles ajouter`. Staff can manage roles, mint or remove coins, reset profiles and publish announcements without full server permissions.
+
+Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) relies on native Discord permissions — but members holding an `/admin` role also gain access. Safety checks are built in: no self-moderation, no action against the owner or higher-ranked members.
+
+### Getting started
+
+**Requirements:** [Node.js](https://nodejs.org/) 20 or later.
 
 1. Create the application on the [Discord Developer Portal](https://discord.com/developers/applications):
-   - **Bot** tab: click *Reset Token* and copy the token; enable the privileged **Message Content Intent**
-   - **General Information** tab: copy the **Application ID**
-2. Invite the bot to your server:
+   - **Bot** tab: *Reset Token*, copy the token, enable the privileged **Message Content Intent**
+   - **General Information**: copy the **Application ID**
+2. Invite the bot:
 
    ```
-   https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&permissions=2147568640&scope=bot%20applications.commands
+   https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
    ```
 
 3. Install and run:
@@ -141,51 +171,61 @@ Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) 
    npm run dev
    ```
 
-### Environment variables (.env)
+### Configuration (.env)
 
 | Variable | Required | Description |
 |---|---|---|
 | `DISCORD_TOKEN` | Yes | Bot token (Developer Portal → Bot) |
 | `CLIENT_ID` | Recommended | Application ID — auto-detected by `npm run deploy` if omitted |
-| `GUILD_ID` | No | Test server ID: deploys commands instantly instead of waiting up to 1 hour |
+| `GUILD_ID` | No | Test server ID: deploys commands instantly instead of waiting up to 1 h |
+| `WEB_PORT` | No | Port of the embedded web server (default: `3000`) |
+| `PUBLIC_URL` | No | Public URL of the wiki behind a reverse proxy |
 | `EMBED_COLOR` | No | Embed color in hexadecimal (default: `#5865F2`) |
 | `BOT_NAME` | No | Name shown in embed footers (default: `OpenBot`) |
 
 ### Customization
 
-- **Add a command**: create a file in `src/commands/`, following the existing examples — it is loaded automatically
+- **Add a command**: drop a file in `src/commands/` following existing examples — loaded automatically, listed in the wiki instantly
 - **Add a shop item**: edit `src/data/items.ts`
+- **Add a pet**: edit `src/data/animals.ts`
+- **Add a monster**: edit `src/data/monsters.ts`
 - **Tune the economy**: cooldowns and XP rates live in `src/config.ts`
 
 ### Project structure
 
 ```
 src/
-├── index.ts               # Entry point: client, events, login
+├── index.ts               # Entry point: client, intents, events, login
 ├── deploy.ts              # Slash command deployment script
 ├── config.ts              # Environment variables & settings
 ├── loaders.ts             # Automatic command loading
 ├── types.ts               # Shared types (Command interface…)
 ├── commands/              # One command = one file (auto-loaded)
-├── events/                # ready, interactions, message XP
+├── events/                # ready, interactions, message XP, voice lifecycle
+├── systems/
+│   ├── adventure.ts       # Battle engine (monsters, loot, HP)
+│   └── vocal.ts           # Personal voice channels + control panel
 ├── database/
-│   ├── db.ts              # SQLite connection + schema
-│   ├── players.ts         # Balance, XP, levels, leaderboards
+│   ├── db.ts              # SQLite connection, schema & migrations
+│   ├── players.ts         # Balance, XP, levels, equipment, pets…
 │   ├── inventory.ts       # Player inventories
 │   ├── guilds.ts          # Per-guild settings (admin roles)
-│   └── warnings.ts        # Moderation warnings
+│   ├── warnings.ts        # Moderation warnings
+│   └── voice.ts           # Managed voice channels
 ├── data/
+│   ├── categories.ts      # Command categories shared with the wiki
 │   ├── items.ts           # Shop catalog
-│   ├── animals.ts         # Pets catalog & bonuses
+│   ├── animals.ts         # Pet catalog & coin bonuses
 │   └── monsters.ts        # Adventure monsters
-└── utils/                 # Embeds, formatting, randomness
+├── web/
+│   ├── server.ts          # Embedded HTTP server (wiki + API)
+│   └── wiki.ts            # Wiki page generator (dark theme)
+└── utils/                 # Embeds, formatting, randomness, moderation guards
 ```
 
 ### Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Ideas that would fit well: guilds, RPG classes, fishing, seasonal events.
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Ideas that would fit well: guilds, RPG classes, fishing, seasonal events.
 
 ### License
 
@@ -197,110 +237,137 @@ Released under the [MIT](LICENSE) license.
 
 ## Français
 
-### À propos du projet
+### Aperçu
 
-**Qu'est-ce qu'OpenBot ?**
+OpenBot apporte l'expérience complète d'un « bot de progression » à n'importe quel serveur Discord : les membres gagnent des pièces et de l'expérience, affrontent des monstres au tour par tour, adoptent des animaux, se marient, revendiquent leur propre salon vocal — pendant que ton staff dispose d'une panoplie de modération complète.
 
-OpenBot est un bot Discord open source développé en TypeScript avec [discord.js](https://discord.js.org) v14. Il apporte à n'importe quel serveur Discord les grandes fonctionnalités de progression — économie, niveaux d'expérience, boutique et mini-jeux — via des commandes slash natives et des embeds personnalisables.
+Tout tourne dans un seul processus Node.js avec une **base SQLite embarquée** : aucun service externe, aucun tableau de bord à configurer, aucune offre premium. Tu clones, tu lances, tu possèdes.
 
-**De quoi se compose-t-il ?**
+|                    | OpenBot            | Bots hébergés classiques |
+| ------------------ | ------------------ | ------------------------ |
+| Code source        | Ouvert (MIT)       | Fermé                    |
+| Hébergement        | Ta machine         | Un tiers                 |
+| Données            | 100 % chez toi     | Sur leurs serveurs       |
+| Personnalisation   | Chaque fichier     | Options figées           |
+| Fonctions verrouillées | Aucune         | Offres premium           |
 
-Le bot propose vingt-huit commandes organisées autour de six systèmes :
+### Points forts
 
-- une **économie** : récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs ;
-- un **système de niveaux** : XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces, classements par serveur ;
-- une **boutique et un inventaire** : consommables, armes et armures, avec un catalogue extensible ;
-- un **mode aventure** : combats au tour par tour contre des monstres pilotés par boutons — attaquer, boire une potion ou fuir — avec PV, régénération passive, bonus d'équipement et butin ;
-- une **vie sociale** : animaux de compagnie adoptables qui boostent tes gains, demandes en mariage avec boutons d'acceptation, sondages à réactions ;
-- des **outils de modération** : kick, ban, timeout, nettoyage de messages, mode lent et système d'avertissements.
+**Progression**
 
-Toutes les données sont stockées dans une base SQLite embarquée — aucun serveur de base de données externe n'est nécessaire. Installer le bot revient simplement à cloner le dépôt puis à lancer `npm install`.
+- XP gagnée en discutant, annonces de montée de niveau avec pièces bonus
+- Récompense quotidienne avec série et travail rémunéré chaque heure
+- Classements par serveur : argent, niveau ou XP totale
 
-**Quel est son but ?**
+**Aventure & divertissement**
 
-Les bots de progression populaires comme DraftBot sont très utilisés, mais ils restent fermés et hébergés par quelqu'un d'autre. OpenBot a été créé pour offrir une alternative libre et transparente que chacun peut :
+- Combats au tour par tour pilotés par boutons — attaquer, potion ou fuir
+- PV avec régénération passive, armes, armures et butin
+- Duels avec mise, pierre-feuille-ciseaux, pile ou face et dés
 
-- **héberger soi-même** — les données de ta communauté restent sur ta machine ;
-- **personnaliser librement** — chaque cooldown, objet et commande se trouve dans un fichier lisible ; en ajouter un revient à créer un fichier ;
-- **utiliser pour apprendre** — le code est volontairement petit et structuré : une bonne base pour découvrir discord.js et TypeScript ;
-- **faire évoluer** — les fonctionnalités avancent avec la communauté, sans offre premium ni commandes verrouillées.
+**Vie sociale**
 
-### Fonctionnalités
+- Animaux adoptables qui boostent chaque gain de pièces (chien, hibou, loup, bébé dragon…)
+- Demandes en mariage avec boutons accepter/refuser, divorce payant
+- Sondages à réactions et badges automatiques sur les profils
 
-- **Économie** — récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs
-- **Niveaux** — XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces
-- **Mode aventure** — combats au tour par tour contre des monstres avec boutons (attaquer / potion / fuir), PV avec régénération passive, armes, armures et butin
-- **Animaux et mariage** — adopte un compagnon qui booste tes gains de pièces, demande un membre en mariage
-- **Badges automatiques** — les profils affichent des badges gagnés via la progression (niveau, richesse, victoires…)
-- **Modération** — kick, ban, timeout, suppression en masse, mode lent de salon et avertissements par membre
-- **Outils communautaires** — duels avec mise, pierre-feuille-ciseaux contre le bot, sondages à réactions
-- **Boutique et inventaire** — boîtes mystère, tickets de loterie, potions, équipement, catalogue extensible
-- **Classements du serveur** — top 10 par argent, niveau ou XP totale
-- **Outils d'administration** — accès par rôles, gestion de l'économie, annonces, réinitialisation de profils
-- **Embeds personnalisés** — couleur configurable, footer et horodatage cohérents
-- **Zéro configuration de base de données** — stockage SQLite embarqué (un fichier local)
-- **Architecture simple** — ajouter une commande revient à ajouter un fichier
+**Salons vocaux**
+
+- Salons vocaux temporaires personnels créés à la demande
+- Panneau de contrôle à boutons : verrouiller, cacher, places, renommer, fermer
+- Transfert de propriété quand le propriétaire part ; suppression automatique si vide
+
+**Modération & administration**
+
+- Kick, ban, timeout, suppression en masse, mode lent de salon
+- Système d'avertissements par membre stocké en base
+- Administration du jeu (`/admin`) déléguée via des rôles configurés
+
+**Plateforme**
+
+- Serveur web intégré qui sert une page wiki sombre auto-générée
+- Endpoint JSON listant toutes les commandes (`/api/commands`)
+- Embeds soignés avec couleur configurable, footer et horodatage cohérents
+- Zéro configuration de base — un simple fichier SQLite local
 
 ### Commandes
 
+Vingt-neuf commandes, regroupées par catégorie :
+
 | Commande | Description |
 |---|---|
-| `/ping` | Affiche la latence du bot |
-| `/aide` | Liste toutes les commandes |
-| `/profil [membre]` | Niveau, XP, argent et série d'un membre |
+| `/profil [membre]` | Niveau, XP, argent, badges et équipement d'un membre |
 | `/classement <type>` | Top 10 du serveur (argent / niveau / XP) |
 | `/quotidien` | Récompense quotidienne (bonus de série) |
 | `/travail` | Gagne des pièces une fois par heure |
-| `/parier <montant>` | Pile ou face : double la mise ou la perd |
+| `/parier <montant>` | Pari pile ou face : double ou perd |
 | `/donner <membre> <montant>` | Offre des pièces à un membre |
 | `/boutique` | Affiche la boutique |
 | `/acheter <objet> [quantité]` | Achète un objet |
 | `/inventaire` | Affiche tes objets |
 | `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie, potion…) |
-| `/aventure` | Pars à l'aventure et affronte un monstre |
-| `/duel <adversaire> <mise>` | Défie un membre en duel avec mise |
+| `/aventure` | Combat un monstre dans une bataille à boutons |
+| `/duel <membre> <mise>` | Défie un membre en duel avec mise |
 | `/pfc` | Pierre-feuille-ciseaux contre le bot |
-| `/animal voir\|acheter\|nommer\|relacher` | Adopte un animal qui booste tes gains de pièces |
-| `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons accepter/refuser) |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopte un animal qui booste tes gains |
+| `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons) |
 | `/sondage <question> [choix]` | Crée un sondage à réactions |
+| `/vocal creer\|info\|supprimer` | Gère ton salon vocal personnel |
 | `/piece` | Lance une pièce |
 | `/de [faces]` | Lance un dé |
-| `/8ball <question>` | Pose une question au bot magique |
-| `/admin` | Administration — accès restreint (voir ci-dessous) |
-| `/clear <nombre> [membre]` | Supprime des messages en masse (d'un seul membre si précisé) |
+| `/clear <nombre> [membre]` | Supprime des messages en masse |
 | `/kick <membre> [raison]` | Expulse un membre |
 | `/ban <membre> [raison]` | Bannit un membre |
 | `/timeout <membre> <durée> [raison]` | Rend un membre muet temporairement |
 | `/slowmode <secondes>` | Définit le mode lent du salon actuel |
 | `/warn ajouter\|liste\|retirer` | Gère les avertissements d'un membre |
+| `/admin …` | Administration du jeu par rôles (ci-dessous) |
+| `/wiki` | Lien vers la page wiki intégrée |
+| `/ping` | Affiche la latence du bot |
 
-### Administration
+### Salons vocaux personnels
 
-L'administration du jeu passe par `/admin`, réservé aux **administrateurs** du serveur plus les rôles explicitement autorisés. Un administrateur accorde l'accès avec `/admin roles ajouter <role>` : le staff peut ainsi modérer le jeu sans disposer des permissions complètes du serveur.
+`/vocal creer` crée un salon vocal temporaire possédé par l'auteur et y publie un **panneau de contrôle** :
 
-| Sous-commande | Description |
+| Bouton du panneau | Effet |
 |---|---|
-| `/admin roles ajouter\|retirer\|liste` | Gère les rôles autorisés à utiliser `/admin` |
-| `/admin argent donner\|retirer <membre> <montant>` | Crée ou retire des pièces pour un membre |
-| `/admin reinitialiser <membre>` | Remet entièrement à zéro le profil et l'inventaire d'un membre |
-| `/admin annoncer <titre> <message> [#salon]` | Publie une annonce officielle en embed |
+| Verrouiller / Déverrouiller | Autorise ou interdit `Se connecter` à tous |
+| Cacher / Afficher | Rend le salon invisible (ou visible) aux membres |
+| Places | Ouvre une modale pour fixer la capacité (0 = illimité) |
+| Renommer | Ouvre une modale pour renommer le salon |
+| Fermer | Supprime immédiatement le salon |
 
-La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) s'appuie sur les permissions Discord natives — mais les membres disposant d'un rôle `/admin` y accèdent aussi, pour une organisation du staff cohérente sur les deux tableaux. Des garde-fous sont intégrés : pas d'auto-modération, aucune action possible contre le propriétaire ou les membres mieux gradés.
+Les règles sont automatiques : le panneau n'est utilisable **que par le propriétaire**, la propriété est transférée au membre suivant si le propriétaire part, et le salon est **supprimé dès qu'il devient vide**.
 
-### Prérequis
+### Wiki intégré
 
-- [Node.js](https://nodejs.org/) 20 ou supérieur
-- Une application Discord (voir ci-dessous)
+Le bot embarque un petit serveur HTTP qui sert sa propre documentation :
+
+| Route | Description |
+|---|---|
+| `/` ou `/wiki` | Page wiki au thème sombre, générée depuis la liste des commandes en direct |
+| `/api/commands` | Liste JSON de toutes les commandes enregistrées |
+| `/health` | Sonde de disponibilité |
+
+La page se régénère à chaque requête : elle reflète toujours le bot en cours d'exécution. Configure le port avec `WEB_PORT` et expose-la publiquement avec `PUBLIC_URL`.
+
+### Administration & modération
+
+L'administration du jeu passe par `/admin`, réservé aux **administrateurs** plus les rôles autorisés via `/admin roles ajouter`. Le staff peut gérer les rôles, créer ou retirer des pièces, réinitialiser des profils et publier des annonces sans disposer des permissions complètes du serveur.
+
+La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) s'appuie sur les permissions Discord natives — mais les membres disposant d'un rôle `/admin` y accèdent aussi. Des garde-fous sont intégrés : pas d'auto-modération, aucune action contre le propriétaire ou les membres mieux gradés.
 
 ### Mise en place
 
+**Prérequis :** [Node.js](https://nodejs.org/) 20 ou supérieur.
+
 1. Crée l'application sur le [Discord Developer Portal](https://discord.com/developers/applications) :
-   - Onglet **Bot** : clique sur *Reset Token*, copie le token ; active l'intent privilégié **Message Content Intent**
+   - Onglet **Bot** : *Reset Token*, copie le token, active l'intent privilégié **Message Content Intent**
    - Onglet **General Information** : copie l'**Application ID**
-2. Invite le bot sur ton serveur :
+2. Invite le bot :
 
    ```
-   https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=2147568640&scope=bot%20applications.commands
+   https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
    ```
 
 3. Installe et lance :
@@ -319,21 +386,25 @@ La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `
    npm run dev
    ```
 
-### Variables d'environnement (.env)
+### Configuration (.env)
 
 | Variable | Obligatoire | Description |
 |---|---|---|
 | `DISCORD_TOKEN` | Oui | Token du bot (Developer Portal → Bot) |
 | `CLIENT_ID` | Recommandé | Application ID — déduit automatiquement par `npm run deploy` si absent |
-| `GUILD_ID` | Non | ID d'un serveur de test : déploie les commandes instantanément au lieu d'attendre ~1 h |
+| `GUILD_ID` | Non | ID d'un serveur de test : déploie instantanément au lieu d'attendre ~1 h |
+| `WEB_PORT` | Non | Port du serveur web intégré (défaut : `3000`) |
+| `PUBLIC_URL` | Non | URL publique du wiki derrière un reverse proxy |
 | `EMBED_COLOR` | Non | Couleur des embeds en hexadécimal (défaut : `#5865F2`) |
 | `BOT_NAME` | Non | Nom affiché dans le pied des embeds (défaut : `OpenBot`) |
 
 ### Personnalisation
 
-- **Ajouter une commande** : crée un fichier dans `src/commands/` sur le modèle des existantes — il est chargé automatiquement
-- **Ajouter un objet en boutique** : modifie `src/data/items.ts`
-- **Ajuster l'économie** : les cooldowns et gains d'XP sont dans `src/config.ts`
+- **Ajouter une commande** : crée un fichier dans `src/commands/` sur le modèle des existantes — chargé automatiquement et listé dans le wiki instantanément
+- **Ajouter un objet** : modifie `src/data/items.ts`
+- **Ajouter un animal** : modifie `src/data/animals.ts`
+- **Ajouter un monstre** : modifie `src/data/monsters.ts`
+- **Ajuster l'économie** : cooldowns et gains d'XP dans `src/config.ts`
 
 ### Structure du projet
 
@@ -341,9 +412,7 @@ Voir la section [anglaise](#english) pour l'arborescence détaillée.
 
 ### Contribuer
 
-Les contributions sont les bienvenues. Consulte [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Idées bienvenues : guildes, classes RPG, pêche, événements saisonniers.
+Les contributions sont les bienvenues — consulte [CONTRIBUTING.md](CONTRIBUTING.md). Idées bienvenues : guildes, classes RPG, pêche, événements saisonniers.
 
 ### Licence
 
