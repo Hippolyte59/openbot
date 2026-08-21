@@ -19,10 +19,30 @@
 
 ## English
 
-### Overview
+### About the project
 
-OpenBot provides economy, leveling, shop and mini-game systems through slash commands.
-It is designed to be simple to host, easy to customize, and free for everyone.
+**What is OpenBot?**
+
+OpenBot is an open-source Discord bot written in TypeScript with [discord.js](https://discord.js.org) v14. It brings classic progression features to any Discord server — economy, experience levels, a shop and mini-games — through native slash commands and clean, customizable embeds.
+
+**What does it include?**
+
+The bot ships with fifteen commands built around three systems:
+
+- an **economy**: daily rewards with streak bonuses, hourly jobs, betting, transfers between players;
+- a **leveling system**: XP earned while chatting, level-up announcements with coin rewards, per-server leaderboards;
+- a **shop and inventory**: mystery boxes, lottery tickets and consumables, with an extensible item catalog.
+
+Everything is stored in an embedded SQLite database — no external database server required — which makes a full installation as simple as cloning the repository and running `npm install`.
+
+**Why does it exist?**
+
+Popular progression bots such as DraftBot are widely used, but they remain closed-source and hosted by someone else. OpenBot was created as a free and transparent alternative that anyone can:
+
+- **self-host** — your community's data stays on your own machine;
+- **customize freely** — every cooldown, item and command lives in a readable file; adding one means adding one file;
+- **learn from** — the codebase is intentionally small and structured, making it a solid starting point to discover discord.js and TypeScript;
+- **contribute to** — features evolve with the community, with no premium tiers and no locked commands.
 
 ### Features
 
@@ -138,10 +158,30 @@ Released under the [MIT](LICENSE) license.
 
 ## Français
 
-### Aperçu
+### À propos du projet
 
-OpenBot propose des systèmes d'économie, de niveaux, de boutique et de mini-jeux accessibles en commandes slash.
-Le bot est pensé pour être simple à héberger, facile à personnaliser et libre pour tous.
+**Qu'est-ce qu'OpenBot ?**
+
+OpenBot est un bot Discord open source développé en TypeScript avec [discord.js](https://discord.js.org) v14. Il apporte à n'importe quel serveur Discord les grandes fonctionnalités de progression — économie, niveaux d'expérience, boutique et mini-jeux — via des commandes slash natives et des embeds personnalisables.
+
+**De quoi se compose-t-il ?**
+
+Le bot propose quinze commandes organisées autour de trois systèmes :
+
+- une **économie** : récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs ;
+- un **système de niveaux** : XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces, classements par serveur ;
+- une **boutique et un inventaire** : boîtes mystère, tickets de loterie et objets consommables, avec un catalogue extensible.
+
+Toutes les données sont stockées dans une base SQLite embarquée — aucun serveur de base de données externe n'est nécessaire. Installer le bot revient simplement à cloner le dépôt puis à lancer `npm install`.
+
+**Quel est son but ?**
+
+Les bots de progression populaires comme DraftBot sont très utilisés, mais ils restent fermés et hébergés par quelqu'un d'autre. OpenBot a été créé pour offrir une alternative libre et transparente que chacun peut :
+
+- **héberger soi-même** — les données de ta communauté restent sur ta machine ;
+- **personnaliser librement** — chaque cooldown, objet et commande se trouve dans un fichier lisible ; en ajouter un revient à créer un fichier ;
+- **utiliser pour apprendre** — le code est volontairement petit et structuré : une bonne base pour découvrir discord.js et TypeScript ;
+- **faire évoluer** — les fonctionnalités avancent avec la communauté, sans offre premium ni commandes verrouillées.
 
 ### Fonctionnalités
 
