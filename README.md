@@ -81,36 +81,36 @@ Thirty commands, grouped by category:
 
 | Command | Description |
 |---|---|
-| `/profil [member]` | View a member's level, XP, balance, badges and more |
-| `/classement <type>` | Server top 10 (balance / level / XP) |
-| `/quotidien` | Claim your daily reward (streak bonus) |
-| `/travail` | Earn coins once per hour |
-| `/parier <amount>` | Coin flip bet: double or lose |
-| `/donner <member> <amount>` | Give coins to another member |
-| `/boutique` | Browse the shop |
-| `/acheter <item> [quantity]` | Purchase an item |
-| `/inventaire` | View your items |
-| `/utiliser <item>` | Use an item (mystery box, lottery, potion…) |
-| `/aventure` | Fight a monster in a button-driven battle |
-| `/duel <member> <stake>` | Challenge a member to a wagered duel |
-| `/pfc` | Rock-paper-scissors against the bot |
-| `/animal voir\|acheter\|nommer\|relacher` | Adopt and care for a pet that boosts your earnings |
-| `/mariage proposer\|statut\|divorcer` | Propose to another member (buttons) |
-| `/sondage <question> [choices]` | Create a reaction poll |
-| `/vocal creer\|info\|supprimer` | Manage your personal voice channel |
-| `/vocal hub creer\|definir\|retirer` | Configure the server's join-to-create channel |
-| `/piece` | Flip a coin |
-| `/de [faces]` | Roll a dice |
-| `/clear <count> [member]` | Bulk delete messages |
-| `/kick <member> [reason]` | Kick a member |
-| `/ban <member> [reason]` | Ban a member |
-| `/timeout <member> <duration> [reason]` | Temporarily mute a member |
-| `/slowmode <seconds>` | Set the current channel's slowmode |
-| `/warn ajouter\|liste\|retirer` | Manage a member's warnings |
-| `/admin …` | Role-based game administration (below) |
-| `/aide` | Open the site and the wiki (embed with logo and quick links) |
-| `/wiki` | Link to the built-in wiki page |
-| `/ping` | Show bot latency |
+| `/profil [member]` | 👤 View a member's level, XP, balance, badges and more |
+| `/classement <type>` | 🏆 Server top 10 (balance / level / XP) |
+| `/quotidien` | 🎁 Claim your daily reward (streak bonus) |
+| `/travail` | 💼 Earn coins once per hour |
+| `/parier <amount>` | 🎲 Coin flip bet: double or lose |
+| `/donner <member> <amount>` | 🎁 Give coins to another member |
+| `/boutique` | 🛒 Browse the shop |
+| `/acheter <item> [quantity]` | 🛍️ Purchase an item |
+| `/inventaire` | 🎒 View your items |
+| `/utiliser <item>` | ✨ Use an item (mystery box, lottery, potion…) |
+| `/aventure` | 🌲 Fight a monster in a button-driven battle |
+| `/duel <member> <stake>` | ⚔️ Challenge a member to a wagered duel |
+| `/pfc` | 🪨 Rock-paper-scissors against the bot |
+| `/animal voir\|acheter\|nommer\|relacher` | 🐾 Adopt and care for a pet that boosts your earnings |
+| `/mariage proposer\|statut\|divorcer` | 💍 Propose to another member (buttons) |
+| `/sondage <question> [choices]` | 📊 Create a reaction poll |
+| `/vocal creer\|info\|supprimer` | 🔊 Manage your personal voice channel |
+| `/vocal hub creer\|definir\|retirer` | 📡 Configure the server's join-to-create channel |
+| `/piece` | 🪙 Flip a coin |
+| `/de [faces]` | 🎲 Roll a dice |
+| `/clear <count> [member]` | 🧹 Bulk delete messages |
+| `/kick <member> [reason]` | 👢 Kick a member |
+| `/ban <member> [reason]` | 🔨 Ban a member |
+| `/timeout <member> <duration> [reason]` | 🔇 Temporarily mute a member |
+| `/slowmode <seconds>` | 🐢 Set the current channel's slowmode |
+| `/warn ajouter\|liste\|retirer` | ⚠️ Manage a member's warnings |
+| `/admin …` | 🛠️ Role-based game administration (below) |
+| `/aide` | 📖 Open the site and the wiki (embed with logo and quick links) |
+| `/wiki` | 📖 Link to the built-in wiki page |
+| `/ping` | 🏓 Show bot latency |
 
 ### Personal voice channels
 
@@ -303,36 +303,36 @@ Trente commandes, regroupées par catégorie :
 
 | Commande | Description |
 |---|---|
-| `/profil [membre]` | Niveau, XP, argent, badges et équipement d'un membre |
-| `/classement <type>` | Top 10 du serveur (argent / niveau / XP) |
-| `/quotidien` | Récompense quotidienne (bonus de série) |
-| `/travail` | Gagne des pièces une fois par heure |
-| `/parier <montant>` | Pari pile ou face : double ou perd |
-| `/donner <membre> <montant>` | Offre des pièces à un membre |
-| `/boutique` | Affiche la boutique |
-| `/acheter <objet> [quantité]` | Achète un objet |
-| `/inventaire` | Affiche tes objets |
-| `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie, potion…) |
-| `/aventure` | Combat un monstre dans une bataille à boutons |
-| `/duel <membre> <mise>` | Défie un membre en duel avec mise |
-| `/pfc` | Pierre-feuille-ciseaux contre le bot |
-| `/animal voir\|acheter\|nommer\|relacher` | Adopte un animal qui booste tes gains |
-| `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons) |
-| `/sondage <question> [choix]` | Crée un sondage à réactions |
-| `/vocal creer\|info\|supprimer` | Gère ton salon vocal personnel |
-| `/vocal hub creer\|definir\|retirer` | Configure le salon « rejoindre pour créer » du serveur |
-| `/piece` | Lance une pièce |
-| `/de [faces]` | Lance un dé |
-| `/clear <nombre> [membre]` | Supprime des messages en masse |
-| `/kick <membre> [raison]` | Expulse un membre |
-| `/ban <membre> [raison]` | Bannit un membre |
-| `/timeout <membre> <durée> [raison]` | Rend un membre muet temporairement |
-| `/slowmode <secondes>` | Définit le mode lent du salon actuel |
-| `/warn ajouter\|liste\|retirer` | Gère les avertissements d'un membre |
-| `/admin …` | Administration du jeu par rôles (ci-dessous) |
-| `/aide` | Ouvre le site et le wiki (embed avec logo et liens rapides) |
-| `/wiki` | Lien vers la page wiki intégrée |
-| `/ping` | Affiche la latence du bot |
+| `/profil [membre]` | 👤 Niveau, XP, argent, badges et équipement d'un membre |
+| `/classement <type>` | 🏆 Top 10 du serveur (argent / niveau / XP) |
+| `/quotidien` | 🎁 Récompense quotidienne (bonus de série) |
+| `/travail` | 💼 Gagne des pièces une fois par heure |
+| `/parier <montant>` | 🎲 Pari pile ou face : double ou perd |
+| `/donner <membre> <montant>` | 🎁 Offre des pièces à un membre |
+| `/boutique` | 🛒 Affiche la boutique |
+| `/acheter <objet> [quantité]` | 🛍️ Achète un objet |
+| `/inventaire` | 🎒 Affiche tes objets |
+| `/utiliser <objet>` | ✨ Utilise un objet (boîte mystère, loterie, potion…) |
+| `/aventure` | 🌲 Combat un monstre dans une bataille à boutons |
+| `/duel <membre> <mise>` | ⚔️ Défie un membre en duel avec mise |
+| `/pfc` | 🪨 Pierre-feuille-ciseaux contre le bot |
+| `/animal voir\|acheter\|nommer\|relacher` | 🐾 Adopte un animal qui booste tes gains |
+| `/mariage proposer\|statut\|divorcer` | 💍 Demande un membre en mariage (boutons) |
+| `/sondage <question> [choix]` | 📊 Crée un sondage à réactions |
+| `/vocal creer\|info\|supprimer` | 🔊 Gère ton salon vocal personnel |
+| `/vocal hub creer\|definir\|retirer` | 📡 Configure le salon « rejoindre pour créer » du serveur |
+| `/piece` | 🪙 Lance une pièce |
+| `/de [faces]` | 🎲 Lance un dé |
+| `/clear <nombre> [membre]` | 🧹 Supprime des messages en masse |
+| `/kick <membre> [raison]` | 👢 Expulse un membre |
+| `/ban <membre> [raison]` | 🔨 Bannit un membre |
+| `/timeout <membre> <durée> [raison]` | 🔇 Rend un membre muet temporairement |
+| `/slowmode <secondes>` | 🐢 Définit le mode lent du salon actuel |
+| `/warn ajouter\|liste\|retirer` | ⚠️ Gère les avertissements d'un membre |
+| `/admin …` | 🛠️ Administration du jeu par rôles (ci-dessous) |
+| `/aide` | 📖 Ouvre le site et le wiki (embed avec logo et liens rapides) |
+| `/wiki` | 📖 Lien vers la page wiki intégrée |
+| `/ping` | 🏓 Affiche la latence du bot |
 
 ### Salons vocaux personnels
 
