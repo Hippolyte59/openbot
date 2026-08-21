@@ -1,0 +1,45 @@
+{
+  "name": "openbot",
+  "version": "1.0.0",
+  "description": "Un bot Discord open source : économie, niveaux, boutique, mini-jeux. Une alternative libre et personnalisable à DraftBot.",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "deploy": "tsx src/deploy.ts"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "discord-bot",
+    "open-source",
+    "typescript",
+    "economie",
+    "rpg",
+    "slash-commands"
+  ],
+  "author": "Hippolyte59",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.5.0",
+    "tsx": "^4.17.1",
+    "typescript": "^5.5.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
+  }
+}
