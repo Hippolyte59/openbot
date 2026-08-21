@@ -27,11 +27,12 @@ OpenBot is an open-source Discord bot written in TypeScript with [discord.js](ht
 
 **What does it include?**
 
-The bot ships with fifteen commands built around three systems:
+The bot ships with twenty commands built around four systems:
 
 - an **economy**: daily rewards with streak bonuses, hourly jobs, betting, transfers between players;
 - a **leveling system**: XP earned while chatting, level-up announcements with coin rewards, per-server leaderboards;
-- a **shop and inventory**: mystery boxes, lottery tickets and consumables, with an extensible item catalog.
+- a **shop and inventory**: consumables, weapons and armor, with an extensible item catalog;
+- an **adventure mode**: turn-based monster battles played with buttons — attack, drink a potion or flee — with HP, passive regeneration, equipment bonuses and loot drops.
 
 Everything is stored in an embedded SQLite database — no external database server required — which makes a full installation as simple as cloning the repository and running `npm install`.
 
@@ -48,8 +49,11 @@ Popular progression bots such as DraftBot are widely used, but they remain close
 
 - **Economy** — daily rewards with streak bonuses, hourly jobs, betting, player-to-player transfers
 - **Leveling** — XP earned by chatting, level-up announcements with coin rewards
-- **Shop & inventory** — mystery boxes, lottery tickets, coffee boosts, extensible item catalog
+- **Adventure mode** — turn-based monster battles played with buttons (attack / potion / flee), HP with passive regeneration, weapons, armor and loot drops
+- **Community tools** — PvP duels with wagers, rock-paper-scissors against the bot, reaction polls
+- **Shop & inventory** — mystery boxes, lottery tickets, potions, equipment, extensible item catalog
 - **Server leaderboards** — top 10 by balance, level or total XP
+- **Admin toolkit** — role-based access control, economy management, announcements, profile resets
 - **Custom embeds** — configurable color, consistent footer and timestamps
 - **Zero database setup** — embedded SQLite storage (single local file)
 - **Simple architecture** — adding a command means adding one file
@@ -69,10 +73,26 @@ Popular progression bots such as DraftBot are widely used, but they remain close
 | `/boutique` | Browse the shop |
 | `/acheter <item> [quantity]` | Purchase an item |
 | `/inventaire` | View your items |
-| `/utiliser <item>` | Use an item (mystery box, lottery…) |
+| `/utiliser <item>` | Use an item (mystery box, lottery, potion…) |
+| `/aventure` | Embark on an adventure and fight a monster |
+| `/duel <member> <stake>` | Challenge a member to a wagered duel |
+| `/pfc` | Rock-paper-scissors against the bot |
+| `/sondage <question> [choices]` | Create a reaction poll |
 | `/piece` | Flip a coin |
 | `/de [faces]` | Roll a dice |
 | `/8ball <question>` | Ask the magic bot a question |
+| `/admin` | Administration — restricted access (see below) |
+
+### Administration
+
+`/admin` is available to server **administrators** plus any roles explicitly allowed. An administrator grants access with `/admin roles ajouter <role>`, so staff members can moderate the game without full server permissions.
+
+| Subcommand | Description |
+|---|---|
+| `/admin roles ajouter\|retirer\|liste` | Manage which roles may use `/admin` |
+| `/admin argent donner\|retirer <member> <amount>` | Create or remove coins for a member |
+| `/admin reinitialiser <member>` | Completely reset a member's profile and inventory |
+| `/admin annoncer <title> <message> [#channel]` | Publish an official announcement embed |
 
 ### Requirements
 
@@ -166,11 +186,12 @@ OpenBot est un bot Discord open source développé en TypeScript avec [discord.j
 
 **De quoi se compose-t-il ?**
 
-Le bot propose quinze commandes organisées autour de trois systèmes :
+Le bot propose vingt commandes organisées autour de quatre systèmes :
 
 - une **économie** : récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs ;
 - un **système de niveaux** : XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces, classements par serveur ;
-- une **boutique et un inventaire** : boîtes mystère, tickets de loterie et objets consommables, avec un catalogue extensible.
+- une **boutique et un inventaire** : consommables, armes et armures, avec un catalogue extensible ;
+- un **mode aventure** : combats au tour par tour contre des monstres pilotés par boutons — attaquer, boire une potion ou fuir — avec PV, régénération passive, bonus d'équipement et butin.
 
 Toutes les données sont stockées dans une base SQLite embarquée — aucun serveur de base de données externe n'est nécessaire. Installer le bot revient simplement à cloner le dépôt puis à lancer `npm install`.
 
@@ -187,8 +208,11 @@ Les bots de progression populaires comme DraftBot sont très utilisés, mais ils
 
 - **Économie** — récompense quotidienne avec bonus de série, travail horaire, paris, dons entre joueurs
 - **Niveaux** — XP gagnée en discutant, annonces de montée de niveau avec bonus de pièces
-- **Boutique et inventaire** — boîtes mystère, tickets de loterie, cafés, catalogue d'objets extensible
+- **Mode aventure** — combats au tour par tour contre des monstres avec boutons (attaquer / potion / fuir), PV avec régénération passive, armes, armures et butin
+- **Outils communautaires** — duels avec mise, pierre-feuille-ciseaux contre le bot, sondages à réactions
+- **Boutique et inventaire** — boîtes mystère, tickets de loterie, potions, équipement, catalogue extensible
 - **Classements du serveur** — top 10 par argent, niveau ou XP totale
+- **Outils d'administration** — accès par rôles, gestion de l'économie, annonces, réinitialisation de profils
 - **Embeds personnalisés** — couleur configurable, footer et horodatage cohérents
 - **Zéro configuration de base de données** — stockage SQLite embarqué (un fichier local)
 - **Architecture simple** — ajouter une commande revient à ajouter un fichier
@@ -208,10 +232,26 @@ Les bots de progression populaires comme DraftBot sont très utilisés, mais ils
 | `/boutique` | Affiche la boutique |
 | `/acheter <objet> [quantité]` | Achète un objet |
 | `/inventaire` | Affiche tes objets |
-| `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie…) |
+| `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie, potion…) |
+| `/aventure` | Pars à l'aventure et affronte un monstre |
+| `/duel <adversaire> <mise>` | Défie un membre en duel avec mise |
+| `/pfc` | Pierre-feuille-ciseaux contre le bot |
+| `/sondage <question> [choix]` | Crée un sondage à réactions |
 | `/piece` | Lance une pièce |
 | `/de [faces]` | Lance un dé |
 | `/8ball <question>` | Pose une question au bot magique |
+| `/admin` | Administration — accès restreint (voir ci-dessous) |
+
+### Administration
+
+`/admin` est réservé aux **administrateurs** du serveur, plus les rôles explicitement autorisés. Un administrateur accorde l'accès avec `/admin roles ajouter <role>` : le staff peut ainsi modérer le jeu sans disposer des permissions complètes du serveur.
+
+| Sous-commande | Description |
+|---|---|
+| `/admin roles ajouter\|retirer\|liste` | Gère les rôles autorisés à utiliser `/admin` |
+| `/admin argent donner\|retirer <membre> <montant>` | Crée ou retire des pièces pour un membre |
+| `/admin reinitialiser <membre>` | Remet entièrement à zéro le profil et l'inventaire d'un membre |
+| `/admin annoncer <titre> <message> [#salon]` | Publie une annonce officielle en embed |
 
 ### Prérequis
 

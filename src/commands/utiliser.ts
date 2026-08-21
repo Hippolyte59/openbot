@@ -1,15 +1,22 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
-import { SHOP_ITEMS, getShopItem } from "../data/items.js";
+import { getConsumables, getShopItem } from "../data/items.js";
 import { consumeItem } from "../database/inventory.js";
-import { addBalance, addXp } from "../database/players.js";
+import {
+  addBalance,
+  addXp,
+  getPlayer,
+  maxHp,
+  setHp,
+} from "../database/players.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
-import { formatNumber } from "../utils/format.js";
+import { formatNumber, progressBar } from "../utils/format.js";
 import { randomInt } from "../utils/random.js";
 import { config } from "../config.js";
 
 const LOTTERY_JACKPOT = 1000;
 const LOTTERY_CHANCE = 0.1;
+const POTION_HEAL = 40;
 
 export default {
   data: new SlashCommandBuilder()
@@ -21,7 +28,7 @@ export default {
         .setDescription("L'objet à utiliser")
         .setRequired(true)
         .addChoices(
-          ...SHOP_ITEMS.map((item) => ({
+          ...getConsumables().map((item) => ({
             name: `${item.emoji} ${item.name}`,
             value: item.id,
           })),
@@ -34,14 +41,14 @@ export default {
     const itemId = interaction.options.getString("objet", true);
     const item = getShopItem(itemId);
 
-    if (!item) {
+    if (!item || item.kind !== "consumable") {
       await interaction.reply({
         embeds: [errorEmbed("Cet objet n'existe pas.")],
       });
       return;
     }
 
-    if (!consumeItem(interaction.guildId, interaction.user.id, item)) {
+    if (!consumeItem(interaction.guildId, interaction.user.id, item.id)) {
       await interaction.reply({
         embeds: [
           errorEmbed(
@@ -88,12 +95,30 @@ export default {
         break;
       }
 
+      case "potion": {
+        const player = getPlayer(interaction.guildId, interaction.user.id);
+        const hpMax = maxHp(player.level);
+
+        if (player.hp >= hpMax) {
+          embed = createEmbed("warning").setDescription(
+            `❤️ Tu es déjà en pleine forme (**${player.hp}/${hpMax} PV**). La potion est perdue…`,
+          );
+          break;
+        }
+
+        const healed = Math.min(hpMax, player.hp + POTION_HEAL);
+        setHp(interaction.guildId, interaction.user.id, healed);
+
+        embed = createEmbed("success")
+          .setTitle("🧪 Potion de soin")
+          .setDescription(
+            `Glou glou… Tu récupères **+${healed - player.hp} PV** !\n\n${progressBar(healed, hpMax)} **${healed} / ${hpMax}** PV`,
+          );
+        break;
+      }
+
       case "cafe": {
-        const result = addXp(
-          interaction.guildId,
-          interaction.user.id,
-          50,
-        );
+        const result = addXp(interaction.guildId, interaction.user.id, 50);
         embed = createEmbed("success")
           .setTitle("☕ Pause café")
           .setDescription(

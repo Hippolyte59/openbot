@@ -1,5 +1,4 @@
 import { db } from "./db.js";
-import type { ShopItem } from "../data/items.js";
 
 interface InventoryRow {
   item_id: string;
@@ -49,9 +48,16 @@ export function addItem(
 export function consumeItem(
   guildId: string,
   userId: string,
-  item: ShopItem,
+  itemId: string,
   quantity = 1,
 ): boolean {
-  const result = consumeStmt.run(quantity, guildId, userId, item.id, quantity);
+  const result = consumeStmt.run(quantity, guildId, userId, itemId, quantity);
   return result.changes > 0;
+}
+
+/** Vide entièrement l'inventaire d'un joueur (commande admin). */
+export function clearInventory(guildId: string, userId: string): void {
+  db.prepare(
+    "DELETE FROM inventory WHERE guild_id = ? AND user_id = ?",
+  ).run(guildId, userId);
 }

@@ -11,19 +11,30 @@ export default {
     .setDescription("🛒 Affiche la boutique du serveur"),
 
   async execute(interaction) {
+    const consumables = SHOP_ITEMS.filter(
+      (item) => item.kind === "consumable",
+    );
+    const equipment = SHOP_ITEMS.filter((item) => item.kind !== "consumable");
+
     const embed = createEmbed()
       .setTitle("🛒 Boutique")
       .setDescription(
         [
           "Bienvenue dans la boutique ! Achète des objets avec tes pièces.",
           "",
-          "**Objets disponibles :**",
-          ...SHOP_ITEMS.map(
+          "**📦 Consommables**",
+          ...consumables.map(
             (item) =>
               `${item.emoji} **${item.name}** — ${formatNumber(item.price)} ${config.currency}\n> ${item.description}`,
           ),
           "",
-          `💡 Utilise \`/acheter\` pour faire ton choix.`,
+          "**⚔️ Équipement** (équipé automatiquement à l'achat)",
+          ...equipment.map(
+            (item) =>
+              `${item.emoji} **${item.name}** — ${formatNumber(item.price)} ${config.currency}\n> ${item.description}`,
+          ),
+          "",
+          "💡 Utilise `/acheter` pour faire ton choix.",
         ].join("\n"),
       );
 

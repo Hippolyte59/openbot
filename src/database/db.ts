@@ -9,15 +9,20 @@ db.pragma("journal_mode = WAL");
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS players (
-    guild_id      TEXT NOT NULL,
-    user_id       TEXT NOT NULL,
-    balance       INTEGER NOT NULL DEFAULT 0,
-    xp            INTEGER NOT NULL DEFAULT 0,
-    level         INTEGER NOT NULL DEFAULT 1,
-    daily_streak  INTEGER NOT NULL DEFAULT 0,
-    last_daily    INTEGER NOT NULL DEFAULT 0,
-    last_work     INTEGER NOT NULL DEFAULT 0,
-    created_at    INTEGER NOT NULL DEFAULT (unixepoch()),
+    guild_id       TEXT NOT NULL,
+    user_id        TEXT NOT NULL,
+    balance        INTEGER NOT NULL DEFAULT 0,
+    xp             INTEGER NOT NULL DEFAULT 0,
+    level          INTEGER NOT NULL DEFAULT 1,
+    daily_streak   INTEGER NOT NULL DEFAULT 0,
+    last_daily     INTEGER NOT NULL DEFAULT 0,
+    last_work      INTEGER NOT NULL DEFAULT 0,
+    hp             INTEGER NOT NULL DEFAULT 100,
+    last_regen     INTEGER NOT NULL DEFAULT 0,
+    last_adventure INTEGER NOT NULL DEFAULT 0,
+    weapon         TEXT,
+    armor          TEXT,
+    created_at     INTEGER NOT NULL DEFAULT (unixepoch()),
     PRIMARY KEY (guild_id, user_id)
   );
 
@@ -28,4 +33,27 @@ db.exec(`
     quantity   INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (guild_id, user_id, item_id)
   );
+
+  CREATE TABLE IF NOT EXISTS admin_roles (
+    guild_id   TEXT NOT NULL,
+    role_id    TEXT NOT NULL,
+    PRIMARY KEY (guild_id, role_id)
+  );
 `);
+
+// Migrations légères : ajoute les colonnes récentes aux bases existantes
+const migrations = [
+  "ALTER TABLE players ADD COLUMN hp INTEGER NOT NULL DEFAULT 100",
+  "ALTER TABLE players ADD COLUMN last_regen INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE players ADD COLUMN last_adventure INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE players ADD COLUMN weapon TEXT",
+  "ALTER TABLE players ADD COLUMN armor TEXT",
+];
+
+for (const sql of migrations) {
+  try {
+    db.exec(sql);
+  } catch {
+    // Colonne déjà présente : rien à faire
+  }
+}

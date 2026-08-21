@@ -2,7 +2,11 @@ import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
 import { SHOP_ITEMS, getShopItem } from "../data/items.js";
 import { addItem } from "../database/inventory.js";
-import { getPlayer, removeBalance } from "../database/players.js";
+import {
+  getPlayer,
+  removeBalance,
+  updatePlayer,
+} from "../database/players.js";
 import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
@@ -26,7 +30,7 @@ export default {
     .addIntegerOption((option) =>
       option
         .setName("quantite")
-        .setDescription("Quantité (1 par défaut)")
+        .setDescription("Quantité (1 par défaut — équipement uniquement)")
         .setRequired(false)
         .setMinValue(1)
         .setMaxValue(10),
@@ -46,6 +50,18 @@ export default {
       return;
     }
 
+    if (item.kind !== "consumable" && quantity > 1) {
+      await interaction.reply({
+        embeds: [
+          errorEmbed(
+            `${item.emoji} **${item.name}** est un équipement : il s'achète à l'unité.`,
+          ),
+        ],
+        ephemeral: true,
+      });
+      return;
+    }
+
     const total = item.price * quantity;
     const player = getPlayer(interaction.guildId, interaction.user.id);
 
@@ -61,6 +77,27 @@ export default {
     }
 
     removeBalance(interaction.guildId, interaction.user.id, total);
+
+    // L'équipement remplace l'objet équipé au lieu d'aller dans l'inventaire
+    if (item.kind === "weapon" || item.kind === "armor") {
+      updatePlayer(
+        interaction.guildId,
+        interaction.user.id,
+        item.kind === "weapon"
+          ? { weapon: item.id }
+          : { armor: item.id },
+      );
+
+      await interaction.reply({
+        embeds: [
+          successEmbed(
+            `${item.emoji} Tu t'équipes de **${item.name}** pour **${formatNumber(total)} ${config.currency}** !\n\n> ${item.description}`,
+          ),
+        ],
+      });
+      return;
+    }
+
     addItem(interaction.guildId, interaction.user.id, item.id, quantity);
 
     await interaction.reply({

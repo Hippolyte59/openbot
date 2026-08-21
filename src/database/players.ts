@@ -9,24 +9,32 @@ export interface Player {
   daily_streak: number;
   last_daily: number;
   last_work: number;
+  hp: number;
+  last_regen: number;
+  last_adventure: number;
+  weapon: string | null;
+  armor: string | null;
 }
 
-const insertPlayer = db.prepare<[string, string]>(
-  "INSERT OR IGNORE INTO players (guild_id, user_id) VALUES (?, ?)",
-);
-const selectPlayer = db.prepare<[string, string], Player>(
-  "SELECT * FROM players WHERE guild_id = ? AND user_id = ?",
-);
+/** PV maximum selon le niveau. */
+export function maxHp(level: number): number {
+  return 90 + level * 10;
+}
+
+/** Régénération : 1 PV toutes les 30 secondes. */
+const REGEN_INTERVAL = 30_000;
 
 /** XP totale nécessaire pour passer du niveau `level` au suivant. */
 export function xpNeededFor(level: number): number {
   return 100 * level * level;
 }
 
-export function getPlayer(guildId: string, userId: string): Player {
-  insertPlayer.run(guildId, userId);
-  return selectPlayer.get(guildId, userId) as Player;
-}
+const insertPlayer = db.prepare<[string, string, number]>(
+  "INSERT OR IGNORE INTO players (guild_id, user_id, hp, last_regen) VALUES (?, ?, 100, ?)",
+);
+const selectPlayer = db.prepare<[string, string], Player>(
+  "SELECT * FROM players WHERE guild_id = ? AND user_id = ?",
+);
 
 export function updatePlayer(
   guildId: string,
@@ -38,11 +46,45 @@ export function updatePlayer(
 
   const setSql = columns.map((c) => `${c} = ?`).join(", ");
   const values = columns.map(
-    (c) => fields[c as keyof typeof fields] as string | number,
+    (c) => fields[c as keyof typeof fields] as string | number | null,
   );
   db.prepare(
     `UPDATE players SET ${setSql} WHERE guild_id = ? AND user_id = ?`,
   ).run(...values, guildId, userId);
+}
+
+/**
+ * Récupère le joueur (le crée si besoin) et applique la régénération
+ * passive des PV depuis la dernière visite.
+ */
+export function getPlayer(guildId: string, userId: string): Player {
+  insertPlayer.run(guildId, userId, Date.now());
+  const player = selectPlayer.get(guildId, userId) as Player;
+
+  const hpMax = maxHp(player.level);
+  if (player.hp < hpMax) {
+    const elapsed = Date.now() - player.last_regen;
+    const regen = Math.floor(elapsed / REGEN_INTERVAL);
+    if (regen > 0) {
+      player.hp = Math.min(hpMax, player.hp + regen);
+      player.last_regen = Date.now();
+      updatePlayer(guildId, userId, {
+        hp: player.hp,
+        last_regen: player.last_regen,
+      });
+    }
+  }
+
+  return player;
+}
+
+/** Modifie les PV et réinitialise le compteur de régénération. */
+export function setHp(
+  guildId: string,
+  userId: string,
+  hp: number,
+): void {
+  updatePlayer(guildId, userId, { hp, last_regen: Date.now() });
 }
 
 export function addBalance(
@@ -119,4 +161,11 @@ export function getLeaderboard(
       `SELECT user_id, ${column} AS value FROM players WHERE guild_id = ? ORDER BY ${column} DESC LIMIT ?`,
     )
     .all(guildId, limit);
+}
+
+/** Supprime complètement le profil d'un joueur (commande admin). */
+export function resetPlayer(guildId: string, userId: string): void {
+  db.prepare(
+    "DELETE FROM players WHERE guild_id = ? AND user_id = ?",
+  ).run(guildId, userId);
 }

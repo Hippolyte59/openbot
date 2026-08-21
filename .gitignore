@@ -7,6 +7,8 @@ dist/
 # Environnement & secrets
 .env
 
+# Base de données locale
+data/
 
 # Logs & OS
 *.log

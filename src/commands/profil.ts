@@ -1,9 +1,16 @@
 import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
-import { getPlayer, xpNeededFor } from "../database/players.js";
+import { getPlayer, maxHp, xpNeededFor } from "../database/players.js";
+import { getShopItem } from "../data/items.js";
 import { createEmbed } from "../utils/embeds.js";
 import { formatNumber, progressBar } from "../utils/format.js";
 import { config } from "../config.js";
+
+function equipmentLabel(itemId: string | null): string {
+  if (!itemId) return "_Aucun_";
+  const item = getShopItem(itemId);
+  return item ? `${item.emoji} ${item.name}` : "_Aucun_";
+}
 
 export default {
   data: new SlashCommandBuilder()
@@ -19,11 +26,11 @@ export default {
   async execute(interaction) {
     if (!interaction.inGuild()) return;
 
-    const target =
-      interaction.options.getUser("membre") ?? interaction.user;
+    const target = interaction.options.getUser("membre") ?? interaction.user;
     const player = getPlayer(interaction.guildId, target.id);
 
     const needed = xpNeededFor(player.level);
+    const hpMax = maxHp(player.level);
 
     const embed = createEmbed()
       .setAuthor({
@@ -45,6 +52,20 @@ export default {
         {
           name: "🔥 Série quotidienne",
           value: `${player.daily_streak} jour(s)`,
+          inline: true,
+        },
+        {
+          name: "❤️ Points de vie",
+          value: `${progressBar(player.hp, hpMax)}\n**${player.hp} / ${hpMax}** PV`,
+        },
+        {
+          name: "⚔️ Arme",
+          value: equipmentLabel(player.weapon),
+          inline: true,
+        },
+        {
+          name: "🛡️ Armure",
+          value: equipmentLabel(player.armor),
           inline: true,
         },
       );
