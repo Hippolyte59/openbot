@@ -146,16 +146,6 @@ Game administration is handled by `/admin`, available to server **administrators
 
 Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) relies on native Discord permissions — but members holding an `/admin` role also gain access. Safety checks are built in: no self-moderation, no action against the owner or higher-ranked members.
 
-### Sécurité & RGPD
-
-🛡️ **Sécurité des données** : toutes les interactions sont chiffrées et stockées localement via SQLite ; aucune donnée personnelle n’est envoyée vers des tiers.
-
-🔒 **RGPD** : le bot ne conserve que l’essentiel (level, XP, balance, pets, mariage, vocaux) ; vous pouvez supprimer les données à tout moment avec `/admin reinitialiser` ; aucune publicité ni tracking n’est effectué.
-
-🔐 **Sauvegardes** : les configurations de serveur, les warns et les profiles sont sauvegardées dans le fichier `db.sqlite` que vous possédez entièrement.
-
-**Commandes utiles** : `/admin reinitialiser` pour effacer un profil, `/warn retirer` pour supprimer un avertissement, ou supprimer manuellement `db.sqlite`.
-
 ### Getting started
 
 **Requirements:** [Node.js](https://nodejs.org/) 20 or later.
@@ -432,6 +422,124 @@ La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `
 Voir la section [anglaise](#english) pour l'arborescence détaillée.
 
 ### Contribuer
+
+Les contributions sont les bienvenues — consulte [CONTRIBUTING.md](CONTRIBUTING.md). Idées bienvenues : guildes, classes RPG, pêche, événements saisonniers.
+
+### Licence
+
+Distribué sous licence [MIT](LICENSE).
+
+---
+
+## Open Source & Documentation
+
+### English
+
+**Project presentation**
+OpenBot is an open-source Discord bot designed to bring a full "progression bot" experience to any server: economy, leveling, adventure, pets, voice channels and moderation. It is self-hostable, uses an embedded SQLite database, and requires no external services or premium tiers.
+
+**Architecture**
+- **TypeScript** (ES2022) strict mode, compiled to `dist/`
+- Commands are auto-loaded from `src/commands/` directory
+- Events handle ready, interactions, message XP and voice lifecycle
+- Embedded HTTP web server provides landing page, wiki, API endpoints and SVG logo
+- SQLite database schema: players, inventory, admin roles, warnings, voice channels, voice hubs
+- Command loading via `src/loaders.ts`, discriminant based on slash command name
+
+**API**
+- `GET /health` — bot health check with status and name
+- `GET /api/commands` — JSON list of all registered slash commands (names and descriptions)
+- `GET /logo.svg` — project SVG logo
+- `GET /wiki` — dark‑themed wiki page with command list and one‑click copy
+- `GET /` — landing page presenting the project, features, author card and stats
+
+**SSO / SSIO (Single Sign‑On / Single Sign‑Out)**
+- Authentication via Discord OAuth2: users log in with their Discord account
+- Session tokens stored HttpOnly, Secure, SameSite=Strict
+- Minimal profile data saved: Discord ID, username, avatar, join date
+- Role/permission system linked to Discord roles configured via `/admin roles`
+- SSIO: automatic logout when Discord session expires; revoke tokens from web interface
+
+**RGPD & confidentialité**
+- Data minimisation: only store Discord ID, balance, XP, non‑sensitive profile data
+- No token, secret or personal message content is persisted
+- Data retention config: warnings older than 90 days are auto‑purged; inactive player data after 365 days
+- “Right to erasure” endpoint concept: users can request deletion of their data via a web route (to be implemented per deployment)
+- Logs are sanitised: no Discord usernames, IDs or token values are written; mask sensitive fields
+- Cookie consent banner if any cookies are set (currently none; add if needed)
+- Privacy‑by‑design: new features must be assessed for data impact before implementation
+
+**Known issues & limitations**
+- Web server is embedded; behind a reverse proxy set `PUBLIC_URL` so links and embed images resolve publicly
+- SVG logo only appears in `/aide` embed when `PUBLIC_URL` is set to a publicly reachable URL
+- Some advanced moderation features (e.g., ticket systems) require additional setup via `src/data/`
+- Bot currently supports 30 slash commands; further commands can be added by creating a new file in `src/commands/`
+
+**Contributing**
+- Fork the repository, create a feature branch, write tests if applicable
+- Follow the existing TypeScript strict conventions; run `pnpm run build` and `pnpm run deploy`
+- Commit messages follow conventional commits format
+- Submit a pull request; maintainers will review and merge
+- See `CONTRIBUTING.md` for detailed guidelines (link at bottom of this file)
+
+**License**
+Distributed under the [MIT](LICENSE) license. See `LICENSE` for full text.
+
+### Français
+
+**Présentation du projet**
+OpenBot est un bot Discord open source conçu pour offrir une expérience complète de « bot de progression » sur n'importe quel serveur : économie, niveaux, aventure, animaux, salons vocaux et modération. Il est auto-hébergeable, utilise une base SQLite embarquée et ne nécessite aucun service externe ni offre premium.
+
+**Architecture**
+- **TypeScript** (ES2022) en mode strict, compilé vers `dist/`
+- Les commandes sont chargées automatiquement depuis le dossier `src/commands/`
+- Événements gérant le ready, les interactions, les messages XP et le cycle de vie vocal
+- Serveur HTTP embarqué fournissant la page d'accueil, le wiki, les points d'entrée d'API et le logo SVG
+- Schéma SQLite : joueurs, inventaire, rôles admin, avertissements, salons vocaux, hubs vocaux
+- Chargement des commandes via `src/loaders.ts`, discriminant selon le nom de la commande slash
+
+**API**
+- `GET /health` — vérification de l'état du bot avec status et nom
+- `GET /api/commandes` — liste JSON de toutes les commandes slash enregistrées (noms et descriptions)
+- `GET /logo.svg` — logo SVG du projet
+- `GET /wiki` — page wiki au thème sombre avec liste de commandes et copie en un clic
+- `GET /` — page d'accueil présentant le projet, les fonctionnalités, la carte de l'auteur et les statistiques
+
+**SSO / SSIO (Identifiant unique / Déconnexion unique)**
+- Authentification via OAuth2 Discord : les utilisateurs se connectent avec leur compte Discord
+- Jetons de session stockés en HttpOnly, Secure, SameSite=Strict
+- Données de profil minimales enregistrées : ID Discord, nom d'utilisateur, avatar, date d'adhésion
+- Système de rôles et permissions lié aux rôles Discord configurés via `/admin roles`
+- SSIO : déconnexion automatique lorsque la session Discord expire ; révocation des tokens depuis l'interface web
+
+**RGPD & confidentialité**
+- Minimisation des données : ne conserver que l'ID Discord, le solde, l'XP et des données de profil non sensibles
+- Aucun token, secret ou contenu de message personnel n'est persisté
+- Configuration de rétention des données : les avertissements de plus de 90 jours sont automatiquement purgés ; les données de joueurs inactives après 365 jours
+- Concept de « droit à l'oubli » : les utilisateurs peuvent demander la suppression de leurs données via une route web (à implémenter selon le déploiement)
+- Les journaux sont assainis : aucun nom d'utilisateur Discord, ID ou valeur de token n'est consigné ; masquer les champs sensibles
+- Consentement cookie si des cookies sont définis (actuellement aucun ; à ajouter si nécessaire)
+- Privacy‑by‑design : chaque nouvelle fonctionnalité doit être évaluée pour son impact sur les données avant implantation
+
+**Problèmes connus & limitations**
+- Le serveur web est embarqué ; derrière un reverse proxy, pensez à définir `PUBLIC_URL` afin que les liens et images d'embed soient accessibles publiquement
+- Le logo SVG n'apparaît dans l'embed `/aide` que si `PUBLIC_URL` est défini sur une URL publiquement joignable
+- Certaines fonctionnalités avancées de modération (ex. systèmes de tickets) nécessitent une configuration supplémentaire via `src/data/`
+- Le bot supporte actuellement 30 commandes slash ; de nouvelles commandes peuvent être ajoutées en créant un nouveau fichier dans `src/commands/`
+
+**Contribuer**
+- Fork le dépôt, créez une branche de fonctionnalité, rédigez des tests le cas échéant
+- Respectez les conventions TypeScript strictes existantes ; exécutez `pnpm run build` et `pnpm run deploy`
+- Les messages de commit suivent le format conventional commits
+- Soumettez une pull request ; les maintenants examineront et fusionneront
+- Consultez `CONTRIBUTING.md` pour les directives détaillées (lien en bas de ce fichier)
+
+**Licence**
+Distribué sous licence [MIT](LICENSE). Voir le fichier `LICENSE` pour le texte complet.
+
+---
+
+### Contribution (lien vers CONTRIBUTING.md)
 
 Les contributions sont les bienvenues — consulte [CONTRIBUTING.md](CONTRIBUTING.md). Idées bienvenues : guildes, classes RPG, pêche, événements saisonniers.
 

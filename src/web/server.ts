@@ -6,13 +6,21 @@ import { renderWiki } from "./wiki.js";
 import { renderHome } from "./home.js";
 import { LOGO_SVG } from "./logo.js";
 
+const DEFAULT_SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "X-XSS-Protection": "0",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Content-Security-Policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; frame-src 'none';",
+};
+
 function send(
   response: ServerResponse,
   status: number,
   body: string,
   contentType = "text/html; charset=UTF-8",
 ): void {
-  response.writeHead(status, { "Content-Type": contentType });
+  response.writeHead(status, { ...DEFAULT_SECURITY_HEADERS, "Content-Type": contentType });
   response.end(body);
 }
 
