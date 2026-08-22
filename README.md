@@ -28,13 +28,13 @@ OpenBot brings the classic "progression bot" experience to any Discord server: m
 
 Everything runs from a single Node.js process with an **embedded SQLite database**: no external services, no dashboard to configure, no premium tier. Clone it, run it, own it.
 
-|                    | OpenBot            | Typical hosted bots |
+|   | OpenBot  | Typical hosted bots |
 | ------------------ | ------------------ | ------------------- |
-| Source code        | Open (MIT)         | Closed              |
-| Hosting            | Your machine       | Third party         |
-| Data ownership     | 100 % yours        | On their servers    |
-| Customization      | Every file editable| Fixed options       |
-| Locked features    | None               | Premium tiers       |
+| Source code | Open (MIT)  | Closed  |
+| Hosting  | Your machine | Third party  |
+| Data ownership | 100 % yours | On their servers |
+| Customization | Every file editable| Fixed options |
+| Locked features | None  | Premium tiers |
 
 ### Feature highlights
 
@@ -81,36 +81,36 @@ Thirty commands, grouped by category:
 
 | Command | Description |
 |---|---|
-| `/profil [member]` | 👤 View a member's level, XP, balance, badges and more |
-| `/classement <type>` | 🏆 Server top 10 (balance / level / XP) |
-| `/quotidien` | 🎁 Claim your daily reward (streak bonus) |
-| `/travail` | 💼 Earn coins once per hour |
-| `/parier <amount>` | 🎲 Coin flip bet: double or lose |
-| `/donner <member> <amount>` | 🎁 Give coins to another member |
-| `/boutique` | 🛒 Browse the shop |
-| `/acheter <item> [quantity]` | 🛍️ Purchase an item |
-| `/inventaire` | 🎒 View your items |
-| `/utiliser <item>` | ✨ Use an item (mystery box, lottery, potion…) |
-| `/aventure` | 🌲 Fight a monster in a button-driven battle |
-| `/duel <member> <stake>` | ⚔️ Challenge a member to a wagered duel |
-| `/pfc` | 🪨 Rock-paper-scissors against the bot |
-| `/animal voir\|acheter\|nommer\|relacher` | 🐾 Adopt and care for a pet that boosts your earnings |
-| `/mariage proposer\|statut\|divorcer` | 💍 Propose to another member (buttons) |
-| `/sondage <question> [choices]` | 📊 Create a reaction poll |
-| `/vocal creer\|info\|supprimer` | 🔊 Manage your personal voice channel |
-| `/vocal hub creer\|definir\|retirer` | 📡 Configure the server's join-to-create channel |
-| `/piece` | 🪙 Flip a coin |
-| `/de [faces]` | 🎲 Roll a dice |
-| `/clear <count> [member]` | 🧹 Bulk delete messages |
-| `/kick <member> [reason]` | 👢 Kick a member |
-| `/ban <member> [reason]` | 🔨 Ban a member |
-| `/timeout <member> <duration> [reason]` | 🔇 Temporarily mute a member |
-| `/slowmode <seconds>` | 🐢 Set the current channel's slowmode |
-| `/warn ajouter\|liste\|retirer` | ⚠️ Manage a member's warnings |
-| `/admin …` | 🛠️ Role-based game administration (below) |
-| `/aide` | 📖 Open the site and the wiki (embed with logo and quick links) |
+| `/profil [member]` | View a member's level, XP, balance, badges and more |
+| `/classement <type>` | Server top 10 (balance / level / XP) |
+| `/quotidien` | Claim your daily reward (streak bonus) |
+| `/travail` | Earn coins once per hour |
+| `/parier <amount>` | Coin flip bet: double or lose |
+| `/donner <member> <amount>` | Give coins to another member |
+| `/boutique` | Browse the shop |
+| `/acheter <item> [quantity]` | Purchase an item |
+| `/inventaire` | View your items |
+| `/utiliser <item>` | Use an item (mystery box, lottery, potion…) |
+| `/aventure` | Fight a monster in a button-driven battle |
+| `/duel <member> <stake>` | Challenge a member to a wagered duel |
+| `/pfc` | Rock-paper-scissors against the bot |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopt and care for a pet that boosts your earnings |
+| `/mariage proposer\|statut\|divorcer` | Propose to another member (buttons) |
+| `/sondage <question> [choices]` | Create a reaction poll |
+| `/vocal creer\|info\|supprimer` | Manage your personal voice channel |
+| `/vocal hub creer\|definir\|retirer` | Configure the server's join-to-create channel |
+| `/piece` | Flip a coin |
+| `/de [faces]` | Roll a dice |
+| `/clear <count> [member]` | Bulk delete messages |
+| `/kick <member> [reason]` | Kick a member |
+| `/ban <member> [reason]` | Ban a member |
+| `/timeout <member> <duration> [reason]` | Temporarily mute a member |
+| `/slowmode <seconds>` | Set the current channel's slowmode |
+| `/warn ajouter\|liste\|retirer` | Manage a member's warnings |
+| `/admin …` | Role-based game administration (below) |
+| `/aide` | Open the site and the wiki (embed with logo and quick links) |
 
-| `/ping` | 🏓 Show bot latency |
+| `/ping` | Show bot latency |
 
 ### Personal voice channels
 
@@ -151,29 +151,29 @@ Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) 
 **Requirements:** [Node.js](https://nodejs.org/) 20 or later.
 
 1. Create the application on the [Discord Developer Portal](https://discord.com/developers/applications):
-   - **Bot** tab: *Reset Token*, copy the token, enable the privileged **Message Content Intent**
-   - **General Information**: copy the **Application ID**
+ - **Bot** tab: *Reset Token*, copy the token, enable the privileged **Message Content Intent**
+ - **General Information**: copy the **Application ID**
 2. Invite the bot:
 
-   ```
-   https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
-   ```
+ ```
+ https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
+ ```
 
 3. Install and run:
 
-   ```bash
-   git clone https://github.com/Hippolyte59/openbot.git
-   cd openbot
+ ```bash
+ git clone https://github.com/Hippolyte59/openbot.git
+ cd openbot
 
-   npm install          # or: pnpm install
-   cp .env.example .env # fill in DISCORD_TOKEN and CLIENT_ID
+ npm install  # or: pnpm install
+ cp .env.example .env # fill in DISCORD_TOKEN and CLIENT_ID
 
-   npm run deploy       # register slash commands with Discord
-   npm run build && npm start
+ npm run deploy # register slash commands with Discord
+ npm run build && npm start
 
-   # development mode (auto-restart):
-   npm run dev
-   ```
+ # development mode (auto-restart):
+ npm run dev
+ ```
 
 ### Configuration (.env)
 
@@ -199,35 +199,35 @@ Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) 
 
 ```
 src/
-├── index.ts               # Entry point: client, intents, events, login
-├── deploy.ts              # Slash command deployment script
-├── config.ts              # Environment variables & settings
-├── loaders.ts             # Automatic command loading
-├── types.ts               # Shared types (Command interface…)
-├── commands/              # One command = one file (auto-loaded)
-├── events/                # ready, interactions, message XP, voice lifecycle
+├── index.ts  # Entry point: client, intents, events, login
+├── deploy.ts  # Slash command deployment script
+├── config.ts  # Environment variables & settings
+├── loaders.ts  # Automatic command loading
+├── types.ts  # Shared types (Command interface…)
+├── commands/  # One command = one file (auto-loaded)
+├── events/  # ready, interactions, message XP, voice lifecycle
 ├── systems/
-│   ├── adventure.ts       # Battle engine (monsters, loot, HP)
-│   └── vocal.ts           # Personal voice channels + control panel
+│ ├── adventure.ts # Battle engine (monsters, loot, HP)
+│ └── vocal.ts  # Personal voice channels + control panel
 ├── database/
-│   ├── db.ts              # SQLite connection, schema & migrations
-│   ├── players.ts         # Balance, XP, levels, equipment, pets…
-│   ├── inventory.ts       # Player inventories
-│   ├── guilds.ts          # Per-guild settings (admin roles)
-│   ├── warnings.ts        # Moderation warnings
-│   └── voice.ts           # Managed voice channels
+│ ├── db.ts  # SQLite connection, schema & migrations
+│ ├── players.ts  # Balance, XP, levels, equipment, pets…
+│ ├── inventory.ts # Player inventories
+│ ├── guilds.ts  # Per-guild settings (admin roles)
+│ ├── warnings.ts # Moderation warnings
+│ └── voice.ts  # Managed voice channels
 ├── data/
-│   ├── categories.ts      # Command categories shared with the wiki
-│   ├── items.ts           # Shop catalog
-│   ├── animals.ts         # Pet catalog & coin bonuses
-│   └── monsters.ts        # Adventure monsters
+│ ├── categories.ts # Command categories shared with the wiki
+│ ├── items.ts  # Shop catalog
+│ ├── animals.ts  # Pet catalog & coin bonuses
+│ └── monsters.ts # Adventure monsters
 ├── web/
-│   ├── server.ts          # Embedded HTTP server (home, wiki, logo, API)
-│   ├── home.ts            # Landing page generator
-│   ├── wiki.ts            # Wiki page generator (dark theme, copyable commands)
-│   ├── styles.ts          # Shared CSS and copy-to-clipboard script
-│   └── logo.ts            # SVG logo, GitHub/author URLs
-└── utils/                 # Embeds, formatting, randomness, moderation guards
+│ ├── server.ts  # Embedded HTTP server (home, wiki, logo, API)
+│ ├── home.ts  # Landing page generator
+│ ├── wiki.ts  # Wiki page generator (dark theme, copyable commands)
+│ ├── styles.ts  # Shared CSS and copy-to-clipboard script
+│ └── logo.ts  # SVG logo, GitHub/author URLs
+└── utils/   # Embeds, formatting, randomness, moderation guards
 ```
 
 ### Contributing
@@ -250,13 +250,13 @@ OpenBot apporte l'expérience complète d'un « bot de progression » à n'impor
 
 Tout tourne dans un seul processus Node.js avec une **base SQLite embarquée** : aucun service externe, aucun tableau de bord à configurer, aucune offre premium. Tu clones, tu lances, tu possèdes.
 
-|                    | OpenBot            | Bots hébergés classiques |
+|   | OpenBot  | Bots hébergés classiques |
 | ------------------ | ------------------ | ------------------------ |
-| Code source        | Ouvert (MIT)       | Fermé                    |
-| Hébergement        | Ta machine         | Un tiers                 |
-| Données            | 100 % chez toi     | Sur leurs serveurs       |
-| Personnalisation   | Chaque fichier     | Options figées           |
-| Fonctions verrouillées | Aucune         | Offres premium           |
+| Code source | Ouvert (MIT) | Fermé   |
+| Hébergement | Ta machine  | Un tiers   |
+| Données  | 100 % chez toi | Sur leurs serveurs |
+| Personnalisation | Chaque fichier | Options figées  |
+| Fonctions verrouillées | Aucune  | Offres premium  |
 
 ### Points forts
 
@@ -303,36 +303,36 @@ Trente commandes, regroupées par catégorie :
 
 | Commande | Description |
 |---|---|
-| `/profil [membre]` | 👤 Niveau, XP, argent, badges et équipement d'un membre |
-| `/classement <type>` | 🏆 Top 10 du serveur (argent / niveau / XP) |
-| `/quotidien` | 🎁 Récompense quotidienne (bonus de série) |
-| `/travail` | 💼 Gagne des pièces une fois par heure |
-| `/parier <montant>` | 🎲 Pari pile ou face : double ou perd |
-| `/donner <membre> <montant>` | 🎁 Offre des pièces à un membre |
-| `/boutique` | 🛒 Affiche la boutique |
-| `/acheter <objet> [quantité]` | 🛍️ Achète un objet |
-| `/inventaire` | 🎒 Affiche tes objets |
-| `/utiliser <objet>` | ✨ Utilise un objet (boîte mystère, loterie, potion…) |
-| `/aventure` | 🌲 Combat un monstre dans une bataille à boutons |
-| `/duel <membre> <mise>` | ⚔️ Défie un membre en duel avec mise |
-| `/pfc` | 🪨 Pierre-feuille-ciseaux contre le bot |
-| `/animal voir\|acheter\|nommer\|relacher` | 🐾 Adopte un animal qui booste tes gains |
-| `/mariage proposer\|statut\|divorcer` | 💍 Demande un membre en mariage (boutons) |
-| `/sondage <question> [choix]` | 📊 Crée un sondage à réactions |
-| `/vocal creer\|info\|supprimer` | 🔊 Gère ton salon vocal personnel |
-| `/vocal hub creer\|definir\|retirer` | 📡 Configure le salon « rejoindre pour créer » du serveur |
-| `/piece` | 🪙 Lance une pièce |
-| `/de [faces]` | 🎲 Lance un dé |
-| `/clear <nombre> [membre]` | 🧹 Supprime des messages en masse |
-| `/kick <membre> [raison]` | 👢 Expulse un membre |
-| `/ban <membre> [raison]` | 🔨 Bannit un membre |
-| `/timeout <membre> <durée> [raison]` | 🔇 Rend un membre muet temporairement |
-| `/slowmode <secondes>` | 🐢 Définit le mode lent du salon actuel |
-| `/warn ajouter\|liste\|retirer` | ⚠️ Gère les avertissements d'un membre |
-| `/admin …` | 🛠️ Administration du jeu par rôles (ci-dessous) |
-| `/aide` | 📖 Ouvre le site et le wiki (embed avec logo et liens rapides) |
+| `/profil [membre]` | Niveau, XP, argent, badges et équipement d'un membre |
+| `/classement <type>` | Top 10 du serveur (argent / niveau / XP) |
+| `/quotidien` | Récompense quotidienne (bonus de série) |
+| `/travail` | Gagne des pièces une fois par heure |
+| `/parier <montant>` | Pari pile ou face : double ou perd |
+| `/donner <membre> <montant>` | Offre des pièces à un membre |
+| `/boutique` | Affiche la boutique |
+| `/acheter <objet> [quantité]` | Achète un objet |
+| `/inventaire` | Affiche tes objets |
+| `/utiliser <objet>` | Utilise un objet (boîte mystère, loterie, potion…) |
+| `/aventure` | Combat un monstre dans une bataille à boutons |
+| `/duel <membre> <mise>` | Défie un membre en duel avec mise |
+| `/pfc` | Pierre-feuille-ciseaux contre le bot |
+| `/animal voir\|acheter\|nommer\|relacher` | Adopte un animal qui booste tes gains |
+| `/mariage proposer\|statut\|divorcer` | Demande un membre en mariage (boutons) |
+| `/sondage <question> [choix]` | Crée un sondage à réactions |
+| `/vocal creer\|info\|supprimer` | Gère ton salon vocal personnel |
+| `/vocal hub creer\|definir\|retirer` | Configure le salon « rejoindre pour créer » du serveur |
+| `/piece` | Lance une pièce |
+| `/de [faces]` | Lance un dé |
+| `/clear <nombre> [membre]` | Supprime des messages en masse |
+| `/kick <membre> [raison]` | Expulse un membre |
+| `/ban <membre> [raison]` | Bannit un membre |
+| `/timeout <membre> <durée> [raison]` | Rend un membre muet temporairement |
+| `/slowmode <secondes>` | Définit le mode lent du salon actuel |
+| `/warn ajouter\|liste\|retirer` | Gère les avertissements d'un membre |
+| `/admin …` | Administration du jeu par rôles (ci-dessous) |
+| `/aide` | Ouvre le site et le wiki (embed avec logo et liens rapides) |
 
-| `/ping` | 🏓 Affiche la latence du bot |
+| `/ping` | Affiche la latence du bot |
 
 ### Salons vocaux personnels
 
@@ -373,29 +373,29 @@ La modération du serveur (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `
 **Prérequis :** [Node.js](https://nodejs.org/) 20 ou supérieur.
 
 1. Crée l'application sur le [Discord Developer Portal](https://discord.com/developers/applications) :
-   - Onglet **Bot** : *Reset Token*, copie le token, active l'intent privilégié **Message Content Intent**
-   - Onglet **General Information** : copie l'**Application ID**
+ - Onglet **Bot** : *Reset Token*, copie le token, active l'intent privilégié **Message Content Intent**
+ - Onglet **General Information** : copie l'**Application ID**
 2. Invite le bot :
 
-   ```
-   https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
-   ```
+ ```
+ https://discord.com/oauth2/authorize?client_id=TON_APPLICATION_ID&permissions=1099800079446&scope=bot%20applications.commands
+ ```
 
 3. Installe et lance :
 
-   ```bash
-   git clone https://github.com/Hippolyte59/openbot.git
-   cd openbot
+ ```bash
+ git clone https://github.com/Hippolyte59/openbot.git
+ cd openbot
 
-   npm install          # ou : pnpm install
-   cp .env.example .env # remplis DISCORD_TOKEN et CLIENT_ID
+ npm install  # ou : pnpm install
+ cp .env.example .env # remplis DISCORD_TOKEN et CLIENT_ID
 
-   npm run deploy       # enregistre les commandes slash sur Discord
-   npm run build && npm start
+ npm run deploy # enregistre les commandes slash sur Discord
+ npm run build && npm start
 
-   # mode développement (redémarrage automatique) :
-   npm run dev
-   ```
+ # mode développement (redémarrage automatique) :
+ npm run dev
+ ```
 
 ### Configuration (.env)
 
@@ -546,3 +546,6 @@ Les contributions sont les bienvenues — consulte [CONTRIBUTING.md](CONTRIBUTIN
 ### Licence
 
 Distribué sous licence [MIT](LICENSE).
+
+
+

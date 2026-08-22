@@ -24,11 +24,43 @@ function send(
   response.end(body);
 }
 
+// Simple in-memory rate limiter: max N requests per window (ms) per IP
+type RateLimiter = {
+  ip: string;
+  timestamps: number[];
+};
+
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 30; // 30 requests per minute
+
+const rateLimiter = new Map<string, RateLimiter>();
+
+function checkRateLimit(ip: string): boolean {
+  const entry = rateLimiter.get(ip);
+  if (!entry) {
+    rateLimiter.set(ip, { ip, timestamps: [Date.now()] });
+    return true;
+  }
+  // Remove timestamps older than the window
+  entry.timestamps = entry.timestamps.filter((t) => Date.now() - t < RATE_LIMIT_WINDOW);
+  if (entry.timestamps.length >= RATE_LIMIT_MAX) {
+    return false; // rate exceeded
+  }
+  entry.timestamps.push(Date.now());
+  return true;
+}
+
 function handleRequest(
   request: IncomingMessage,
   response: ServerResponse,
   client: Client,
 ): void {
+  const ip = request.socket.remoteAddress ?? "unknown";
+  if (!checkRateLimit(ip)) {
+    response.writeHead(429, { "Content-Type": "application/json; charset=UTF-8" });
+    response.end(JSON.stringify({ error: "Rate limit exceeded" }));
+    return;
+  }
   const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
   const commands = asBotClient(client).commands;
 
