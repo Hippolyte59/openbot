@@ -20,6 +20,7 @@ db.exec(`
     hp             INTEGER NOT NULL DEFAULT 100,
     last_regen     INTEGER NOT NULL DEFAULT 0,
     last_adventure INTEGER NOT NULL DEFAULT 0,
+    last_activity  INTEGER NOT NULL DEFAULT (unixepoch()),  -- RGPD: timestamp for activity retention
     weapon         TEXT,
     armor          TEXT,
     created_at     INTEGER NOT NULL DEFAULT (unixepoch()),
@@ -56,9 +57,16 @@ db.exec(`
     message_id  TEXT
   );
 
-  CREATE TABLE IF NOT EXISTS voice_hubs (
-    guild_id    TEXT PRIMARY KEY,
-    channel_id  TEXT NOT NULL
+  CREATE TABLE IF NOT EXISTS users (
+    discord_id     TEXT PRIMARY KEY,
+    username       TEXT NOT NULL,
+    avatar         TEXT,
+    discriminator  TEXT,
+    joined_at      INTEGER NOT NULL DEFAULT (unixepoch()),
+    last_login     INTEGER,
+    is_bot         INTEGER NOT NULL DEFAULT 0,
+    is_online      INTEGER NOT NULL DEFAULT 0,
+    roles_discord  TEXT DEFAULT '[]'
   );
 `);
 
@@ -72,6 +80,7 @@ const migrations = [
   "ALTER TABLE players ADD COLUMN animal_name TEXT",
   "ALTER TABLE players ADD COLUMN partner TEXT",
   "ALTER TABLE players ADD COLUMN wins INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE players ADD COLUMN last_activity INTEGER NOT NULL DEFAULT (unixepoch())"
 ];
 
 for (const sql of migrations) {
