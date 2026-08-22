@@ -77,7 +77,7 @@ Everything runs from a single Node.js process with an **embedded SQLite database
 
 ### Commands
 
-Thirty commands, grouped by category:
+29 commands, grouped by category:
 
 | Command | Description |
 |---|---|
@@ -299,7 +299,7 @@ Tout tourne dans un seul processus Node.js avec une **base SQLite embarquée** :
 
 ### Commandes
 
-Trente commandes, regroupées par catégorie :
+29 commandes, regroupées par catégorie :
 
 | Commande | Description |
 |---|---|
@@ -473,7 +473,7 @@ OpenBot is an open-source Discord bot designed to bring a full "progression bot"
 - Web server is embedded; behind a reverse proxy set `PUBLIC_URL` so links and embed images resolve publicly
 - SVG logo only appears in `/aide` embed when `PUBLIC_URL` is set to a publicly reachable URL
 - Some advanced moderation features (e.g., ticket systems) require additional setup via `src/data/`
-- Bot currently supports 30 slash commands; further commands can be added by creating a new file in `src/commands/`
+- Bot currently supports 29 slash commands; further commands can be added by creating a new file in `src/commands/`
 
 **Contributing**
 - Fork the repository, create a feature branch, write tests if applicable
@@ -525,7 +525,7 @@ OpenBot est un bot Discord open source conçu pour offrir une expérience compl�
 - Le serveur web est embarqué ; derrière un reverse proxy, pensez à définir `PUBLIC_URL` afin que les liens et images d'embed soient accessibles publiquement
 - Le logo SVG n'apparaît dans l'embed `/aide` que si `PUBLIC_URL` est défini sur une URL publiquement joignable
 - Certaines fonctionnalités avancées de modération (ex. systèmes de tickets) nécessitent une configuration supplémentaire via `src/data/`
-- Le bot supporte actuellement 30 commandes slash ; de nouvelles commandes peuvent être ajoutées en créant un nouveau fichier dans `src/commands/`
+- Le bot supporte actuellement 29 commandes slash ; de nouvelles commandes peuvent être ajoutées en créant un nouveau fichier dans `src/commands/`
 
 **Contribuer**
 - Fork le dépôt, créez une branche de fonctionnalité, rédigez des tests le cas échéant
@@ -551,7 +551,8 @@ Distribué sous licence [MIT](LICENSE).
 
 ## Documentation Open Source
 
-- **Architecture** : [ARCHCHMD](ARCHITECTURE.md)
-- **API Documentation** : [API Documentation](API_DOCUMENTATION.md) (available on the website)
+- **Architecture** : [ARCHITECTURE.md](ARCHITECTURE.md)
+- **API** : disponible sur le site web [`/api/commands`](https://your-domain.com/api/commands) et [`/wiki`](https://your-domain.com/wiki) — voir aussi [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
 - **Sécurité** : [SECURITY.md](SECURITY.md)
+- **Contribution** : [CONTRIBUTING.md](CONTRIBUTING.md)
 
