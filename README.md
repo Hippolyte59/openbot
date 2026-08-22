@@ -549,3 +549,9 @@ Distribué sous licence [MIT](LICENSE).
 
 
 
+## Documentation Open Source
+
+- **Architecture** : [ARCHCHMD](ARCHITECTURE.md)
+- **API Documentation** : [API Documentation](API_DOCUMENTATION.md) (available on the website)
+- **Sécurité** : [SECURITY.md](SECURITY.md)
+
