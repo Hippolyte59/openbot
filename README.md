@@ -109,7 +109,7 @@ Thirty commands, grouped by category:
 | `/warn ajouter\|liste\|retirer` | ⚠️ Manage a member's warnings |
 | `/admin …` | 🛠️ Role-based game administration (below) |
 | `/aide` | 📖 Open the site and the wiki (embed with logo and quick links) |
-| `/wiki` | 📖 Link to the built-in wiki page |
+
 | `/ping` | 🏓 Show bot latency |
 
 ### Personal voice channels
@@ -145,6 +145,16 @@ The bot starts its own HTTP server alongside Discord — no reverse proxy requir
 Game administration is handled by `/admin`, available to server **administrators** plus any roles explicitly allowed via `/admin roles ajouter`. Staff can manage roles, mint or remove coins, reset profiles and publish announcements without full server permissions.
 
 Server moderation (`/kick`, `/ban`, `/timeout`, `/clear`, `/slowmode`, `/warn`) relies on native Discord permissions — but members holding an `/admin` role also gain access. Safety checks are built in: no self-moderation, no action against the owner or higher-ranked members.
+
+### Sécurité & RGPD
+
+🛡️ **Sécurité des données** : toutes les interactions sont chiffrées et stockées localement via SQLite ; aucune donnée personnelle n’est envoyée vers des tiers.
+
+🔒 **RGPD** : le bot ne conserve que l’essentiel (level, XP, balance, pets, mariage, vocaux) ; vous pouvez supprimer les données à tout moment avec `/admin reinitialiser` ; aucune publicité ni tracking n’est effectué.
+
+🔐 **Sauvegardes** : les configurations de serveur, les warns et les profiles sont sauvegardées dans le fichier `db.sqlite` que vous possédez entièrement.
+
+**Commandes utiles** : `/admin reinitialiser` pour effacer un profil, `/warn retirer` pour supprimer un avertissement, ou supprimer manuellement `db.sqlite`.
 
 ### Getting started
 
@@ -331,7 +341,7 @@ Trente commandes, regroupées par catégorie :
 | `/warn ajouter\|liste\|retirer` | ⚠️ Gère les avertissements d'un membre |
 | `/admin …` | 🛠️ Administration du jeu par rôles (ci-dessous) |
 | `/aide` | 📖 Ouvre le site et le wiki (embed avec logo et liens rapides) |
-| `/wiki` | 📖 Lien vers la page wiki intégrée |
+
 | `/ping` | 🏓 Affiche la latence du bot |
 
 ### Salons vocaux personnels
