@@ -41,3 +41,30 @@ export function getLeaderboard(guildId: string, column:"balance"|"level"|"xp", l
 }
 export function resetPlayer(guildId: string, userId: string): void { deletePlayer(guildId,userId); }
 export function incrementWins(guildId:string,userId:string):void { const p=getPlayer(guildId,userId); (p as any).wins=((p as any).wins??0)+1; setJson(guildId,userId,p); }
+
+export async function handleLevelUpRewards(guildId: string, userId: string, newLevel: number, client: any): Promise<void> {
+  try {
+    const { loadGuilds } = await import("./json-db.js");
+    const cfg: any = loadGuilds().get(guildId);
+    if (!cfg) return;
+    const maxLevel = cfg.maxLevel ?? 100;
+    if (newLevel < maxLevel) return;
+    const guild = client.guilds.cache.get(guildId);
+    if (!guild) return;
+    const member: any = await guild.members.fetch(userId).catch(()=>null);
+    if (!member) return;
+    // Rôle max niveau
+    const roleId = cfg.maxLevelRoleId ?? cfg.privilegedRoleId;
+    if (roleId && !member.roles.cache.has(roleId)) {
+      await member.roles.add(roleId).catch(()=>{});
+      // Accès salon privilégié
+      const channelId = cfg.privilegedChannelId;
+      if (channelId) {
+        const channel: any = guild.channels.cache.get(channelId);
+        if (channel?.isTextBased?.()) {
+          await channel.send(`🎉 <@${userId}> a atteint le **niveau ${maxLevel}** et a débloqué l'accès au salon privilégié ${channel} !`).catch(()=>{});
+        }
+      }
+    }
+  } catch {}
+}

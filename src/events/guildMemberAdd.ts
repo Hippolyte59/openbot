@@ -17,7 +17,14 @@ export async function execute(member: any): Promise<void> {
     channelName: (channel as any).name ?? "",
     memberCount: member.guild.memberCount,
   });
-  const payload: any = { content: text };
-  if (cfg.welcomeBanner) payload.embeds = [{ image: { url: cfg.welcomeBanner }, color: 0x5865F2 }];
+  const embed: any = {
+    color: 0x5865F2,
+    description: text,
+    thumbnail: { url: member.user.displayAvatarURL({ size: 256 } as any) ?? undefined },
+    footer: { text: `${member.guild.name} • Membre #${member.guild.memberCount}`, icon_url: member.guild.iconURL() ?? undefined },
+    timestamp: new Date().toISOString(),
+  };
+  if (cfg.welcomeBanner) embed.image = { url: cfg.welcomeBanner };
+  const payload: any = { content: `<@${member.id}>`, embeds: [embed], allowedMentions: { parse: ["users"] } };
   try { await (channel as any).send(payload); } catch (e) { console.error("welcome send", e); }
 }

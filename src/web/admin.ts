@@ -52,6 +52,7 @@ export function renderAdmin(client: Client): string {
   <div class="tabs">
     <button class="active" data-tab="welcome">Bienvenue</button>
     <button data-tab="goodbye">Au revoir</button>
+    <button data-tab="objectifs">Objectifs</button>
     <button data-tab="commands">Commandes</button>
     <button data-tab="style">Apparence</button>
   </div>
@@ -74,6 +75,20 @@ export function renderAdmin(client: Client): string {
     <div class="field"><label>Message</label><textarea id="goodbyeMessage">${escapeHtml(firstCfg.goodbyeMessage ?? "👋 Au revoir {pseudo}, on espère te revoir sur **{server_name}** !")}</textarea></div>
     <div class="preview"><div class="msg" id="goodbyePreview"></div></div>
     <button class="btn primary" style="margin-top:10px;" onclick="save('goodbye')">Enregistrer</button>
+  </section>
+
+  <section id="panel-objectifs" class="card panel">
+    <h2>Objectifs communauté</h2>
+    <p class="muted">Donnez un objectif : niveau maximum et rôle spécial + salon privilégié</p>
+    <div class="row2">
+      <div class="field"><label>Niveau maximum</label><input type="number" id="maxLevel" placeholder="100" min="10" max="1000" value="${escapeHtml(String(firstCfg.maxLevel ?? 100))}"></div>
+      <div class="field"><label>Rôle niveau max (ID)</label><input id="maxLevelRoleId" value="${escapeHtml(firstCfg.maxLevelRoleId ?? "")}" placeholder="123456789..."></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Rôle privilégié (ID)</label><input id="privilegedRoleId" value="${escapeHtml(firstCfg.privilegedRoleId ?? "")}" placeholder="123456789..."></div>
+      <div class="field"><label>Salon privilégié (ID)</label><input id="privilegedChannelId" value="${escapeHtml(firstCfg.privilegedChannelId ?? "")}" placeholder="123456789..."></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveGoals()">Enregistrer objectifs</button>
   </section>
 
   <section id="panel-commands" class="card panel">
@@ -111,6 +126,10 @@ export function renderAdmin(client: Client): string {
     document.getElementById('goodbyeChannel').value=c.goodbyeChannel||'';
     document.getElementById('goodbyeMessage').value=c.goodbyeMessage||'👋 Au revoir {pseudo}, on espère te revoir sur **{server_name}** !';
     document.getElementById('goodbyeBanner').value=c.goodbyeBanner||'';
+    document.getElementById('maxLevel').value=c.maxLevel||100;
+    document.getElementById('maxLevelRoleId').value=c.maxLevelRoleId||'';
+    document.getElementById('privilegedRoleId').value=c.privilegedRoleId||'';
+    document.getElementById('privilegedChannelId').value=c.privilegedChannelId||'';
     document.getElementById('embedColor').value=c.embedColor||'${config.embedColor}';
     document.getElementById('embedColorText').value=c.embedColor||'${config.embedColor}';
     document.getElementById('levelColor').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
@@ -138,6 +157,12 @@ export function renderAdmin(client: Client): string {
     if(t==='goodbye'){p.goodbyeChannel=document.getElementById('goodbyeChannel').value.trim(); p.goodbyeMessage=document.getElementById('goodbyeMessage').value; p.goodbyeBanner=document.getElementById('goodbyeBanner').value.trim();}
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Enregistré ✅':'Erreur');
+  }
+  async function saveGoals(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    const p={guildId:id, maxLevel: Number(document.getElementById('maxLevel').value)||100, maxLevelRoleId: document.getElementById('maxLevelRoleId').value.trim(), privilegedRoleId: document.getElementById('privilegedRoleId').value.trim(), privilegedChannelId: document.getElementById('privilegedChannelId').value.trim()};
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Objectifs enregistrés ✅':'Erreur');
   }
   async function saveStyle(){
     const id=curId(); if(!id) return toast('Choisis un serveur');

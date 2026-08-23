@@ -39,6 +39,10 @@ export async function execute(message: any): Promise<void> {
     randomInt(config.xpPerMessage.min, config.xpPerMessage.max),
   );
 
+  if (result.leveledUp) {
+    void import("../database/players.js").then(m=> m.handleLevelUpRewards(message.guild.id, message.author.id, result.level, message.client).catch(()=>{}));
+  }
+
   if (!result.leveledUp) return;
   if (!("send" in message.channel)) return;
 

@@ -142,6 +142,10 @@ function handleRequest(
           if (data.embedColor !== undefined) (updates as any).embedColor = data.embedColor;
           if (data.levelColor !== undefined) (updates as any).levelColor = data.levelColor;
           if (data.economyColor !== undefined) (updates as any).economyColor = data.economyColor;
+          if (data.maxLevel !== undefined) (updates as any).maxLevel = Number(data.maxLevel) || 100;
+          if (data.maxLevelRoleId !== undefined) (updates as any).maxLevelRoleId = data.maxLevelRoleId;
+          if (data.privilegedRoleId !== undefined) (updates as any).privilegedRoleId = data.privilegedRoleId;
+          if (data.privilegedChannelId !== undefined) (updates as any).privilegedChannelId = data.privilegedChannelId;
           
           const guilds = loadGuilds();
           if (!guilds.has(guildId)) guilds.set(guildId, {});
