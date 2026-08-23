@@ -64,6 +64,6 @@ const VOICE_FILE = join(DATA_DIR, "voice.json");
 export function loadVoice(): Map<string, JsonVoiceChannel> { return new Map(Object.entries(readJSON<VoiceStore>(VOICE_FILE, {}))); }
 export function saveVoice(channels: Map<string, JsonVoiceChannel>): void { writeJSON(VOICE_FILE, Object.fromEntries(channels)); }
 
-export function replacePlaceholders(message:string, data:{pseudo:string; mention:string; serverName:string; channelName?:string}): string {
-  let r=message; r=r.replace(/{pseudo}/gi,data.pseudo); r=r.replace(/{@?mention}/g,data.mention); r=r.replace(/{server_name}/g,data.serverName); if(data.channelName) r=r.replace(/{channel_name}/g,data.channelName); return r;
+export function replacePlaceholders(message:string, data:{pseudo:string; mention:string; serverName:string; channelName?:string; memberCount?:number}): string {
+  let r=message; r=r.replace(/{pseudo}/gi,data.pseudo); r=r.replace(/{@?mention}/g,data.mention); r=r.replace(/{server_name}/g,data.serverName); if(data.channelName) r=r.replace(/{channel_name}/g,data.channelName); if(data.memberCount!==undefined) r=r.replace(/{memberCount}/g,String(data.memberCount)); return r;
 }

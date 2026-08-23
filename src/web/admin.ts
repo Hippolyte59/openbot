@@ -83,7 +83,7 @@ export function renderAdmin(client: Client): string {
         <div class="field"><label>Salon #bienvenue (ID)</label><input id="welcomeChannel" placeholder="ex: 1234567890123" value="${escapeHtml(firstCfg.welcomeChannel ?? "")}"></div>
         <div class="field"><label>Bannière (URL image)</label><input id="welcomeBanner" placeholder="https://..." value="${escapeHtml(firstCfg.welcomeBanner ?? "")}"></div>
       </div>
-      <div class="field"><label>Message</label><textarea id="welcomeMessage" placeholder="Bienvenue {pseudo} sur {server_name} !">${escapeHtml(firstCfg.welcomeMessage ?? "Bienvenue {pseudo} sur {server_name} ! 🎉")}</textarea></div>
+      <div class="field"><label>Message</label><textarea id="welcomeMessage" placeholder="🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.">${escapeHtml(firstCfg.welcomeMessage ?? "🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}. 🎉")}</textarea></div>
       <div class="banner-preview" id="welcomeBannerPreview"><span>Aperçu bannière</span></div>
       <div class="preview"><div class="msg" id="welcomePreview">Bienvenue @Pseudo sur MonServeur !</div></div>
       <div style="margin-top:12px; display:flex; gap:10px;"><button class="btn primary" onclick="save('welcome')">Enregistrer</button><button class="btn" onclick="preview('welcome')">Prévisualiser</button></div>
@@ -97,7 +97,7 @@ export function renderAdmin(client: Client): string {
         <div class="field"><label>Salon #au-revoir (ID)</label><input id="goodbyeChannel" placeholder="ex: 1234567890123" value="${escapeHtml(firstCfg.goodbyeChannel ?? "")}"></div>
         <div class="field"><label>Bannière (URL)</label><input id="goodbyeBanner" placeholder="https://..." value="${escapeHtml((firstCfg as any).goodbyeBanner ?? "")}"></div>
       </div>
-      <div class="field"><label>Message</label><textarea id="goodbyeMessage">${escapeHtml(firstCfg.goodbyeMessage ?? "Au revoir {pseudo} ! 👋")}</textarea></div>
+      <div class="field"><label>Message</label><textarea id="goodbyeMessage">${escapeHtml(firstCfg.goodbyeMessage ?? "👋 Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** ! 👋")}</textarea></div>
       <div class="preview"><div class="msg" id="goodbyePreview">Au revoir @Pseudo !</div></div>
       <div style="margin-top:12px; display:flex; gap:10px;"><button class="btn primary" onclick="save('goodbye')">Enregistrer</button><button class="btn" onclick="preview('goodbye')">Prévisualiser</button></div>
     </section>
@@ -133,18 +133,18 @@ export function renderAdmin(client: Client): string {
     const res=await fetch('/admin/api/guilds'); const data=await res.json();
     const cfg = (data.find(([gid])=>gid===id)?.[1]) || {};
     document.getElementById('welcomeChannel').value=cfg.welcomeChannel||'';
-    document.getElementById('welcomeMessage').value=cfg.welcomeMessage||'Bienvenue {pseudo} sur {server_name} !';
+    document.getElementById('welcomeMessage').value=cfg.welcomeMessage||'🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.';
     document.getElementById('welcomeBanner').value=cfg.welcomeBanner||'';
     document.getElementById('goodbyeChannel').value=cfg.goodbyeChannel||'';
-    document.getElementById('goodbyeMessage').value=cfg.goodbyeMessage||'Au revoir {pseudo} !';
+    document.getElementById('goodbyeMessage').value=cfg.goodbyeMessage||'👋 Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !';
     document.getElementById('goodbyeBanner').value=cfg.goodbyeBanner||'';
     preview('welcome'); preview('goodbye'); bannerPreview();
   }
   function preview(type){
     const msg=document.getElementById(type+'Message').value;
     const out=document.getElementById(type+'Preview');
-    const fake={pseudo:'Hippolyte', mention:'@Hippolyte', server_name:'MonServeur', channel_name:'#bienvenue'};
-    let r=msg; r=r.replace(/{pseudo}/gi,fake.pseudo); r=r.replace(/{@?mention}/g,fake.mention); r=r.replace(/{server_name}/g,fake.server_name); r=r.replace(/{channel_name}/g,fake.channel_name);
+    const fake={pseudo:'Hippolyte', mention:'@Hippolyte', server_name:'MonServeur', channel_name:'#bienvenue', memberCount: 42};
+    let r=msg; r=r.replace(/{pseudo}/gi,fake.pseudo); r=r.replace(/{@?mention}/g,fake.mention); r=r.replace(/{server_name}/g,fake.server_name); r=r.replace(/{channel_name}/g,fake.channel_name); r=r.replace(/{memberCount}/g,String(fake.memberCount));
     out.textContent=r;
   }
   function bannerPreview(){

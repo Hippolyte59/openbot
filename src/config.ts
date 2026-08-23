@@ -33,15 +33,15 @@ export const config = {
 
   xpPerMessage: { min: 15, max: 25 },
 
-  // Welcome/Goodbye configuration
+  // Welcome/Goodbye configuration — messages par défaut
   welcome: {
     enabled: process.env.WELCOME_ENABLED === "true",
     channelId: process.env.WELCOME_CHANNEL_ID ?? "",
-    message: process.env.WELCOME_MESSAGE ?? "Bienvenue {pseudo} sur {server_name} !",
+    message: process.env.WELCOME_MESSAGE ?? "🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.",
   },
   goodbye: {
     enabled: process.env.GOODBYE_ENABLED === "true",
     channelId: process.env.GOODBYE_CHANNEL_ID ?? "",
-    message: process.env.GOODBYE_MESSAGE ?? "Au revoir {pseudo} !",
+    message: process.env.GOODBYE_MESSAGE ?? "👋 Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !",
   },
 };
