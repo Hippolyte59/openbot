@@ -1,44 +1,35 @@
-import { db } from "./db.js";
+import { loadInventory, saveInventory, upsertItem as jsonUpsertItem } from "./json-db.js";
 
 interface InventoryRow {
   item_id: string;
   quantity: number;
 }
 
-const selectInventory = db.prepare<[string, string], InventoryRow>(
-  "SELECT item_id, quantity FROM inventory WHERE guild_id = ? AND user_id = ? AND quantity > 0 ORDER BY item_id",
-);
-const selectItem = db.prepare<[string, string, string], InventoryRow | undefined>(
-  "SELECT item_id, quantity FROM inventory WHERE guild_id = ? AND user_id = ? AND item_id = ?",
-);
-const upsertItem = db.prepare(`
-  INSERT INTO inventory (guild_id, user_id, item_id, quantity) VALUES (?, ?, ?, ?)
-  ON CONFLICT (guild_id, user_id, item_id) DO UPDATE SET quantity = quantity + excluded.quantity
-`);
-const consumeStmt = db.prepare(`
-  UPDATE inventory SET quantity = quantity - ?
-  WHERE guild_id = ? AND user_id = ? AND item_id = ? AND quantity >= ?
-`);
-
 export function getInventory(guildId: string, userId: string): InventoryRow[] {
-  return selectInventory.all(guildId, userId);
+  const inventory = loadInventory();
+  const guildInv = inventory.get(guildId);
+  if (!guildInv) return [];
+  return [...guildInv.values()].filter((row) => row.quantity > 0);
 }
 
-export function getItemCount(
-  guildId: string,
-  userId: string,
-  itemId: string,
-): number {
-  return selectItem.get(guildId, userId, itemId)?.quantity ?? 0;
+export function getItemCount(guildId: string, userId: string, itemId: string): number {
+  const inventory = loadInventory();
+  const guildInv = inventory.get(guildId);
+  if (!guildInv) return 0;
+  const row = [...guildInv.values()].find((r) => r.item_id === itemId);
+  return row?.quantity ?? 0;
 }
 
-export function addItem(
-  guildId: string,
-  userId: string,
-  itemId: string,
-  quantity = 1,
-): void {
-  upsertItem.run(guildId, userId, itemId, quantity);
+export function addItem(guildId: string, userId: string, itemId: string, quantity = 1): void {
+  const inventory = loadInventory();
+  if (!inventory.has(guildId)) inventory.set(guildId, new Map());
+  
+  const guildInv = inventory.get(guildId)!;
+  const existing = existing?.item_id === itemId ? existing : undefined;
+  
+  // Simpler: always upsert
+  jsonUpsertItem(guildId, userId, itemId, quantity);
+  saveInventory(inventory);
 }
 
 export function consumeItem(
@@ -47,12 +38,31 @@ export function consumeItem(
   itemId: string,
   quantity = 1,
 ): boolean {
-  const result = consumeStmt.run(quantity, guildId, userId, itemId, quantity);
-  return result.changes > 0;
+  const inventory = loadInventory();
+  const guildInv = inventory.get(guildId);
+  if (!guildInv) return false;
+  
+  const row = [...guildInv.values()].find((r) => r.item_id === itemId);
+  if (!row || row.quantity < quantity) return false;
+  
+  row.quantity -= quantity;
+  if (row.quantity <= 0) {
+    guildInv.delete(row.item_id);
+  }
+  saveInventory(inventory);
+  return true;
 }
 
 export function clearInventory(guildId: string, userId: string): void {
-  db.prepare(
-    "DELETE FROM inventory WHERE guild_id = ? AND user_id = ?",
-  ).run(guildId, userId);
+  const inventory = loadInventory();
+  if (inventory.has(guildId)) {
+    const guildInv = inventory.get(guildId)!;
+    // Delete all items for this user in this guild
+    for (const [key] of guildInv) {
+      if (key.startsWith(userId + "_") || key === userId) {
+        guildInv.delete(key);
+      }
+    }
+    saveInventory(inventory);
+  }
 }

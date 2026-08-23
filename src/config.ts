@@ -32,4 +32,16 @@ export const config = {
   },
 
   xpPerMessage: { min: 15, max: 25 },
+
+  // Welcome/Goodbye configuration
+  welcome: {
+    enabled: process.env.WELCOME_ENABLED === "true",
+    channelId: process.env.WELCOME_CHANNEL_ID ?? "",
+    message: process.env.WELCOME_MESSAGE ?? "Bienvenue {pseudo} sur {server_name} !",
+  },
+  goodbye: {
+    enabled: process.env.GOODBYE_ENABLED === "true",
+    channelId: process.env.GOODBYE_CHANNEL_ID ?? "",
+    message: process.env.GOODBYE_MESSAGE ?? "Au revoir {pseudo} !",
+  },
 };

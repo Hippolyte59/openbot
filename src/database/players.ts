@@ -1,4 +1,4 @@
-import { db } from "./db.js";
+import { getPlayer, setPlayer, loadPlayers, savePlayers, maxHp, xpNeededFor, playerToInterface, JsonPlayer } from "./json-db.js";
 
 export interface Player {
   guild_id: string;
@@ -30,84 +30,89 @@ export function xpNeededFor(level: number): number {
   return 100 * level * level;
 }
 
-const insertPlayer = db.prepare<[string, string, number]>(
-  "INSERT OR IGNORE INTO players (guild_id, user_id, hp, last_regen) VALUES (?, ?, 100, ?)",
-);
-const selectPlayer = db.prepare<[string, string], Player>(
-  "SELECT * FROM players WHERE guild_id = ? AND user_id = ?",
-);
+function createNewPlayer(guildId: string, userId: string, hp: number): JsonPlayer {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    guild_id: guildId,
+    user_id: userId,
+    balance: 0,
+    xp: 0,
+    level: 1,
+    daily_streak: 0,
+    last_daily: 0,
+    last_work: 0,
+    hp,
+    last_regen: now,
+    last_adventure: 0,
+    last_activity: now,
+    weapon: null,
+    armor: null,
+    created_at: now,
+  };
+}
+
+function insertPlayerInternal(guildId: string, userId: string, hp: number, lastRegen: number): void {
+  const player = createNewPlayer(guildId, userId, hp);
+  setPlayer(guildId, userId, player);
+}
+
+const insertPlayer = insertPlayerInternal;
+
+const selectPlayer = (guildId: string, userId: string): Player | undefined => {
+  const player = getPlayer(guildId, userId);
+  return player ? playerToInterface(player) : undefined;
+};
 
 export function updatePlayer(
   guildId: string,
   userId: string,
   fields: Partial<Omit<Player, "guild_id" | "user_id">>,
 ): void {
-  const columns = Object.keys(fields);
-  if (columns.length === 0) return;
+  const player = getPlayer(guildId, userId) ||
+    { guild_id: guildId, user_id: userId, balance: 0, xp: 0, level: 1, daily_streak: 0, last_daily: 0, last_work: 0, hp: 100, last_regen: 0, last_adventure: 0, weapon: null, armor: null } as Player;
 
-  insertPlayer.run(guildId, userId, Date.now());
+  const updated = { ...player, ...fields };
+  setPlayer(guildId, userId, { ...playerToInterface(updated), guild_id: guildId, user_id: userId } as JsonPlayer);
 
-  const setSql = columns.map((c) => `${c} = ?`).join(", ");
-  const values = columns.map(
-    (c) => fields[c as keyof typeof fields] as string | number | null,
-  );
-  db.prepare(
-    `UPDATE players SET ${setSql} WHERE guild_id = ? AND user_id = ?`,
-  ).run(...values, guildId, userId);
+  // Regen logic
+  const hpMax = maxHp(updated.level);
+  if (updated.hp < hpMax) {
+    const elapsed = Date.now() - (updated.last_regen ?? 0);
+    const regen = Math.floor(elapsed / REGEN_INTERVAL);
+    if (regen > 0) {
+      updated.hp = Math.min(hpMax, updated.hp + regen);
+      setPlayer(guildId, userId, { ...updated, last_regen: Date.now() });
+    }
+  }
 }
 
 export function getPlayer(guildId: string, userId: string): Player {
-  insertPlayer.run(guildId, userId, Date.now());
-  const player = selectPlayer.get(guildId, userId) as Player;
-
-  const hpMax = maxHp(player.level);
-  if (player.hp < hpMax) {
-    const elapsed = Date.now() - player.last_regen;
-    const regen = Math.floor(elapsed / REGEN_INTERVAL);
-    if (regen > 0) {
-      player.hp = Math.min(hpMax, player.hp + regen);
-      player.last_regen = Date.now();
-      updatePlayer(guildId, userId, {
-        hp: player.hp,
-        last_regen: player.last_regen,
-      });
-    }
+  const player = selectPlayer(guildId, userId);
+  if (!player) {
+    insertPlayerInternal(guildId, userId, 100, Date.now());
+    return getPlayer(guildId, userId);
   }
-
   return player;
 }
 
-export function setHp(
-  guildId: string,
-  userId: string,
-  hp: number,
-): void {
-  updatePlayer(guildId, userId, { hp, last_regen: Date.now() });
+export function setHp(guildId: string, userId: string, hp: number): void {
+  const player = getPlayer(guildId, userId);
+  setPlayer(guildId, userId, { ...player, hp, last_regen: Date.now() });
 }
 
-export function addBalance(
-  guildId: string,
-  userId: string,
-  amount: number,
-): void {
-  getPlayer(guildId, userId);
-  db.prepare(
-    "UPDATE players SET balance = MAX(0, balance + ?) WHERE guild_id = ? AND user_id = ?",
-  ).run(amount, guildId, userId);
+export function addBalance(guildId: string, userId: string, amount: number): void {
+  const player = getPlayer(guildId, userId);
+  setPlayer(guildId, userId, { ...player, balance: Math.max(0, (player.balance ?? 0) + amount) });
 }
 
-export function removeBalance(
-  guildId: string,
-  userId: string,
-  amount: number,
-): boolean {
-  getPlayer(guildId, userId);
-  const result = db
-    .prepare(
-      "UPDATE players SET balance = balance - ? WHERE guild_id = ? AND user_id = ? AND balance >= ?",
-    )
-    .run(amount, guildId, userId, amount);
-  return result.changes > 0;
+export function removeBalance(guildId: string, userId: string, amount: number): boolean {
+  const player = getPlayer(guildId, userId);
+  const newBalance = (player.balance ?? 0) - amount;
+  if (newBalance >= 0) {
+    setPlayer(guildId, userId, { ...player, balance: newBalance });
+    return true;
+  }
+  return false;
 }
 
 export interface XpResult {
@@ -116,11 +121,7 @@ export interface XpResult {
   levelsGained: number;
 }
 
-export function addXp(
-  guildId: string,
-  userId: string,
-  amount: number,
-): XpResult {
+export function addXp(guildId: string, userId: string, amount: number): XpResult {
   const player = getPlayer(guildId, userId);
   let xp = player.xp + amount;
   let level = player.level;
@@ -130,7 +131,7 @@ export function addXp(
     level++;
   }
 
-  updatePlayer(guildId, userId, { xp, level });
+  setPlayer(guildId, userId, { ...player, xp, level });
 
   return {
     leveledUp: level > player.level,
@@ -139,32 +140,14 @@ export function addXp(
   };
 }
 
-export interface LeaderboardRow {
-  user_id: string;
-  value: number;
-}
-
-export function getLeaderboard(
-  guildId: string,
-  column: "balance" | "level" | "xp",
-  limit = 10,
-): LeaderboardRow[] {
-  return db
-    .prepare<[string, number], LeaderboardRow>(
-      `SELECT user_id, ${column} AS value FROM players WHERE guild_id = ? ORDER BY ${column} DESC LIMIT ?`,
-    )
-    .all(guildId, limit);
-}
-
 export function resetPlayer(guildId: string, userId: string): void {
-  db.prepare(
-    "DELETE FROM players WHERE guild_id = ? AND user_id = ?",
-  ).run(guildId, userId);
+  const players = loadPlayers();
+  const key = guildId + "_" + userId;
+  players.delete(key);
+  savePlayers(players);
 }
 
 export function incrementWins(guildId: string, userId: string): void {
-  getPlayer(guildId, userId);
-  db.prepare(
-    "UPDATE players SET wins = wins + 1 WHERE guild_id = ? AND user_id = ?",
-  ).run(guildId, userId);
+  const player = getPlayer(guildId, userId);
+  setPlayer(guildId, userId, { ...player, wins: (player.wins ?? 0) + 1 });
 }

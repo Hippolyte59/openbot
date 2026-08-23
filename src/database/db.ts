@@ -1,92 +1,49 @@
-import Database from "better-sqlite3";
-import { mkdirSync } from "node:fs";
-import path from "node:path";
+import { db } from "./json-db.js";
+import { loadPlayers, savePlayers, getPlayer, setPlayer, maxHp, xpNeededFor, insertPlayer as jsonInsertPlayer, selectPlayer as jsonSelectPlayer } from "./json-db.js";
+import { loadInventory, saveInventory, upsertItem as jsonUpsertItem, selectInventory as jsonSelectInventory, consumeStmt as jsonConsumeStmt } from "./json-db.js";
+import { loadGuilds, saveGuilds, GuildConfig } from "./json-db.js";
+import { loadWarnings, saveWarnings, insertWarning as jsonInsertWarning } from "./json-db.js";
+import { loadVoice, saveVoice } from "./json-db.js";
 
-mkdirSync(path.join(process.cwd(), "data"), { recursive: true });
+export const db = {
+  // Players - compatibilité avec l'ancienne API (dépréciée, utiliser json-db à la place)
+  // Ces fonctions sont maintenues pour la compatibilité mais redirigent vers JSON
+  getPlayer,
+  setPlayer,
+  loadPlayers,
+  savePlayers,
+  maxHp,
+  xpNeededFor,
+  // Inventory
+  loadInventory,
+  saveInventory,
+  // Guilds config
+  loadGuilds,
+  saveGuilds,
+  // Warnings
+  loadWarnings,
+  saveWarnings,
+  insertWarning: jsonInsertWarning,
+  // Voice
+  loadVoice,
+  saveVoice,
+};
 
-export const db = new Database(path.join(process.cwd(), "data", "bot.db"));
-db.pragma("journal_mode = WAL");
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS players (
-    guild_id       TEXT NOT NULL,
-    user_id        TEXT NOT NULL,
-    balance        INTEGER NOT NULL DEFAULT 0,
-    xp             INTEGER NOT NULL DEFAULT 0,
-    level          INTEGER NOT NULL DEFAULT 1,
-    daily_streak   INTEGER NOT NULL DEFAULT 0,
-    last_daily     INTEGER NOT NULL DEFAULT 0,
-    last_work      INTEGER NOT NULL DEFAULT 0,
-    hp             INTEGER NOT NULL DEFAULT 100,
-    last_regen     INTEGER NOT NULL DEFAULT 0,
-    last_adventure INTEGER NOT NULL DEFAULT 0,
-    last_activity  INTEGER NOT NULL DEFAULT (unixepoch()),  -- RGPD: timestamp for activity retention
-    weapon         TEXT,
-    armor          TEXT,
-    created_at     INTEGER NOT NULL DEFAULT (unixepoch()),
-    PRIMARY KEY (guild_id, user_id)
-  );
-
-  CREATE TABLE IF NOT EXISTS inventory (
-    guild_id   TEXT NOT NULL,
-    user_id    TEXT NOT NULL,
-    item_id    TEXT NOT NULL,
-    quantity   INTEGER NOT NULL DEFAULT 0,
-    PRIMARY KEY (guild_id, user_id, item_id)
-  );
-
-  CREATE TABLE IF NOT EXISTS admin_roles (
-    guild_id   TEXT NOT NULL,
-    role_id    TEXT NOT NULL,
-    PRIMARY KEY (guild_id, role_id)
-  );
-
-  CREATE TABLE IF NOT EXISTS warnings (
-    id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    guild_id      TEXT NOT NULL,
-    user_id       TEXT NOT NULL,
-    reason        TEXT NOT NULL,
-    moderator_id  TEXT NOT NULL,
-    created_at    INTEGER NOT NULL DEFAULT (unixepoch())
-  );
-
-  CREATE TABLE IF NOT EXISTS voice_channels (
-    channel_id  TEXT PRIMARY KEY,
-    guild_id    TEXT NOT NULL,
-    owner_id    TEXT NOT NULL,
-    message_id  TEXT
-  );
-
-  CREATE TABLE IF NOT EXISTS users (
-    discord_id     TEXT PRIMARY KEY,
-    username       TEXT NOT NULL,
-    avatar         TEXT,
-    discriminator  TEXT,
-    joined_at      INTEGER NOT NULL DEFAULT (unixepoch()),
-    last_login     INTEGER,
-    is_bot         INTEGER NOT NULL DEFAULT 0,
-    is_online      INTEGER NOT NULL DEFAULT 0,
-    roles_discord  TEXT DEFAULT '[]'
-  );
-`);
-
-const migrations = [
-  "ALTER TABLE players ADD COLUMN hp INTEGER NOT NULL DEFAULT 100",
-  "ALTER TABLE players ADD COLUMN last_regen INTEGER NOT NULL DEFAULT 0",
-  "ALTER TABLE players ADD COLUMN last_adventure INTEGER NOT NULL DEFAULT 0",
-  "ALTER TABLE players ADD COLUMN weapon TEXT",
-  "ALTER TABLE players ADD COLUMN armor TEXT",
-  "ALTER TABLE players ADD COLUMN animal TEXT",
-  "ALTER TABLE players ADD COLUMN animal_name TEXT",
-  "ALTER TABLE players ADD COLUMN partner TEXT",
-  "ALTER TABLE players ADD COLUMN wins INTEGER NOT NULL DEFAULT 0",
-  "ALTER TABLE players ADD COLUMN last_activity INTEGER NOT NULL DEFAULT (unixepoch())"
-];
-
-for (const sql of migrations) {
-  try {
-    db.exec(sql);
-  } catch {
-
-  }
+// HELPER: conversion player JSON -> interface Player (pour compatibilité avec les commandes existantes)
+export function playerToInterface(player: any): Player {
+  return {
+    guild_id: player.guild_id,
+    user_id: player.user_id,
+    balance: player.balance ?? 0,
+    xp: player.xp ?? 0,
+    level: player.level ?? 1,
+    daily_streak: player.daily_streak ?? 0,
+    last_daily: player.last_daily ?? 0,
+    last_work: player.last_work ?? 0,
+    hp: player.hp ?? 100,
+    last_regen: player.last_regen ?? 0,
+    last_adventure: player.last_adventure ?? 0,
+    weapon: player.weapon ?? null,
+    armor: player.armor ?? null,
+  };
 }
