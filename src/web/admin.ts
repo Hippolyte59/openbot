@@ -53,6 +53,7 @@ export function renderAdmin(client: Client): string {
     <button class="active" data-tab="welcome">Bienvenue</button>
     <button data-tab="goodbye">Au revoir</button>
     <button data-tab="commands">Commandes</button>
+    <button data-tab="style">Apparence</button>
   </div>
 
   <section id="panel-welcome" class="card panel active">
@@ -79,6 +80,21 @@ export function renderAdmin(client: Client): string {
     <h2>Commandes</h2>
     <div id="commandsList"></div>
   </section>
+
+  <section id="panel-style" class="card panel">
+    <h2>Apparence</h2>
+    <p class="muted">Changez la couleur des niveaux et de l'économie</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field"><label>Couleur principale</label><div style="display:flex;gap:8px;"><input type="color" id="embedColor" value="${escapeHtml(config.embedColor)}" style="width:48px;height:38px;padding:2px;"><input type="text" id="embedColorText" value="${escapeHtml(config.embedColor)}" style="flex:1"></div></div>
+      <div class="field"><label>Couleur niveaux</label><div style="display:flex;gap:8px;"><input type="color" id="levelColor" value="${escapeHtml((config as any).levelColor ?? "#57F287")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="levelColorText" value="${escapeHtml((config as any).levelColor ?? "#57F287")}" style="flex:1"></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="field"><label>Couleur économie</label><div style="display:flex;gap:8px;"><input type="color" id="economyColor" value="${escapeHtml((config as any).economyColor ?? "#FEE75C")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="economyColorText" value="${escapeHtml((config as any).economyColor ?? "#FEE75C")}" style="flex:1"></div></div>
+      <div class="field"><label>Nom du bot</label><input id="botName" value="${escapeHtml(config.botName)}"></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveStyle()">Enregistrer apparence</button>
+    <p class="muted" style="margin-top:8px;">Par serveur — modifie <code>.env</code> pour les valeurs globales : <code>EMBED_COLOR</code> / <code>LEVEL_COLOR</code> / <code>ECONOMY_COLOR</code></p>
+  </section>
 </main>
 <div class="toast" id="toast"></div>
 <script>
@@ -95,6 +111,12 @@ export function renderAdmin(client: Client): string {
     document.getElementById('goodbyeChannel').value=c.goodbyeChannel||'';
     document.getElementById('goodbyeMessage').value=c.goodbyeMessage||'👋 Au revoir {pseudo}, on espère te revoir sur **{server_name}** !';
     document.getElementById('goodbyeBanner').value=c.goodbyeBanner||'';
+    document.getElementById('embedColor').value=c.embedColor||'${config.embedColor}';
+    document.getElementById('embedColorText').value=c.embedColor||'${config.embedColor}';
+    document.getElementById('levelColor').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
+    document.getElementById('levelColorText').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
+    document.getElementById('economyColor').value=c.economyColor||'${(config as any).economyColor ?? "#FEE75C"}';
+    document.getElementById('economyColorText').value=c.economyColor||'${(config as any).economyColor ?? "#FEE75C"}';
     preview('welcome'); preview('goodbye'); bannerPreview();
   }
   function preview(t){
@@ -117,6 +139,21 @@ export function renderAdmin(client: Client): string {
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Enregistré ✅':'Erreur');
   }
+  async function saveStyle(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    const p={guildId:id, embedColor:document.getElementById('embedColor').value, levelColor:document.getElementById('levelColor').value, economyColor:document.getElementById('economyColor').value};
+    // sync text inputs
+    document.getElementById('embedColorText').value=p.embedColor;
+    document.getElementById('levelColorText').value=p.levelColor;
+    document.getElementById('economyColorText').value=p.economyColor;
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Apparence enregistrée ✅':'Erreur');
+  }
+  // sync color pickers <-> text
+  [['embedColor','embedColorText'],['levelColor','levelColorText'],['economyColor','economyColorText']].forEach(([c,t])=>{
+    document.getElementById(c).addEventListener('input',e=>document.getElementById(t).value=e.target.value);
+    document.getElementById(t).addEventListener('input',e=>{ const v=e.target.value; if(/^#[0-9A-Fa-f]{6}$/.test(v)) document.getElementById(c).value=v; });
+  });
   document.getElementById('welcomeMessage').addEventListener('input',()=>preview('welcome'));
   document.getElementById('goodbyeMessage').addEventListener('input',()=>preview('goodbye'));
   document.getElementById('welcomeBanner').addEventListener('input',bannerPreview);
@@ -132,7 +169,7 @@ export function renderAdmin(client: Client): string {
   loadGuild();
   fetch('/api/commands').then(r=>r.json()).then(j=>{
     const el=document.getElementById('commandsList');
-    el.innerHTML=j.commands.map(c=>'<div style=\"display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;\"><span><b>/'+c.name+'</b> <span style=\"color:var(--text-muted)\">'+c.description.slice(0,60)+'</span></span><span style=\"color:#57f287\">● actif</span></div>').join('');
+    el.innerHTML=j.commands.map(c=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;"><span><b>/'+c.name+'</b> <span style="color:var(--text-muted)">'+c.description.slice(0,60)+'</span></span><span style="color:#57f287">● actif</span></div>').join('');
   });
   bannerPreview(); preview('welcome'); preview('goodbye');
 </script>

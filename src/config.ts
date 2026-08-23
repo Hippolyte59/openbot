@@ -16,6 +16,8 @@ export const config = {
   clientId: process.env.CLIENT_ID ?? "",
   guildId: process.env.GUILD_ID ?? "",
   embedColor: process.env.EMBED_COLOR ?? "#5865F2",
+  levelColor: process.env.LEVEL_COLOR ?? "#57F287",
+  economyColor: process.env.ECONOMY_COLOR ?? "#FEE75C",
   botName: process.env.BOT_NAME ?? "OpenBot",
   currency: "🪙",
 

@@ -139,6 +139,9 @@ function handleRequest(
           if (data.goodbyeChannel !== undefined) updates.goodbyeChannel = data.goodbyeChannel;
           if (data.goodbyeMessage !== undefined) updates.goodbyeMessage = data.goodbyeMessage;
           if (data.goodbyeBanner !== undefined) (updates as any).goodbyeBanner = data.goodbyeBanner;
+          if (data.embedColor !== undefined) (updates as any).embedColor = data.embedColor;
+          if (data.levelColor !== undefined) (updates as any).levelColor = data.levelColor;
+          if (data.economyColor !== undefined) (updates as any).economyColor = data.economyColor;
           
           const guilds = loadGuilds();
           if (!guilds.has(guildId)) guilds.set(guildId, {});
