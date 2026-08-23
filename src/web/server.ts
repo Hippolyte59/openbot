@@ -6,6 +6,7 @@ import { renderWiki } from "./wiki.js";
 import { renderHome } from "./home.js";
 import { LOGO_SVG } from "./logo.js";
 import { loadGuilds, saveGuilds } from "../database/json-db.js";
+import { renderAdmin } from "./admin.js";
 
 const DEFAULT_SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
@@ -115,7 +116,7 @@ function handleRequest(
       response.end("Accès interdit - utilisez localhost");
       return;
     }
-    send(response, 200, adminPage(), "text/html");
+    send(response, 200, renderAdmin(client), "text/html");
     return;
   }
 
@@ -134,8 +135,10 @@ function handleRequest(
           
           if (data.welcomeChannel !== undefined) updates.welcomeChannel = data.welcomeChannel;
           if (data.welcomeMessage !== undefined) updates.welcomeMessage = data.welcomeMessage;
+          if (data.welcomeBanner !== undefined) updates.welcomeBanner = data.welcomeBanner;
           if (data.goodbyeChannel !== undefined) updates.goodbyeChannel = data.goodbyeChannel;
           if (data.goodbyeMessage !== undefined) updates.goodbyeMessage = data.goodbyeMessage;
+          if (data.goodbyeBanner !== undefined) (updates as any).goodbyeBanner = data.goodbyeBanner;
           
           const guilds = loadGuilds();
           if (!guilds.has(guildId)) guilds.set(guildId, {});
@@ -171,59 +174,4 @@ export function startWebServer(client: Client): void {
     console.log(`🌐 Site et wiki disponibles sur ${config.publicUrl} (port ${config.webPort})`);
     console.log(`🛠️ Panneau admin : http://localhost:${config.webPort}/admin`);
   });
-}
-
-function adminPage(): string {
-  const guilds = loadGuilds();
-  const guildsList = Array.from(guilds.entries())
-    .map(([guildId, cfg]) => `
-      <div class="guild-card">
-        <h3>Serveur #${guildId.substring(0, 6)}...</h3>
-        <form method="POST" action="/admin/api/guilds" style="display:flex;gap:10px;">
-          <input type="hidden" name="guildId" value="${guildId}">
-          <input type="text" name="welcomeChannel" value="${cfg.welcomeChannel || ""}" placeholder="#bienvenue">
-          <input type="text" name="welcomeMessage" value="${cfg.welcomeMessage || "Bienvenue {pseudo} !"}" style="width:300px;">
-          <input type="text" name="goodbyeChannel" value="${cfg.goodbyeChannel || ""}" placeholder="#au-revoir">
-          <input type="text" name="goodbyeMessage" value="${cfg.goodbyeMessage || "Au revoir !"}" style="width:300px;">
-          <button type="submit">Enregistrer</button>
-        </form>
-      </div>
-    `).join("");
-  
-  return `
-<!DOCTYPE html>
-<html lang="fr" style="font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 2rem;">
-  <head>
-    <meta charset="UTF-8">
-    <title>OpenBot - Tableau de bord administration</title>
-    <style>
-      .guild-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
-      input { padding: 0.5rem; margin: 0.2rem 0; }
-      button { padding: 0.5rem 1rem; cursor: pointer; }
-    </style>
-  </head>
-  <body>
-    <h1>🛠️ OpenBot - Administration</h1>
-    <p>Configuration welcome/goodbye par serveur</p>
-    
-    <div style="margin-bottom: 2rem;">
-      <h2>Nouveau serveur</h2>
-      <form method="POST" action="/admin/api/guilds" style="display:flex;gap:10px;">
-        <input type="text" name="guildId" placeholder="ID du serveur" style="width:200px;">
-        <input type="text" name="welcomeChannel" placeholder="#bienvenue" style="width:150px;">
-        <input type="text" name="welcomeMessage" value="Bienvenue {pseudo} !" style="width:300px;">
-        <input type="text" name="goodbyeChannel" placeholder="#au-revoir" style="width:150px;">
-        <input type="text" name="goodbyeMessage" value="Au revoir !" style="width:300px;">
-        <button type="submit">Créer config</button>
-      </form>
-    </div>
-    
-    <h2>Serveurs configurés</h2>
-    ${guildsList.length > 0 ? guildsList : "<p>Aucun serveur configuré encore.</p>"}
-    
-    <hr>
-    <p><small>Modifications sauvegardées en JSON dans data/</small></p>
-  </body>
-</html>
-  `;
 }

@@ -16,5 +16,7 @@ export async function execute(member: any): Promise<void> {
     serverName: member.guild.name,
     channelName: (channel as any).name ?? "",
   });
-  try { await (channel as any).send(text); } catch (e) { console.error("welcome send", e); }
+  const payload: any = { content: text };
+  if (cfg.welcomeBanner) payload.embeds = [{ image: { url: cfg.welcomeBanner }, color: 0x5865F2 }];
+  try { await (channel as any).send(payload); } catch (e) { console.error("welcome send", e); }
 }
