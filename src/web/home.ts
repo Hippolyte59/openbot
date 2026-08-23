@@ -33,9 +33,9 @@ export function renderHome(commandCount: number): string {
 <title>${escapeHtml(config.botName)} — Bot Discord open source</title>
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <style>${BASE_CSS}
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
   .grid section.card { margin-bottom: 0; }
-  .stats { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+  .stats { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
   .stat {
     border: 1px solid var(--border);
     background: var(--surface);
@@ -71,8 +71,8 @@ export function renderHome(commandCount: number): string {
     <div class="stat"><b>MIT</b> logiciel libre</div>
   </div>
 
-  <h2 style="text-align:center;margin-bottom:22px">Ce que le bot sait faire</h2>
-  <div class="grid">
+  <h2 style="text-align:center;margin-bottom:28px">Ce que le bot sait faire</h2>
+  <div class="grid" style="margin-bottom:36px;">
 ${FEATURES}
   </div>
 

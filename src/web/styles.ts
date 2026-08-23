@@ -18,7 +18,7 @@ export const BASE_CSS = `
   }
   a { color: inherit; text-decoration: none; }
   header.hero {
-    padding: 72px 24px 48px;
+    padding: 80px 24px 56px;
     text-align: center;
     border-bottom: 1px solid var(--border);
   }
@@ -43,16 +43,17 @@ export const BASE_CSS = `
   .btn:hover { background: var(--surface); border-color: #3d3d3d; }
   .btn.primary { background: var(--accent); color: #0b0b0b; border-color: var(--accent); }
   .btn.primary:hover { opacity: .88; }
-  main { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+  main { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
   section.card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 32px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
   }
-  h2 { font-size: 1.35rem; letter-spacing: -0.01em; margin-bottom: 6px; }
-  p.muted { color: var(--text-muted); margin-bottom: 18px; }
+  main > section.card + section.card { margin-top: 8px; }
+  h2 { font-size: 1.35rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+  p.muted { color: var(--text-muted); margin-bottom: 20px; }
   table { width: 100%; border-collapse: collapse; font-size: .95rem; }
   th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
   thead th { color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
