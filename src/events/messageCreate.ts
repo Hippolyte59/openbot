@@ -8,6 +8,7 @@ import {
 } from "../database/players.js";
 import { createEmbed } from "../utils/embeds.js";
 import { randomInt } from "../utils/random.js";
+import { handleInterserverMessage } from "../systems/interserver.js";
 
 export const name = Events.MessageCreate;
 
@@ -21,6 +22,7 @@ function pruneCooldowns(now: number): void {
 }
 
 export async function execute(message: any): Promise<void> {
+  void handleInterserverMessage(message).catch(()=>{});
   if (!message.guild || message.author.bot) return;
 
   const now = Date.now();
