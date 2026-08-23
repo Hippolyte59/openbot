@@ -54,10 +54,10 @@ export function renderAdmin(client: Client): string {
       <div><div style="font-weight:600">${escapeHtml(guilds[0]?.name ?? "Aucun serveur")}</div><div style="font-size:.8rem;color:var(--text-muted)">${guilds.length} serveur(s) • ${client.users.cache.size} utilisateurs</div></div>
     </div>
     <h2>Configuration</h2>
-    <a class="active" data-tab="welcome">👋 Bienvenue</a>
-    <a data-tab="goodbye">👋 Au revoir</a>
-    <a data-tab="commands">⚙️ Commandes</a>
-    <a data-tab="style">🎨 Apparence</a>
+    <a class="active" data-tab="welcome">Bienvenue</a>
+    <a data-tab="goodbye">Au revoir</a>
+    <a data-tab="commands">Commandes</a>
+    <a data-tab="style">Apparence</a>
     <h2>Liens</h2>
     <a href="/">Accueil</a>
     <a href="/wiki">Wiki</a>
@@ -77,7 +77,7 @@ export function renderAdmin(client: Client): string {
 
     <!-- WELCOME -->
     <section class="card tab" id="tab-welcome">
-      <h2>👋 Message de bienvenue</h2>
+      <h2>Message de bienvenue</h2>
       <p class="muted">Envoyé quand un membre rejoint. Placeholders : <code>{pseudo}</code> <code>{mention}</code> <code>{server_name}</code> <code>{channel_name}</code></p>
       <div class="row2">
         <div class="field"><label>Salon #bienvenue (ID)</label><input id="welcomeChannel" placeholder="ex: 1234567890123" value="${escapeHtml(firstCfg.welcomeChannel ?? "")}"></div>
@@ -91,7 +91,7 @@ export function renderAdmin(client: Client): string {
 
     <!-- GOODBYE -->
     <section class="card tab" id="tab-goodbye" style="display:none;">
-      <h2>👋 Message d'au revoir</h2>
+      <h2>Message d'au revoir</h2>
       <p class="muted">Envoyé quand un membre quitte.</p>
       <div class="row2">
         <div class="field"><label>Salon #au-revoir (ID)</label><input id="goodbyeChannel" placeholder="ex: 1234567890123" value="${escapeHtml(firstCfg.goodbyeChannel ?? "")}"></div>
@@ -104,7 +104,7 @@ export function renderAdmin(client: Client): string {
 
     <!-- COMMANDS -->
     <section class="card tab" id="tab-commands" style="display:none;">
-      <h2>⚙️ Commandes</h2>
+      <h2>Commandes</h2>
       <p class="muted">Active/désactive les catégories. Les changements sont instantanés (pas besoin de redéployer).</p>
       <div id="commandsList" style="display:grid; gap:8px; margin-top:10px;"></div>
       <p class="muted" style="margin-top:10px;">Astuce : la liste complète est sur <a href="/wiki" style="text-decoration:underline">/wiki</a> et <a href="/api/commands" style="text-decoration:underline">/api/commands</a></p>
@@ -112,7 +112,7 @@ export function renderAdmin(client: Client): string {
 
     <!-- STYLE -->
     <section class="card tab" id="tab-style" style="display:none;">
-      <h2>🎨 Apparence</h2>
+      <h2>Apparence</h2>
       <div class="row2">
         <div class="field"><label>Couleur des embeds (hex)</label><input id="embedColor" value="${escapeHtml(config.embedColor)}" placeholder="#5865F2"></div>
         <div class="field"><label>Nom du bot</label><input id="botName" value="${escapeHtml(config.botName)}"></div>

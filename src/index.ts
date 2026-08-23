@@ -9,6 +9,7 @@ import * as voiceStateUpdateEvent from "./events/voiceStateUpdate.js";
 import * as channelDeleteEvent from "./events/channelDelete.js";
 import * as guildMemberAddEvent from "./events/guildMemberAdd.js";
 import * as guildMemberRemoveEvent from "./events/guildMemberRemove.js";
+import { initScheduler } from "./systems/scheduler.js";
 
 const client = new (Client as any)({
   intents: [
@@ -22,6 +23,7 @@ const client = new (Client as any)({
 
 asBotClient(client).commands = new (Collection as any)();
 await loadCommands(asBotClient(client).commands);
+initScheduler(client as any);
 
 client.once(readyEvent.name, () => (readyEvent.execute as any)(client));
 client.on(interactionCreateEvent.name, (...args: any[]) => void (interactionCreateEvent.execute as any)(...args));
