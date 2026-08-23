@@ -39,6 +39,8 @@ export function renderAdmin(client: Client): string {
   .toast { position:fixed; bottom:18px; right:18px; background:#1e1e1e; border:1px solid #2a2a2a; padding:10px 14px; border-radius:10px; display:none; }
   .guild-badge { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); border-radius:10px; background:#0f0f0f; margin-bottom:10px; }
   .guild-badge img { width:36px; height:36px; border-radius:50%; }
+  .tab { display:none; }
+  .tab.active { display:block; }
   @media (max-width:720px){ .admin-layout{grid-template-columns:1fr} .sidebar{height:auto; position:relative} .row2{grid-template-columns:1fr} }
 </style>
 </head>
@@ -76,7 +78,7 @@ export function renderAdmin(client: Client): string {
     </section>
 
     <!-- WELCOME -->
-    <section class="card tab" id="tab-welcome">
+    <section class="card tab active" id="tab-welcome">
       <h2>Message de bienvenue</h2>
       <p class="muted">Envoyé quand un membre rejoint. Placeholders : <code>{pseudo}</code> <code>{mention}</code> <code>{server_name}</code> <code>{channel_name}</code></p>
       <div class="row2">
@@ -90,7 +92,7 @@ export function renderAdmin(client: Client): string {
     </section>
 
     <!-- GOODBYE -->
-    <section class="card tab" id="tab-goodbye" style="display:none;">
+    <section class="card tab" id="tab-goodbye">
       <h2>Message d'au revoir</h2>
       <p class="muted">Envoyé quand un membre quitte.</p>
       <div class="row2">
@@ -103,7 +105,7 @@ export function renderAdmin(client: Client): string {
     </section>
 
     <!-- COMMANDS -->
-    <section class="card tab" id="tab-commands" style="display:none;">
+    <section class="card tab" id="tab-commands">
       <h2>Commandes</h2>
       <p class="muted">Active/désactive les catégories. Les changements sont instantanés (pas besoin de redéployer).</p>
       <div id="commandsList" style="display:grid; gap:8px; margin-top:10px;"></div>
@@ -111,7 +113,7 @@ export function renderAdmin(client: Client): string {
     </section>
 
     <!-- STYLE -->
-    <section class="card tab" id="tab-style" style="display:none;">
+    <section class="card tab" id="tab-style">
       <h2>Apparence</h2>
       <div class="row2">
         <div class="field"><label>Couleur des embeds (hex)</label><input id="embedColor" value="${escapeHtml(config.embedColor)}" placeholder="#5865F2"></div>
@@ -170,9 +172,9 @@ export function renderAdmin(client: Client): string {
       const tab=a.getAttribute('data-tab');
       document.querySelectorAll('.sidebar a[data-tab]').forEach(x=>x.classList.remove('active'));
       a.classList.add('active');
-      document.querySelectorAll('.tab').forEach(s=>s.style.display='none');
+      document.querySelectorAll('.tab').forEach(s=>s.classList.remove('active'));
       const target=document.getElementById('tab-'+tab);
-      if(target) target.style.display='block';
+      if(target) target.classList.add('active');
     });
   });
   // init
