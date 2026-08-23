@@ -14,7 +14,7 @@ OpenBot is a self-hostable Discord bot written in TypeScript that brings a "prog
 | Database | SQLite (embedded, via better-sqlite3) |
 | Web Server | Node.js native http module |
 | Build Tool | TypeScript Compiler (tsc) |
-| Package Manager | pnpm |
+| Package Manager | npm |
 
 ## Project Structure
 
@@ -75,7 +75,7 @@ robots.txt              # Search engine optimization
 
 1. **Auto-discovery**: The bot reads all `.ts` files from the `src/commands/` directory
 2. **Discord.js Integration**: Each command file exports a Discord.js `SlashCommandBuilder` or `Command` definition
-3. **Registration**: Commands are deployed globally or to a specific guild via `pnpm run deploy`
+3. **Registration**: Commands are deployed globally or to a specific guild via `npm run deploy`
 4. **Runtime**: When a user types `/`, Discord lists the available commands with their names and descriptions
 
 ### Command File Structure
@@ -250,32 +250,32 @@ Panel updates reflected immediately
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Build the TypeScript project
-pnpm run build
+npm run build
 
 # Start development mode (auto-restart on changes)
-pnpm run dev
+npm run dev
 
 # Or start production mode
-pnpm run start
+npm run start
 ```
 
 ### Production Deployment
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Build the TypeScript project
-pnpm run build
+npm run build
 
 # Deploy commands to Discord
-pnpm run deploy
+npm run deploy
 
 # Start the bot
-pnpm run start
+npm run start
 ```
 
 ### Environment Variables
@@ -326,7 +326,7 @@ When adding new features:
 2. **Update categories**: Add to `src/data/categories.ts` if it's a command category
 3. **Update wiki**: Ensure the wiki reflects the new feature
 4. **Update README**: Documentation must stay in sync with code
-5. **Run the full pipeline**: `pnpm run build && pnpm run deploy` to verify
+5. **Run the full pipeline**: `npm run build && npm run deploy` to verify
 6. **Test in Discord**: Verify commands appear with emojis and permissions work
 7. **Check security**: Run `npm audit` and review for vulnerabilities
 8. **Update this documentation** if architecture concepts change

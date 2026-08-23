@@ -477,7 +477,7 @@ OpenBot is an open-source Discord bot designed to bring a full "progression bot"
 
 **Contributing**
 - Fork the repository, create a feature branch, write tests if applicable
-- Follow the existing TypeScript strict conventions; run `pnpm run build` and `pnpm run deploy`
+- Follow the existing TypeScript strict conventions; run `npm run build` and `npm run deploy`
 - Commit messages follow conventional commits format
 - Submit a pull request; maintainers will review and merge
 - See `CONTRIBUTING.md` for detailed guidelines (link at bottom of this file)
