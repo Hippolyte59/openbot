@@ -91,6 +91,31 @@ export function renderAdmin(client: Client): string {
     <button class="btn primary" style="margin-top:10px;" onclick="saveGoals()">Enregistrer objectifs</button>
   </section>
 
+  <section id="panel-logs" class="card panel">
+    <h2>Logs personnalisés</h2>
+    <p class="muted">Configuration des logs par service (YouTube, Twitch, Reddit, Dealabs)</p>
+    <div class="row2">
+      <div class="field"><label>YouTube — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsYouTubeColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsYouTubeColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.color))}" style="flex:1"></div></div>
+      <div class="field"><label>YouTube — Salon ID</label><input id="logsYouTubeChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.channelId))}" placeholder="123456789..."></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Twitch — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsTwitchColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsTwitchColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.color))}" style="flex:1"></div></div>
+      <div class="field"><label>Twitch — Salon ID</label><input id="logsTwitchChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.channelId))}" placeholder="123456789..."></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Reddit — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsRedditColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsRedditColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.color))}" style="flex:1"></div></div>
+      <div class="field"><label>Reddit — Salon ID</label><input id="logsRedditChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.channelId))}" placeholder="123456789..."></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Dealabs — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsDealabsColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsDealabsColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.color))}" style="flex:1"></div></div>
+      <div class="field"><label>Dealabs — Salon ID</label><input id="logsDealabsChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.channelId))}" placeholder="123456789..."></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Avatar par défaut (URL)</label><input id="logsAvatarUrl" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.avatarUrl))}" placeholder="https://..."></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveLogs()">Enregistrer logs</button>
+  </section>
+
   <section id="panel-commands" class="card panel">
     <h2>Commandes</h2>
     <div id="commandsList"></div>
@@ -130,7 +155,19 @@ export function renderAdmin(client: Client): string {
     document.getElementById('maxLevelRoleId').value=c.maxLevelRoleId||'';
     document.getElementById('privilegedRoleId').value=c.privilegedRoleId||'';
     document.getElementById('privilegedChannelId').value=c.privilegedChannelId||'';
-    document.getElementById('embedColor').value=c.embedColor||'${config.embedColor}';
+    document.getElementById('logsYouTubeColor').value=c.logs?.youtube?.color||'#FF0000';
+    document.getElementById('logsYouTubeColorText').value=c.logs?.youtube?.color||'#FF0000';
+    document.getElementById('logsYouTubeChannel').value=c.logs?.youtube?.channelId||'';
+    document.getElementById('logsTwitchColor').value=c.logs?.twitch?.color||'#9146FF';
+    document.getElementById('logsTwitchColorText').value=c.logs?.twitch?.color||'#9146FF';
+    document.getElementById('logsTwitchChannel').value=c.logs?.twitch?.channelId||'';
+    document.getElementById('logsRedditColor').value=c.logs?.reddit?.color||'#FF4500';
+    document.getElementById('logsRedditColorText').value=c.logs?.reddit?.color||'#FF4500';
+    document.getElementById('logsRedditChannel').value=c.logs?.reddit?.channelId||'';
+    document.getElementById('logsDealabsColor').value=c.logs?.dealabs?.color||'#FFAA00';
+    document.getElementById('logsDealabsColorText').value=c.logs?.dealabs?.color||'#FFAA00';
+    document.getElementById('logsDealabsChannel').value=c.logs?.dealabs?.channelId||'';
+    document.getElementById('logsAvatarUrl').value=c.logs?.youtube?.avatarUrl||'';
     document.getElementById('embedColorText').value=c.embedColor||'${config.embedColor}';
     document.getElementById('levelColor').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
     document.getElementById('levelColorText').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
@@ -163,6 +200,17 @@ export function renderAdmin(client: Client): string {
     const p={guildId:id, maxLevel: Number(document.getElementById('maxLevel').value)||100, maxLevelRoleId: document.getElementById('maxLevelRoleId').value.trim(), privilegedRoleId: document.getElementById('privilegedRoleId').value.trim(), privilegedChannelId: document.getElementById('privilegedChannelId').value.trim()};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Objectifs enregistrés ✅':'Erreur');
+  }
+  async function saveLogs(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    const p={guildId:id, logs: {
+      youtube: { color: document.getElementById('logsYouTubeColor').value, channelId: document.getElementById('logsYouTubeChannel').value.trim(), avatarUrl: document.getElementById('logsAvatarUrl').value.trim() },
+      twitch: { color: document.getElementById('logsTwitchColor').value, channelId: document.getElementById('logsTwitchChannel').value.trim() },
+      reddit: { color: document.getElementById('logsRedditColor').value, channelId: document.getElementById('logsRedditChannel').value.trim() },
+      dealabs: { color: document.getElementById('logsDealabsColor').value, channelId: document.getElementById('logsDealabsChannel').value.trim() }
+    }};
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Logs enregistrés ✅':'Erreur');
   }
   async function saveStyle(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
