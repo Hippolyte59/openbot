@@ -5,7 +5,7 @@ import { config } from "../config.js";
 import { renderWiki } from "./wiki.js";
 import { renderHome } from "./home.js";
 import { LOGO_SVG } from "./logo.js";
-import { loadGuilds, saveGuilds } from "../database/json-db.js";
+import { loadGuilds, saveGuilds, type GuildConfig } from "../database/json-db.js";
 import { renderAdmin } from "./admin.js";
 
 const DEFAULT_SECURITY_HEADERS = {
@@ -148,7 +148,7 @@ function handleRequest(
           if (data.privilegedChannelId !== undefined) (updates as any).privilegedChannelId = data.privilegedChannelId;
           
           const guilds = loadGuilds();
-          if (!guilds.has(guildId)) guilds.set(guildId, {});
+          if (!guilds.has(guildId)) guilds.set(guildId, {} as GuildConfig);
           const updated = { ...guilds.get(guildId)!, ...updates };
           guilds.set(guildId, updated);
           saveGuilds(guilds);

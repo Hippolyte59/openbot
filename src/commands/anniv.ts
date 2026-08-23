@@ -1,7 +1,7 @@
 import * as pkg from "discord.js";
 const { SlashCommandBuilder, EmbedBuilder } = pkg as any;
 import type { Command } from "../types.js";
-import { loadGuilds, saveGuilds, loadBirthdays, saveBirthdays, setBirthday, deleteBirthday, getBirthday } from "../database/json-db.js";
+import { loadGuilds, saveGuilds, loadBirthdays, saveBirthdays, setBirthday, deleteBirthday, getBirthday, type GuildConfig } from "../database/json-db.js";
 import { createEmbed } from "../utils/embeds.js";
 
 export default {
@@ -59,16 +59,17 @@ export default {
         await interaction.reply({ content: "❌ Tu as besoin de la permission **Gérer le serveur**.", ephemeral: true });
         return;
       }
+      const s = loadGuilds().get(guildId) || {} as GuildConfig;
       if (interaction.options.getString("message")) {
-        cfg.birthdayMessage = interaction.options.getString("message")!;
+        s.birthdayMessage = interaction.options.getString("message")!;
       }
       if (interaction.options.getRole("role")) {
-        cfg.birthdayRoleId = interaction.options.getRole("role")!.id;
+        s.birthdayRoleId = interaction.options.getRole("role")!.id;
       }
       if (interaction.options.getChannel("channel")) {
-        cfg.birthdayChannelId = interaction.options.getChannel("channel")!.id;
+        s.birthdayChannelId = interaction.options.getChannel("channel")!.id;
       }
-      saveGuilds(new Map([[guildId, cfg]]));
+      saveGuilds(new Map([[guildId, s]]));
       await interaction.reply({ content: "✅ Configuration serveur mise à jour.", ephemeral: true });
       return;
     }
