@@ -6,7 +6,7 @@ import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("donner")
     .setDescription("🎁 Donne des pièces à un autre membre")
     .addUserOption((option) =>
@@ -26,7 +26,7 @@ export default {
   async execute(interaction) {
     if (!interaction.inGuild()) return;
 
-    const target: User = interaction.options.getUser("membre", true);
+    const target: any = interaction.options.getUser("membre", true);
     const amount = interaction.options.getInteger("montant", true);
 
     if (target.bot) {

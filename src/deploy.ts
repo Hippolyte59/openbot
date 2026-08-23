@@ -1,9 +1,10 @@
 
-import { Collection, REST, Routes } from "discord.js";
+import * as pkg from "discord.js";
+const { Collection, REST, Routes } = pkg as any;
 import { config } from "./config.js";
 import { loadCommands } from "./loaders.js";
 
-const rest = new REST().setToken(config.token);
+const rest = new (REST as any)().setToken(config.token);
 
 let applicationId = config.clientId;
 if (!applicationId) {
@@ -14,7 +15,7 @@ if (!applicationId) {
   console.log(`ℹ️  CLIENT_ID déduit automatiquement : ${applicationId}`);
 }
 
-const commands = await loadCommands(new Collection());
+const commands = await loadCommands(new (Collection as any)());
 const body = commands.map((command) => command.toJSON());
 
 try {

@@ -1,10 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentType,
-  SlashCommandBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } = pkg as any;
 import type { Command } from "../types.js";
 import { createEmbed } from "../utils/embeds.js";
 
@@ -15,14 +10,14 @@ const CHOICES = [
 ] as const;
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("pfc")
     .setDescription("🪨 Pierre-feuille-ciseaux contre le bot"),
 
   async execute(interaction) {
     const userId = interaction.user.id;
 
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    const row = new (ActionRowBuilder as any)().addComponents(
       ...CHOICES.map(
         (choice) =>
           new ButtonBuilder()
@@ -76,7 +71,7 @@ export default {
       }
 
       const disabledRow =
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new (ActionRowBuilder as any)().addComponents(
           ...row.components.map((c) =>
             ButtonBuilder.from(c).setDisabled(true),
           ),

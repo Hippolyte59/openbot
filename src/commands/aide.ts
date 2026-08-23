@@ -1,16 +1,12 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  SlashCommandBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = pkg as any;
 import type { Command } from "../types.js";
 import { config } from "../config.js";
 import { GITHUB_URL } from "../web/logo.js";
 import { createEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("aide")
     .setDescription("📖 Ouvre le site et le wiki du bot"),
 
@@ -19,7 +15,7 @@ export default {
     const wikiUrl = `${siteUrl}/wiki`;
     const logoUrl = `${siteUrl}/logo.svg`;
 
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    const row = new (ActionRowBuilder as any)().addComponents(
       new ButtonBuilder()
         .setLabel("Site web")
         .setEmoji("🏠")

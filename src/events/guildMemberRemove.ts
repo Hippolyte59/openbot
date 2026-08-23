@@ -4,7 +4,7 @@ import { loadGuilds, replacePlaceholders } from "../database/json-db.js";
 
 export const name = Events.GuildMemberRemove;
 
-export async function execute(member: GuildMember): Promise<void> {
+export async function execute(member: any): Promise<void> {
   const cfg = loadGuilds().get(member.guild.id);
   if (!cfg?.goodbyeChannel) return;
   const channel = member.guild.channels.cache.get(cfg.goodbyeChannel);

@@ -1,10 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentType,
-  SlashCommandBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } = pkg as any;
 import type { Command } from "../types.js";
 import { addBalance, getPlayer, removeBalance } from "../database/players.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
@@ -19,7 +14,7 @@ const WIN_LINES = [
 ];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("duel")
     .setDescription("⚔️ Défie un autre membre en duel pour une mise")
     .addUserOption((option) =>
@@ -69,7 +64,7 @@ export default {
       return;
     }
 
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    const row = new (ActionRowBuilder as any)().addComponents(
       new ButtonBuilder()
         .setCustomId(`duel:${opponent.id}:accept`)
         .setLabel("Accepter")
@@ -118,7 +113,7 @@ export default {
     });
 
     collector.on("end", async (collected, reason) => {
-      const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      const disabledRow = new (ActionRowBuilder as any)().addComponents(
         ...row.components.map((c) =>
           ButtonBuilder.from(c).setDisabled(true),
         ),

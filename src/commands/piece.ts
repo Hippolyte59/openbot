@@ -3,7 +3,7 @@ import type { Command } from "../types.js";
 import { createEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("piece")
     .setDescription("🪙 Lance une pièce (pile ou face)"),
 

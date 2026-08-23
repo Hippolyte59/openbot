@@ -7,7 +7,7 @@ import { formatNumber } from "../utils/format.js";
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("classement")
     .setDescription("🏆 Affiche le top 10 du serveur")
     .addStringOption((option) =>

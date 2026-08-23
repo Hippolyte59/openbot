@@ -4,7 +4,7 @@ import { createEmbed } from "../utils/embeds.js";
 import { randomInt } from "../utils/random.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("de")
     .setDescription("🎲 Lance un dé à X faces")
     .addIntegerOption((option) =>

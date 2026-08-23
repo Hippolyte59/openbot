@@ -5,7 +5,7 @@ import type { Collection } from "discord.js";
 import type { Command, CommandData } from "./types.js";
 
 export async function loadCommands(
-  collection: Collection<string, Command>,
+  collection: any,
 ): Promise<CommandData[]> {
   const currentDir = path.dirname(fileURLToPath(import.meta.url));
   const dir = path.join(currentDir, "commands");

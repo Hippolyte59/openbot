@@ -8,7 +8,7 @@ import { config } from "../config.js";
 const FACES = ["Pile 🪙", "Face 🎯"];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("parier")
     .setDescription("🎲 Pile ou face : double la mise ou tout perd")
     .addIntegerOption((option) =>

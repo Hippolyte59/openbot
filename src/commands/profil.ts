@@ -32,7 +32,7 @@ function badgesFor(player: {
 }
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("profil")
     .setDescription("👤 Affiche le profil d'un membre")
     .addUserOption((option) =>

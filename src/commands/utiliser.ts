@@ -19,7 +19,7 @@ const LOTTERY_CHANCE = 0.1;
 const POTION_HEAL = 40;
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("utiliser")
     .setDescription("✨ Utilise un objet de ton inventaire")
     .addStringOption((option) =>

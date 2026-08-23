@@ -7,5 +7,6 @@ declare module "discord.js" {
   export const Routes: any;
   export const ActivityType: any;
   export const TextInputStyle: any;
+  export const PermissionsBitField: any;
 }
 declare const process: any;

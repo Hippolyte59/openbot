@@ -1,4 +1,5 @@
-import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+import * as pkg from "discord.js";
+const { SlashCommandBuilder, PermissionFlagsBits } = pkg as any;
 import type { Command } from "../types.js";
 import {
   hasModAccess,
@@ -7,7 +8,7 @@ import {
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("ban")
     .setDescription("🔨 Bannit un membre du serveur")
     .addUserOption((option) =>

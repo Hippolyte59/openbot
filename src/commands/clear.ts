@@ -1,9 +1,10 @@
-import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+import * as pkg from "discord.js";
+const { SlashCommandBuilder, PermissionFlagsBits } = pkg as any;
 import type { Command } from "../types.js";
 import { createEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("clear")
     .setDescription("🧹 Supprime des messages en masse dans ce salon")
     .addIntegerOption((option) =>

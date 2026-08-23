@@ -10,17 +10,17 @@ const colors: Record<EmbedColor, number> = {
   warning: 0xfee75c,
 };
 
-export function createEmbed(color: EmbedColor = "primary"): EmbedBuilder {
-  return new EmbedBuilder()
+export function createEmbed(color: EmbedColor = "primary"): any {
+  return new (EmbedBuilder as any)()
     .setColor(colors[color])
     .setFooter({ text: `• ${config.botName}` })
     .setTimestamp();
 }
 
-export function errorEmbed(description: string): EmbedBuilder {
+export function errorEmbed(description: string): any {
   return createEmbed("error").setDescription(`❌ ${description}`);
 }
 
-export function successEmbed(description: string): EmbedBuilder {
+export function successEmbed(description: string): any {
   return createEmbed("success").setDescription(`✅ ${description}`);
 }

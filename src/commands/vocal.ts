@@ -1,4 +1,5 @@
-import { SlashCommandBuilder, ChannelType, PermissionFlagsBits } from "discord.js";
+import * as pkg from "discord.js";
+const { SlashCommandBuilder, ChannelType, PermissionFlagsBits } = pkg as any;
 import type { Command } from "../types.js";
 import {
   deleteVoiceChannel,
@@ -23,7 +24,7 @@ const ACCESS_LABELS = {
 } as const;
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("vocal")
     .setDescription("🔊 Gère ton salon vocal personnel")
     .addSubcommandGroup((group) =>

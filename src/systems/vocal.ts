@@ -1,19 +1,13 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ChannelType,
-  ModalBuilder,
-  PermissionFlagsBits,
-  TextInputBuilder,
-  TextInputStyle,
-  type ButtonInteraction,
-  type ChatInputCommandInteraction,
-  type EmbedBuilder,
-  type GuildMember,
-  type ModalSubmitInteraction,
-  type VoiceBasedChannel,
-  type VoiceState,
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, ModalBuilder, PermissionFlagsBits, TextInputBuilder, TextInputStyle } = pkg as any;
+import type {
+  ButtonInteraction,
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  GuildMember,
+  ModalSubmitInteraction,
+  VoiceBasedChannel,
+  VoiceState,
 } from "discord.js";
 import {
   deleteVoiceChannel,
@@ -40,7 +34,7 @@ const ACCESS_LABELS: Record<AccessState, string> = {
   hidden: "Caché",
 };
 
-export function accessOf(channel: VoiceBasedChannel): AccessState {
+export function accessOf(channel: any): AccessState {
   const everyone = channel.guild.roles.everyone;
   const deny = channel.permissionOverwrites.cache.get(everyone.id)?.deny;
   if (deny?.has(PermissionFlagsBits.ViewChannel)) return "hidden";
@@ -49,9 +43,9 @@ export function accessOf(channel: VoiceBasedChannel): AccessState {
 }
 
 function panelEmbed(
-  channel: VoiceBasedChannel,
+  channel: any,
   ownerId: string,
-): EmbedBuilder {
+): any {
   const access = accessOf(channel);
   const limit =
     channel.userLimit === 0 ? "Illimité" : `${channel.userLimit} personne(s)`;
@@ -73,8 +67,8 @@ function panelEmbed(
     );
 }
 
-function panelRow(): ActionRowBuilder<ButtonBuilder> {
-  return new ActionRowBuilder<ButtonBuilder>().addComponents(
+function panelRow(): any {
+  return new (ActionRowBuilder as any)().addComponents(
     new ButtonBuilder()
       .setCustomId("vc-lock")
       .setLabel("Verrouiller")
@@ -104,7 +98,7 @@ function panelRow(): ActionRowBuilder<ButtonBuilder> {
 }
 
 async function postPanel(
-  channel: VoiceBasedChannel,
+  channel: any,
   ownerId: string,
 ): Promise<void> {
   try {
@@ -144,7 +138,7 @@ export async function refreshPanel(
 }
 
 async function createVoiceRoom(
-  member: GuildMember,
+  member: any,
   name: string | null,
   parentId?: string | null,
 ): Promise<VoiceBasedChannel> {
@@ -179,7 +173,7 @@ async function createVoiceRoom(
 }
 
 export async function createPersonalChannel(
-  interaction: ChatInputCommandInteraction,
+  interaction: any,
   name: string | null,
 ): Promise<void> {
   const member = interaction.member as GuildMember;
@@ -224,7 +218,7 @@ export async function createPersonalChannel(
 }
 
 export async function handleVocalButton(
-  interaction: ButtonInteraction,
+  interaction: any,
 ): Promise<boolean> {
   if (!interaction.inGuild() || !interaction.channelId) return false;
   if (!interaction.customId.startsWith("vc-")) return false;
@@ -257,7 +251,7 @@ export async function handleVocalButton(
       .setCustomId("vc-modal-limit")
       .setTitle("Limite de places")
       .addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(
+        new (ActionRowBuilder as any)().addComponents(
           new TextInputBuilder()
             .setCustomId("limit-input")
             .setLabel("Nombre maximum de personnes (0 = illimité)")
@@ -276,7 +270,7 @@ export async function handleVocalButton(
       .setCustomId("vc-modal-name")
       .setTitle("Renommer le salon")
       .addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(
+        new (ActionRowBuilder as any)().addComponents(
           new TextInputBuilder()
             .setCustomId("name-input")
             .setLabel("Nouveau nom du salon")
@@ -328,7 +322,7 @@ export async function handleVocalButton(
 }
 
 export async function handleVocalModal(
-  interaction: ModalSubmitInteraction,
+  interaction: any,
 ): Promise<boolean> {
   if (
     interaction.customId !== "vc-modal-limit" &&
@@ -378,8 +372,8 @@ export async function handleVocalModal(
 }
 
 export async function handleVoiceStateUpdate(
-  oldState: VoiceState,
-  newState: VoiceState,
+  oldState: any,
+  newState: any,
 ): Promise<void> {
   await processArrival(newState);
   processDeparture(oldState);
@@ -387,7 +381,7 @@ export async function handleVoiceStateUpdate(
 
 const pendingCreations = new Set<string>();
 
-async function processArrival(state: VoiceState): Promise<void> {
+async function processArrival(state: any): Promise<void> {
   const guild = state.guild;
   const member = state.member;
   if (!guild || !member || member.user.bot || !state.channelId) return;
@@ -427,7 +421,7 @@ async function processArrival(state: VoiceState): Promise<void> {
   }
 }
 
-function processDeparture(oldState: VoiceState): void {
+function processDeparture(oldState: any): void {
   const leftChannel = oldState.channel;
   if (!leftChannel) return;
 

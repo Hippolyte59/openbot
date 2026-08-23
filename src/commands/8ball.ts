@@ -19,7 +19,7 @@ const ANSWERS = [
 ];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("8ball")
     .setDescription("🎱 Pose une question au bot magique")
     .addStringOption((option) =>

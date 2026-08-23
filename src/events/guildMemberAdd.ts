@@ -4,7 +4,7 @@ import { loadGuilds, replacePlaceholders } from "../database/json-db.js";
 
 export const name = Events.GuildMemberAdd;
 
-export async function execute(member: GuildMember): Promise<void> {
+export async function execute(member: any): Promise<void> {
   const cfg = loadGuilds().get(member.guild.id);
   if (!cfg?.welcomeChannel) return;
   const channel = member.guild.channels.cache.get(cfg.welcomeChannel);

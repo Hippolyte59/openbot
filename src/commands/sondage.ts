@@ -5,7 +5,7 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 const POLL_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("sondage")
     .setDescription("📊 Lance un sondage dans le salon")
     .addStringOption((option) =>

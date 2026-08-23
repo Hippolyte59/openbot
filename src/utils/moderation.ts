@@ -1,12 +1,9 @@
-import {
-  PermissionFlagsBits,
-  type GuildMember,
-  type ChatInputCommandInteraction,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { PermissionFlagsBits } = pkg as any;
 import { getAdminRoles } from "../database/guilds.js";
 
 export function hasModAccess(
-  interaction: ChatInputCommandInteraction,
+  interaction: any,
   ...permissions: bigint[]
 ): boolean {
   if (
@@ -16,8 +13,8 @@ export function hasModAccess(
   }
 
   const allowedRoles = getAdminRoles(interaction.guildId!);
-  const member = interaction.member as GuildMember;
-  if (member.roles.cache.some((role) => allowedRoles.includes(role.id))) {
+  const member = interaction.member as any;
+  if (member.roles.cache.some((role: any) => allowedRoles.includes(role.id))) {
     return true;
   }
 
@@ -27,13 +24,13 @@ export function hasModAccess(
 }
 
 export interface ModerationTarget {
-  member: GuildMember;
+  member: any;
   user: import("discord.js").User;
 }
 
 export function moderationError(
-  interaction: ChatInputCommandInteraction,
-  targetMember: GuildMember | null,
+  interaction: any,
+  targetMember: any | null,
 ): string | null {
   if (!targetMember) return "Membre introuvable sur ce serveur.";
   if (targetMember.id === interaction.user.id) {
@@ -46,7 +43,7 @@ export function moderationError(
     return "Impossible de modérer le propriétaire du serveur.";
   }
 
-  const executor = interaction.member as GuildMember;
+  const executor = interaction.member as any;
   if (
     executor.id !== interaction.guild!.ownerId &&
     targetMember.roles.highest.comparePositionTo(

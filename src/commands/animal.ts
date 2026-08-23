@@ -8,7 +8,7 @@ import { ANIMALS, getAnimal } from "../data/animals.js";
 import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("animal")
     .setDescription("🐾 Gère ton animal de compagnie")
     .addSubcommand((sub) =>

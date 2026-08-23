@@ -12,7 +12,7 @@ import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("acheter")
     .setDescription("🛍️ Achète un objet de la boutique")
     .addStringOption((option) =>

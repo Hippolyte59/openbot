@@ -9,7 +9,7 @@ import { config } from "../config.js";
 const STREAK_WINDOW = 2 * config.cooldowns.daily;
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("quotidien")
     .setDescription("🎁 Récupère ta récompense quotidienne"),
 

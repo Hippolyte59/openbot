@@ -20,7 +20,7 @@ function pruneCooldowns(now: number): void {
   }
 }
 
-export async function execute(message: Message): Promise<void> {
+export async function execute(message: any): Promise<void> {
   if (!message.guild || message.author.bot) return;
 
   const now = Date.now();

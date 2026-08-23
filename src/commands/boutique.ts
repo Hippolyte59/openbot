@@ -6,7 +6,7 @@ import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("boutique")
     .setDescription("🛒 Affiche la boutique du serveur"),
 

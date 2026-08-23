@@ -14,17 +14,17 @@ export type CommandData =
 
 export interface Command {
   data: CommandData;
-  execute(interaction: ChatInputCommandInteraction): Promise<void>;
+  execute(interaction: any): Promise<void>;
 }
 
 declare module "discord.js" {
   interface Client {
-    commands: Collection<string, Command>;
+    commands: any;
   }
 }
 
 export interface BotClient extends Client {
-  commands: Collection<string, Command>;
+  commands: any;
 }
 
 export function asBotClient(client: Client): BotClient {

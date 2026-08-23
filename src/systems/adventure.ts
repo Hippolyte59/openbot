@@ -1,12 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  ComponentType,
-  type ButtonInteraction,
-  type ChatInputCommandInteraction,
-  type EmbedBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = pkg as any;
 import {
   addItem,
   consumeItem,
@@ -69,9 +62,9 @@ function equipmentLabel(itemId: string | null): string {
   return item ? `${item.emoji} ${item.name}` : "Aucune";
 }
 
-function buildButtons(fight: ActiveFight, disabled = false): ActionRowBuilder<ButtonBuilder> {
+function buildButtons(fight: ActiveFight, disabled = false): any {
   const potions = getItemCount(fight.guildId, fight.userId, "potion");
-  return new ActionRowBuilder<ButtonBuilder>().addComponents(
+  return new (ActionRowBuilder as any)().addComponents(
     new ButtonBuilder()
       .setCustomId(`adv:${fight.userId}:attack`)
       .setLabel("Attaquer")
@@ -97,7 +90,7 @@ function hpLine(label: string, hp: number, max: number): string {
   return `${label}\n${progressBar(hp, max)} **${Math.max(0, hp)} / ${max}** PV`;
 }
 
-function buildEmbed(fight: ActiveFight): EmbedBuilder {
+function buildEmbed(fight: ActiveFight): any {
   return createEmbed("primary")
     .setTitle(`${fight.emoji} ${fight.name}`)
     .setDescription(
@@ -117,7 +110,7 @@ function pushLog(fight: ActiveFight, line: string): void {
 
 async function finishFight(
   fight: ActiveFight,
-  button: ButtonInteraction,
+  button: any,
   outcome: "victory" | "defeat" | "flee",
 ): Promise<void> {
   fight.ended = true;
@@ -196,7 +189,7 @@ function monsterAttack(fight: ActiveFight): void {
 }
 
 export async function startAdventure(
-  interaction: ChatInputCommandInteraction,
+  interaction: any,
 ): Promise<void> {
   if (!interaction.inGuild()) return;
 
@@ -284,7 +277,7 @@ export async function startAdventure(
     time: 120_000,
   });
 
-  collector.on("collect", async (button: ButtonInteraction) => {
+  collector.on("collect", async (button: any) => {
     const [, ownerId, action] = button.customId.split(":");
 
     if (ownerId !== userId) {

@@ -1,9 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  SlashCommandBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = pkg as any;
 import type { Command } from "../types.js";
 import {
   getPlayer,
@@ -14,7 +10,7 @@ import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 const DIVORCE_COST = 500;
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("mariage")
     .setDescription("💍 Gère ta vie de couple")
     .addSubcommand((sub) =>
@@ -158,7 +154,7 @@ export default {
       return;
     }
 
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    const row = new (ActionRowBuilder as any)().addComponents(
       new ButtonBuilder()
         .setCustomId(`mari:${target.id}:accept`)
         .setLabel("Oui ! 💍")

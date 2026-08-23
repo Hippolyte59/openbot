@@ -8,7 +8,7 @@ import {
 
 export const name = Events.InteractionCreate;
 
-export async function execute(interaction: Interaction): Promise<void> {
+export async function execute(interaction: any): Promise<void> {
 
   if (interaction.isButton()) {
     try {

@@ -1,13 +1,11 @@
-import {
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { PermissionFlagsBits, SlashCommandBuilder } = pkg as any;
 import type { Command } from "../types.js";
 import { hasModAccess } from "../utils/moderation.js";
 import { createEmbed } from "../utils/embeds.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("slowmode")
     .setDescription("🐢 Définit le mode lent du salon actuel")
     .addIntegerOption((option) =>

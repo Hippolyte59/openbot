@@ -1,11 +1,6 @@
-import {
-  ChannelType,
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-  type GuildMember,
-  type TextChannel,
-} from "discord.js";
+import * as pkg from "discord.js";
+const { ChannelType, PermissionFlagsBits, SlashCommandBuilder } = pkg as any;
+import type { ChatInputCommandInteraction, GuildMember, TextChannel } from "discord.js";
 import type { Command } from "../types.js";
 import {
   addAdminRole,
@@ -24,7 +19,7 @@ import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
 function hasAdminAccess(
-  interaction: ChatInputCommandInteraction,
+  interaction: any,
 ): boolean {
   if (interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
     return true;
@@ -35,7 +30,7 @@ function hasAdminAccess(
 }
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("admin")
     .setDescription(
       "🛠️ Commandes d'administration (admins et rôles autorisés uniquement)",

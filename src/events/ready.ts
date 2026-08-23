@@ -1,4 +1,6 @@
-import { Events, ActivityType, type Client } from "discord.js";
+import * as pkg from "discord.js";
+const { Events, ActivityType } = pkg as any;
+import type { Client } from "discord.js";
 import { config } from "../config.js";
 import { startWebServer } from "../web/server.js";
 

@@ -8,7 +8,7 @@ import { config } from "../config.js";
 import { getPlayer } from "../database/players.js";
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("inventaire")
     .setDescription("🎒 Affiche ton inventaire d'objets"),
 

@@ -19,7 +19,7 @@ const JOBS = [
 ];
 
 export default {
-  data: new SlashCommandBuilder()
+  data: new (SlashCommandBuilder as any)()
     .setName("travail")
     .setDescription("💼 Travaille pour gagner quelques pièces"),
 

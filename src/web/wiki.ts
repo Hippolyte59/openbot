@@ -17,7 +17,7 @@ function stripLeadingEmoji(description: string): string {
   return description.replace(/^[^\wÀ-ÿ]+ /u, "");
 }
 
-export function renderWiki(commands: Collection<string, Command>): string {
+export function renderWiki(commands: any): string {
   const sections = CATEGORIES.map((category) => {
     const rows = category.commands
       .map((name) => commands.get(name))
