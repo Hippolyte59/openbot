@@ -5,50 +5,27 @@ import { CATEGORIES } from "../data/categories.js";
 import { GITHUB_URL } from "./logo.js";
 import { BASE_CSS, COPY_JS } from "./styles.js";
 
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
+function escapeHtml(v: string): string { return v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
+function stripEmoji(d: string): string { return d.replace(/^[^\wÀ-ÿ]+ /u, ""); }
 
-function stripLeadingEmoji(description: string): string {
-  return description.replace(/^[^\wÀ-ÿ]+ /u, "");
-}
-
-export function renderWiki(commands: any): string {
-  const sections = CATEGORIES.map((category) => {
-    const rows = category.commands
-      .map((name) => commands.get(name))
-      .filter((cmd): cmd is Command => cmd !== undefined)
-      .map(
-        (cmd) => `
-          <tr>
-            <td><code>/${escapeHtml(cmd.data.name)}</code></td>
-            <td>${escapeHtml(stripLeadingEmoji(cmd.data.description))}</td>
-          </tr>`,
-      )
-      .join("\n");
-
+export function renderWiki(commands: Collection<string, Command> | Map<string, any>): string {
+  const sections = CATEGORIES.map(cat => {
+    const rows = cat.commands.map(n => (commands as any).get(n)).filter(Boolean).map((cmd: any) => `
+      <tr data-command="${escapeHtml(cmd.data.name)}" data-desc="${escapeHtml(stripEmoji(cmd.data.description).toLowerCase())}">
+        <td><code>/${escapeHtml(cmd.data.name)}</code></td>
+        <td>${escapeHtml(stripEmoji(cmd.data.description))}</td>
+        <td><button class="btn" style="padding:4px 10px;font-size:.8rem;" onclick="copyCmd('/${escapeHtml(cmd.data.name)}')">Copier</button></td>
+      </tr>`).join("\n");
     if (!rows) return "";
-
     return `
-      <section class="card" id="${category.id}">
-        <h2>${escapeHtml(category.title)}</h2>
-        <p class="muted">${escapeHtml(category.description)}</p>
-        <table>
-          <thead><tr><th>Commande</th><th>Description</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
+      <section class="card" id="${cat.id}">
+        <h2>${escapeHtml(cat.title)}</h2>
+        <p class="muted">${escapeHtml(cat.description)} — ${cat.commands.length} commande(s)</p>
+        <table><thead><tr><th>Commande</th><th>Description</th><th></th></tr></thead><tbody>${rows}</tbody></table>
       </section>`;
   }).join("\n");
 
-  const nav = CATEGORIES.filter((c) =>
-    c.commands.some((name) => commands.has(name)),
-  )
-    .map((c) => `<a href="#${c.id}">${escapeHtml(c.title)}</a>`)
-    .join("\n");
+  const nav = CATEGORIES.filter(c => c.commands.some(n => (commands as any).has(n))).map(c => `<a href="#${c.id}">${escapeHtml(c.title)}</a>`).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -57,78 +34,75 @@ export function renderWiki(commands: any): string {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <title>${escapeHtml(config.botName)} — Wiki</title>
-<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<link rel="icon" href="/logo.svg">
 <style>${BASE_CSS}
-  nav.toc {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 18px;
-    justify-content: center;
-    padding: 14px 24px;
-    background: rgba(11, 11, 11, .92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-    font-size: .9rem;
-  }
-  nav.toc a { color: var(--text-muted); transition: color .15s ease; }
-  nav.toc a:hover { color: var(--accent); }
+  nav.toc{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:16px 24px;background:rgba(11,11,11,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);font-size:.88rem;}
+  nav.toc a{color:var(--text-muted);padding:6px 10px;border-radius:20px;border:1px solid transparent;transition:all .15s;}
+  nav.toc a:hover{color:var(--text);border-color:var(--border);background:var(--surface);}
+  .search-wrap{max-width:600px;margin:24px auto 0;padding:0 24px;}
+  .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:12px 16px;font-size:1rem;}
+  .search-wrap input::placeholder{color:var(--text-muted);}
+  .search-info{text-align:center;color:var(--text-muted);font-size:.9rem;margin:12px 0 0;}
 </style>
 </head>
 <body>
-
-<header class="hero">
-  <img class="logo" src="/logo.svg" alt="Logo ${escapeHtml(config.botName)}">
+<header class="hero" style="padding:48px 24px 32px;">
   <h1>${escapeHtml(config.botName)} <span>/ wiki</span></h1>
-  <p>Toute la documentation du bot : commandes classées par catégorie,
-     salons vocaux personnels, guide d'installation et personnalisation.
-     Clique sur une commande pour la copier.</p>
-  <div class="hero-actions">
-    <a class="btn primary" href="/">Retour à l'accueil</a>
-    <a class="btn" href="${GITHUB_URL}">GitHub</a>
-    <a class="btn" href="/api/commands">API JSON</a>
-  </div>
+  <p>Toute la doc : <b>${(commands as any).size ?? 0} commandes</b> classées par catégorie. Clique <code>Copier</code> ou tape le nom pour filtrer.</p>
+  <div class="hero-actions"><a class="btn primary" href="/">Accueil</a><a class="btn" href="${GITHUB_URL}">GitHub</a><a class="btn" href="/api/commands">API</a></div>
 </header>
-
 <nav class="toc">${nav}</nav>
-
+<div class="search-wrap">
+  <input id="search" type="search" placeholder="Rechercher une commande…  ex: /profil, /aventure, vocal" autofocus>
+  <div class="search-info" id="searchInfo"></div>
+</div>
 <main>
-  <section class="card" id="vocaux">
+  <section class="card" id="vocaux" style="margin-top:24px;">
     <h2>Salons vocaux personnels</h2>
-    <p class="muted">Ton propre vocal, créé en un saut depuis le hub.</p>
-    <p>
-      Le staff place un salon <em>« rejoindre pour créer »</em> avec
-      <code>/vocal hub creer</code>. Dès qu'un membre y entre, un salon vocal
-      personnel est créé et il y est déplacé automatiquement : le panneau de
-      contrôle apparaît dans le chat du salon.
-    </p>
-    <table>
-      <thead><tr><th>Bouton du panneau</th><th>Effet</th></tr></thead>
-      <tbody>
-        <tr><td><code>Verrouiller / Déverrouiller</code></td><td>Autorise ou interdit l'accès au salon</td></tr>
-        <tr><td><code>Cacher / Afficher</code></td><td>Rend le salon invisible aux autres membres</td></tr>
-        <tr><td><code>Places</code></td><td>Fixe la capacité maximale (0 = illimité)</td></tr>
-        <tr><td><code>Renommer</code></td><td>Change le nom du salon</td></tr>
-        <tr><td><code>Fermer</code></td><td>Supprime immédiatement le salon</td></tr>
-      </tbody>
-    </table>
-    <p class="muted" style="margin-top:14px">
-      Réservé au propriétaire. Si le propriétaire part, la propriété passe au membre suivant ;
-      un salon vide est supprimé automatiquement.
-    </p>
+    <p class="muted">Ton vocal perso en un clic depuis le hub.</p>
+    <p><code>/vocal hub creer</code> → un membre rejoint le hub → salon perso créé + panneau de contrôle.</p>
+    <table><thead><tr><th>Bouton</th><th>Effet</th></tr></thead><tbody>
+      <tr><td><code>Verrouiller</code></td><td>Bloque l'accès</td></tr>
+      <tr><td><code>Cacher</code></td><td>Invisible</td></tr>
+      <tr><td><code>Places</code></td><td>Capacité (0 = ∞)</td></tr>
+      <tr><td><code>Renommer</code></td><td>Nouveau nom</td></tr>
+      <tr><td><code>Fermer</code></td><td>Supprime</td></tr>
+    </tbody></table>
   </section>
   ${sections}
 </main>
-
-<footer>
-  ${escapeHtml(config.botName)} — logiciel libre sous licence MIT ·
-  Documentation régénérée automatiquement à chaque démarrage du bot ·
-  <a href="/">Accueil</a>
-</footer>
-
-<script>${COPY_JS}</script>
+<footer>${escapeHtml(config.botName)} — MIT · <a href="/">Accueil</a> · <a href="${GITHUB_URL}">GitHub</a></footer>
+<script>${COPY_JS}
+  function copyCmd(t){ navigator.clipboard.writeText(t).then(()=>toast('Copié '+t)).catch(()=>{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); toast('Copié '+t); }); }
+  function toast(m){ const t=document.createElement('div'); t.textContent=m; t.style.cssText='position:fixed;bottom:18px;right:18px;background:#1e1e1e;border:1px solid #333;padding:10px 14px;border-radius:10px;z-index:99;'; document.body.appendChild(t); setTimeout(()=>t.remove(),1400); }
+  const search=document.getElementById('search');
+  const info=document.getElementById('searchInfo');
+  search.addEventListener('input',()=>{
+    const q=search.value.trim().toLowerCase();
+    let visible=0;
+    document.querySelectorAll('tbody tr[data-command]').forEach(tr=>{
+      const cmd=tr.getAttribute('data-command')||''; const desc=tr.getAttribute('data-desc')||'';
+      const show=!q || cmd.includes(q) || desc.includes(q);
+      tr.style.display=show?'':'none';
+      if(show) visible++;
+    });
+    document.querySelectorAll('main section.card').forEach(sec=>{
+      const rows=sec.querySelectorAll('tbody tr[data-command]');
+      if(!rows.length) return;
+      const anyVisible=[...rows].some(r=>r.style.display!=='none');
+      sec.style.display=anyVisible?'':'none';
+    });
+    info.textContent=q ? visible+' résultat(s) pour "'+q+'"' : '';
+  });
+  // highlight TOC on scroll
+  const tocLinks=document.querySelectorAll('nav.toc a');
+  const sections2=document.querySelectorAll('main section.card[id]');
+  window.addEventListener('scroll',()=>{
+    let current='';
+    sections2.forEach(s=>{ if(window.scrollY >= (s as HTMLElement).offsetTop - 120) current=s.id; });
+    tocLinks.forEach(a=>a.style.color = a.getAttribute('href')==='#'+current ? 'var(--text)' : 'var(--text-muted)');
+  });
+</script>
 </body>
 </html>`;
 }
