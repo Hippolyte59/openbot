@@ -166,7 +166,16 @@ export function startWebServer(client: Client): void {
     handleRequest(request, response, client),
   );
 
-  server.on("error", (error) => {
+  server.on("error", async (error: any) => {
+    if (error?.code === "EADDRINUSE") {
+      console.error(`❌ Port ${config.webPort} déjà utilisé — libération...`);
+      try {
+        const { execSync } = await import("node:child_process");
+        execSync(`npx --yes kill-port ${config.webPort}`, { stdio: "ignore" });
+        setTimeout(() => server.listen(config.webPort), 800);
+        return;
+      } catch {}
+    }
     console.error("❌ Serveur web :", error.message);
   });
 
