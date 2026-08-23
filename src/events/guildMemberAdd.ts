@@ -1,6 +1,6 @@
 import { Events } from "discord.js";
 import type { GuildMember } from "discord.js";
-import { loadGuilds, replacePlaceholders } from "../database/json-db.js";
+import { loadGuilds, loadBirthdays, replacePlaceholders } from "../database/json-db.js";
 
 export const name = Events.GuildMemberAdd;
 
@@ -27,4 +27,18 @@ export async function execute(member: any): Promise<void> {
   if (cfg.welcomeBanner) embed.image = { url: cfg.welcomeBanner };
   const payload: any = { content: `<@${member.id}>`, embeds: [embed], allowedMentions: { parse: ["users"] } };
   try { await (channel as any).send(payload); } catch (e) { console.error("welcome send", e); }
+
+  // Birthday check
+  const bday = loadBirthdays()[`${member.guild.id}:${member.id}`];
+  if (bday && cfg.birthdayChannelId && cfg.birthdayMessage) {
+    const bdayChannel = member.guild.channels.cache.get(cfg.birthdayChannelId);
+    if (bdayChannel && bdayChannel.isTextBased()) {
+      const age = Math.floor((Date.now() - member.user.createdAt) / 86400000) / 30.44 | 0; // rough age
+      const bdayText = cfg.birthdayMessage
+        .replace(/{pseudo}/g, member.user.username)
+        .replace(/{age}/g, age.toString())
+        .replace(/{date}/g, `${bday.month}/${bday.day}`);
+      try { await bdayChannel.send({ content: `<@${member.id}>`, embeds: [{ color: 0xFFD700, description: bdayText }] }); } catch {}
+    }
+  }
 }

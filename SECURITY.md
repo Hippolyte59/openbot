@@ -98,4 +98,4 @@ We appreciate all security researchers who help keep OpenBot safe for the commun
 
 ---
 
-**Security Contact**: security@hippolyte59.openbot.com
+**Security Contact**: hippolyte@zorcraft.ovh

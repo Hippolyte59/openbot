@@ -39,13 +39,21 @@ export function loadInventoryStore(): InventoryStore { return readJSON<Inventory
 export function saveInventoryStore(s: InventoryStore): void { writeJSON(INVENTORY_FILE, s); }
 
 // ---------- Guilds config ----------
-export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; }
+export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; birthdayRoleId?: string; birthdayChannelId?: string; birthdayMessage?: string; logs: Record<string { color: string; channelId: string; avatarUrl?: string; }>; birthdays: Record<string { month: number; day: number }>; }
 type GuildsStore = Record<string, GuildConfig>;
 const GUILDS_FILE = join(DATA_DIR, "guilds.json");
 export function loadGuilds(): Map<string, GuildConfig> { return new Map(Object.entries(readJSON<GuildsStore>(GUILDS_FILE, {}))); }
 export function saveGuilds(guilds: Map<string, GuildConfig>): void { writeJSON(GUILDS_FILE, Object.fromEntries(guilds)); }
 
-// ---------- Warnings ----------
+// ---------- Birthdays ----------
+export interface Birthday { month: number; day: number; }
+type BirthdaysStore = Record<string, Birthday>; // key: "guildId:userId"
+const BIRTHDAYS_FILE = join(DATA_DIR, "birthdays.json");
+export function loadBirthdays(): BirthdaysStore { return readJSON<BirthdaysStore>(BIRTHDAYS_FILE, {}); }
+export function saveBirthdays(b: BirthdaysStore): void { writeJSON(BIRTHDAYS_FILE, JSON.stringify(b, null, 2)); }
+export function setBirthday(guildId: string, userId: string, month: number, day: number): void { const s = loadBirthdays(); s[`${guildId}:${userId}`] = { month, day }; saveBirthdays(s); }
+export function deleteBirthday(guildId: string, userId: string): void { const s = loadBirthdays(); delete s[`${guildId}:${userId}`]; saveBirthdays(s); }
+export function getBirthday(guildId: string, userId: string): Birthday | undefined { return loadBirthdays()[`${guildId}:${userId}`]; }
 export interface JsonWarning { id:number; guild_id:string; user_id:string; reason:string; moderator_id:string; created_at:number; }
 type WarningsStore = Record<string, JsonWarning[]>;
 const WARNINGS_FILE = join(DATA_DIR, "warnings.json");
