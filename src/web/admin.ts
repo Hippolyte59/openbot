@@ -167,10 +167,11 @@ export function renderAdmin(client: Client): string {
   document.querySelectorAll('.sidebar a[data-tab]').forEach(a=>{
     a.addEventListener('click',(e)=>{
       e.preventDefault();
+      const tab=a.getAttribute('data-tab');
       document.querySelectorAll('.sidebar a[data-tab]').forEach(x=>x.classList.remove('active'));
       a.classList.add('active');
       document.querySelectorAll('.tab').forEach(s=>s.style.display='none');
-      const target=document.getElementById('tab-'+a.dataset.tab);
+      const target=document.getElementById('tab-'+tab);
       if(target) target.style.display='block';
     });
   });
