@@ -1,37 +1,20 @@
-import { Events, type Client } from "discord.js";
-import { replacePlaceholders } from "../database/json-db.js";
+import { Events } from "discord.js";
+import type { GuildMember } from "discord.js";
+import { loadGuilds, replacePlaceholders } from "../database/json-db.js";
 
 export const name = Events.GuildMemberAdd;
 
-export async function execute(member: import("discord.js").GuildMember): Promise<void> {
-  // Charge la config du serveur
-  const { loadGuilds } = await import("../database/json-db.js");
-  const guildConfig = loadGuilds().get(member.guild.id) || {};
-  
-  const welcomeChannelId = guildConfig.welcomeChannel;
-  const welcomeMessage = guildConfig.welcomeMessage || "Bienvenue {pseudo} sur {server_name} !";
-  
-  if (!welcomeChannelId) return;
-
-  const channel = member.guild.channels.cache.get(welcomeChannelId);
-  if (!channel) return;
-
-  const pseudo = member.user?.displayName || member.user?.username;
-  const mention = member.toString();
-  const serverName = member.guild.name;
-
-  const data = {
-    pseudo,
-    mention,
-    serverName,
-    channelName: channel.name,
-  };
-
-  const finalMessage = replacePlaceholders(welcomeMessage, data);
-
-  try {
-    await channel.send({ content: finalMessage });
-  } catch (error) {
-    console.error("❌ Erreur lors de l'envoi du message de bienvenue :", error);
-  }
+export async function execute(member: GuildMember): Promise<void> {
+  const cfg = loadGuilds().get(member.guild.id);
+  if (!cfg?.welcomeChannel) return;
+  const channel = member.guild.channels.cache.get(cfg.welcomeChannel);
+  if (!channel || !channel.isTextBased()) return;
+  const template = cfg.welcomeMessage ?? "Bienvenue {pseudo} sur {server_name} ! 🎉";
+  const text = replacePlaceholders(template, {
+    pseudo: member.user.username,
+    mention: `<@${member.id}>`,
+    serverName: member.guild.name,
+    channelName: (channel as any).name ?? "",
+  });
+  try { await (channel as any).send(text); } catch (e) { console.error("welcome send", e); }
 }

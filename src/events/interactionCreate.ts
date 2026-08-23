@@ -50,7 +50,7 @@ export async function execute(interaction: Interaction): Promise<void> {
   }
 
   if (!interaction.inGuild()) {
-    await interaction.reply({
+    await (interaction as any).reply({
       embeds: [errorEmbed("Cette commande doit être utilisée dans un serveur.")],
       ephemeral: true,
     });

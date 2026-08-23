@@ -1,170 +1,69 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import type { Player } from "../database/players.ts";
 
 const DATA_DIR = join(process.cwd(), "data");
-const PLAYERS_FILE = join(DATA_DIR, "players.json");
-const INVENTORY_FILE = join(DATA_DIR, "inventory.json");
-const GUILDS_FILE = join(DATA_DIR, "guilds.json");
-const WARNINGS_FILE = join(DATA_DIR, "warnings.json");
-const VOICE_FILE = join(DATA_DIR, "voice.json");
-
-function ensureDir(): void {
-  mkdirSync(DATA_DIR, { recursive: true });
-}
-
+function ensureDir(): void { mkdirSync(DATA_DIR, { recursive: true }); }
 function readJSON<T>(file: string, fallback: T): T {
   if (!existsSync(file)) return fallback;
-  try {
-    return JSON.parse(readFileSync(file, "utf-8")) as T;
-  } catch {
-    return fallback;
-  }
+  try { return JSON.parse(readFileSync(file, "utf-8")) as T; } catch { return fallback; }
 }
-
-function writeJSON(file: string, data: unknown): void {
-  ensureDir();
-  writeFileSync(file, JSON.stringify(data, null, 2));
-}
+function writeJSON(file: string, data: unknown): void { ensureDir(); writeFileSync(file, JSON.stringify(data, null, 2)); }
 
 // ---------- Players ----------
 export interface JsonPlayer {
-  guild_id: string;
-  user_id: string;
-  balance: number;
-  xp: number;
-  level: number;
-  daily_streak: number;
-  last_daily: number;
-  last_work: number;
-  hp: number;
-  last_regen: number;
-  last_adventure: number;
-  last_activity: number;
-  weapon: string | null;
-  armor: string | null;
-  created_at: number;
+  guild_id: string; user_id: string; balance: number; xp: number; level: number;
+  daily_streak: number; last_daily: number; last_work: number; hp: number;
+  last_regen: number; last_adventure: number; last_activity: number;
+  weapon: string | null; armor: string | null; animal: string | null;
+  animal_name: string | null; partner: string | null; wins: number; created_at: number;
 }
-
-export function loadPlayers(): Map<string, Map<string, JsonPlayer>> {
-  const raw = readJSON<Map<string, Map<string, JsonPlayer>>>(PLAYERS_FILE, new Map());
-  return raw;
-}
-
-export function savePlayers(players: Map<string, Map<string, JsonPlayer>>): void {
-  writeJSON(PLAYERS_FILE, players);
-}
-
-export function getPlayer(guildId: string, userId: string): JsonPlayer | undefined {
-  const players = loadPlayers();
-  const guild = players.get(guildId);
-  return guild ? guild.get(userId) : undefined;
-}
-
-export function setPlayer(guildId: string, userId: string, player: JsonPlayer): void {
-  const players = loadPlayers();
-  if (!players.has(guildId)) players.set(guildId, new Map());
-  players.get(guildId)!.set(userId, player);
-  savePlayers(players);
+type PlayersStore = Record<string, JsonPlayer>;
+const PLAYERS_FILE = join(DATA_DIR, "players.json");
+export function loadPlayersStore(): PlayersStore { return readJSON<PlayersStore>(PLAYERS_FILE, {}); }
+export function savePlayersStore(s: PlayersStore): void { writeJSON(PLAYERS_FILE, s); }
+export function getPlayer(guildId: string, userId: string): JsonPlayer | undefined { return loadPlayersStore()[`${guildId}:${userId}`]; }
+export function setPlayer(guildId: string, userId: string, player: JsonPlayer): void { const s=loadPlayersStore(); s[`${guildId}:${userId}`]=player; savePlayersStore(s); }
+export function deletePlayer(guildId: string, userId: string): void { const s=loadPlayersStore(); delete s[`${guildId}:${userId}`]; savePlayersStore(s); }
+export function maxHp(level: number): number { return 90 + level * 10; }
+export function xpNeededFor(level: number): number { return 100 * level * level; }
+export function playerToJson(p: Partial<JsonPlayer> & { guild_id: string; user_id: string }): JsonPlayer {
+  const now=Math.floor(Date.now()/1000);
+  return { balance:0,xp:0,level:1,daily_streak:0,last_daily:0,last_work:0,hp:100,last_regen:now,last_adventure:0,last_activity:now,weapon:null,armor:null,animal:null,animal_name:null,partner:null,wins:0,created_at:now, ...p };
 }
 
 // ---------- Inventory ----------
-export interface JsonInventoryRow {
-  guild_id: string;
-  user_id: string;
-  item_id: string;
-  quantity: number;
-}
-
-export function loadInventory(): Map<string, Map<string, JsonInventoryRow>> {
-  const raw = readJSON<Map<string, Map<string, JsonInventoryRow>>>(INVENTORY_FILE, new Map());
-  return raw;
-}
-
-export function saveInventory(inventory: Map<string, Map<string, JsonInventoryRow>>): void {
-  writeJSON(INVENTORY_FILE, inventory);
-}
+export interface JsonInventoryRow { guild_id: string; user_id: string; item_id: string; quantity: number; }
+type InventoryStore = Record<string, JsonInventoryRow>;
+const INVENTORY_FILE = join(DATA_DIR, "inventory.json");
+export function loadInventoryStore(): InventoryStore { return readJSON<InventoryStore>(INVENTORY_FILE, {}); }
+export function saveInventoryStore(s: InventoryStore): void { writeJSON(INVENTORY_FILE, s); }
 
 // ---------- Guilds config ----------
-export interface GuildConfig {
-  welcomeChannel?: string;
-  goodbyeChannel?: string;
-  welcomeMessage?: string;
-  goodbyeMessage?: string;
-  welcomeBanner?: string;
-}
-
-export function loadGuilds(): Map<string, GuildConfig> {
-  const raw = readJSON<Map<string, GuildConfig>>(GUILDS_FILE, new Map());
-  return raw;
-}
-
-export function saveGuilds(guilds: Map<string, GuildConfig>): void {
-  writeJSON(GUILDS_FILE, guilds);
-}
+export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; }
+type GuildsStore = Record<string, GuildConfig>;
+const GUILDS_FILE = join(DATA_DIR, "guilds.json");
+export function loadGuilds(): Map<string, GuildConfig> { return new Map(Object.entries(readJSON<GuildsStore>(GUILDS_FILE, {}))); }
+export function saveGuilds(guilds: Map<string, GuildConfig>): void { writeJSON(GUILDS_FILE, Object.fromEntries(guilds)); }
 
 // ---------- Warnings ----------
-export interface JsonWarning {
-  id: number;
-  guild_id: string;
-  user_id: string;
-  reason: string;
-  moderator_id: string;
-  created_at: number;
-}
-
-export function loadWarnings(): Map<string, JsonWarning[]> {
-  const raw = readJSON<Map<string, JsonWarning[]>>(WARNINGS_FILE, new Map());
-  return raw;
-}
-
-export function saveWarnings(warnings: Map<string, JsonWarning[]>): void {
-  writeJSON(WARNINGS_FILE, warnings);
+export interface JsonWarning { id:number; guild_id:string; user_id:string; reason:string; moderator_id:string; created_at:number; }
+type WarningsStore = Record<string, JsonWarning[]>;
+const WARNINGS_FILE = join(DATA_DIR, "warnings.json");
+export function loadWarnings(): Map<string, JsonWarning[]> { return new Map(Object.entries(readJSON<WarningsStore>(WARNINGS_FILE, {}))); }
+export function saveWarnings(warnings: Map<string, JsonWarning[]>): void { writeJSON(WARNINGS_FILE, Object.fromEntries(warnings)); }
+export function insertWarning(guildId:string,userId:string,reason:string,moderatorId:string): JsonWarning {
+  const warnings=loadWarnings(); const arr=warnings.get(guildId)??[]; const id=arr.length?Math.max(...arr.map(w=>w.id))+1:1;
+  const w:JsonWarning={id,guild_id:guildId,user_id:userId,reason,moderator_id:moderatorId,created_at:Math.floor(Date.now()/1000)};
+  arr.push(w); warnings.set(guildId,arr); saveWarnings(warnings); return w;
 }
 
 // ---------- Voice channels ----------
-export interface JsonVoiceChannel {
-  channel_id: string;
-  guild_id: string;
-  owner_id: string;
-  message_id?: string;
-}
+export interface JsonVoiceChannel { channel_id:string; guild_id:string; owner_id:string; message_id?:string; }
+type VoiceStore = Record<string, JsonVoiceChannel>;
+const VOICE_FILE = join(DATA_DIR, "voice.json");
+export function loadVoice(): Map<string, JsonVoiceChannel> { return new Map(Object.entries(readJSON<VoiceStore>(VOICE_FILE, {}))); }
+export function saveVoice(channels: Map<string, JsonVoiceChannel>): void { writeJSON(VOICE_FILE, Object.fromEntries(channels)); }
 
-export function loadVoice(): Map<string, JsonVoiceChannel> {
-  const raw = readJSON<Map<string, JsonVoiceChannel>>(VOICE_FILE, new Map());
-  return raw;
+export function replacePlaceholders(message:string, data:{pseudo:string; mention:string; serverName:string; channelName?:string}): string {
+  let r=message; r=r.replace(/{pseudo}/gi,data.pseudo); r=r.replace(/{@?mention}/g,data.mention); r=r.replace(/{server_name}/g,data.serverName); if(data.channelName) r=r.replace(/{channel_name}/g,data.channelName); return r;
 }
-
-export function saveVoice(channels: Map<string, JsonVoiceChannel>): void {
-  writeJSON(VOICE_FILE, channels);
-}
-
-export function insertWarning(guildId: string, userId: string, reason: string, moderatorId: string): JsonWarning {
-  const warnings = loadWarnings();
-  const guildWarns = warnings.get(guildId) || [];
-  const id = guildWarns.length > 0 ? Math.max(...guildWarns.map(w => w.id), 0) + 1 : 1;
-  const warning: JsonWarning = { id, guild_id: guildId, user_id: userId, reason, moderator_id: moderatorId, created_at: Math.floor(Date.now() / 1000) };
-  guildWarns.push(warning);
-  warnings.set(guildId, guildWarns);
-  saveWarnings(warnings);
-  return warning;
-}
-
-// Export helper: placeholder replacement
-export function replacePlaceholders(message: string, data: {
-  pseudo: string;
-  mention: string;
-  serverName: string;
-  channelName?: string;
-}): string {
-  let result = message;
-  result = result.replace(/{pseudo}/gi, data.pseudo);
-  result = result.replace(/@{mention}/g, data.mention);
-  result = result.replace(/{server_name}/g, data.serverName);
-  if (data.channelName !== undefined) {
-    result = result.replace(/{channel_name}/g, data.channelName);
-  }
-  return result;
-}
-
-export {};

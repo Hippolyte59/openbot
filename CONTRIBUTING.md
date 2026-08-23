@@ -152,7 +152,7 @@ This project follows Semantic Versioning (MAJOR.MINOR.PATCH):
 ### Do NOT disclose security vulnerabilities publicly
 
 Instead, report them privately via email to:
-- security@hippolyte59.openbot.com (or open an issue marked as `security` if public)
+- hippolyte@zorcraft.ovh (or open an issue marked as `security` if public)
 
 ### What to Include
 - Type of vulnerability (XSS, injection, auth bypass, etc.)

@@ -33,7 +33,7 @@ export default {
     await interaction.deferReply({ ephemeral: true });
 
     try {
-      const deleted = await interaction.channel.bulkDelete(amount, true);
+      const deleted = await (interaction.channel as any).bulkDelete(amount, true);
       const filtered = target
         ? deleted.filter((message) => message?.author?.id === target.id)
         : deleted;

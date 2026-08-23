@@ -15,7 +15,7 @@ If you discover a security vulnerability in this project, please report it as so
 ### How to Report
 
 Please report security issues by emailing:
-- security@hippolyte59.openbot.com
+- hippolyte@zorcraft.ovh
 
 or by opening a private security advisory if your GitHub organization supports it.
 

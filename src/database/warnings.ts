@@ -1,43 +1,11 @@
-import { db } from "./db.js";
-
-export interface Warning {
-  id: number;
-  guild_id: string;
-  user_id: string;
-  reason: string;
-  moderator_id: string;
-  created_at: number;
+import { loadWarnings, saveWarnings, insertWarning as jsonInsert } from "./json-db.js";
+import type { JsonWarning } from "./json-db.js";
+export interface Warning extends JsonWarning {}
+export function addWarning(guildId:string,userId:string,reason:string,moderatorId:string): void { jsonInsert(guildId,userId,reason,moderatorId); }
+export function getWarnings(guildId:string,userId:string): Warning[] {
+  return (loadWarnings().get(guildId) ?? []).filter(w=>w.user_id===userId);
 }
-
-const insertWarning = db.prepare<[string, string, string, string]>(
-  "INSERT INTO warnings (guild_id, user_id, reason, moderator_id) VALUES (?, ?, ?, ?)",
-);
-
-const selectWarnings = db.prepare<[string, string], Warning>(
-  "SELECT * FROM warnings WHERE guild_id = ? AND user_id = ? ORDER BY id",
-);
-
-const deleteWarning = db.prepare<[number, string, string]>(
-  "DELETE FROM warnings WHERE id = ? AND guild_id = ? AND user_id = ?",
-);
-
-export function addWarning(
-  guildId: string,
-  userId: string,
-  reason: string,
-  moderatorId: string,
-): void {
-  insertWarning.run(guildId, userId, reason, moderatorId);
-}
-
-export function getWarnings(guildId: string, userId: string): Warning[] {
-  return selectWarnings.all(guildId, userId);
-}
-
-export function removeWarningById(
-  guildId: string,
-  userId: string,
-  warningId: number,
-): boolean {
-  return deleteWarning.run(warningId, guildId, userId).changes > 0;
+export function removeWarningById(guildId:string,userId:string,warningId:number): boolean {
+  const m=loadWarnings(); const arr=m.get(guildId)??[]; const idx=arr.findIndex(w=>w.id===warningId && w.user_id===userId);
+  if(idx===-1) return false; arr.splice(idx,1); m.set(guildId,arr); saveWarnings(m); return true;
 }

@@ -204,7 +204,7 @@ async function handleHub(
       type: ChannelType.GuildVoice,
       reason: `Hub « rejoindre pour créer » configuré par ${interaction.user.username}`,
     });
-    setVoiceHub(guildId, channel.id);
+    setVoiceHub(guildId, (channel as any).id);
 
     await interaction.reply({
       embeds: [

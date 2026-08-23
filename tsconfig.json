@@ -2,13 +2,15 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "Node16",
-    "strict": true,
+    "moduleResolution": "nodenext",
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"]
 }

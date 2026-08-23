@@ -172,8 +172,8 @@ async function createVoiceRoom(
     reason: `Salon vocal personnel créé par ${member.user.username}`,
   });
 
-  saveVoiceChannel(channel.id, guild.id, member.id, null);
-  await postPanel(channel, member.id);
+  saveVoiceChannel((channel as any).id, guild.id, member.id, null);
+  await postPanel(channel as any, member.id);
 
   return channel;
 }

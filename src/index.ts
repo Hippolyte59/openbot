@@ -1,55 +1,39 @@
-import { Events, Client, GatewayIntentBits } from "discord.js";
+import { Client, Collection, GatewayIntentBits } from "discord.js";
 import { config } from "./config.js";
-import { startWebServer } from "./web/server.js";
+import { asBotClient } from "./types.js";
 import { loadCommands } from "./loaders.js";
-import { loadEvents } from "./loaders.js";
-import { setupDatabase } from "./database.js";
+import * as readyEvent from "./events/ready.js";
+import * as interactionCreateEvent from "./events/interactionCreate.js";
+import * as messageCreateEvent from "./events/messageCreate.js";
+import * as voiceStateUpdateEvent from "./events/voiceStateUpdate.js";
+import * as channelDeleteEvent from "./events/channelDelete.js";
+import * as guildMemberAddEvent from "./events/guildMemberAdd.js";
+import * as guildMemberRemoveEvent from "./events/guildMemberRemove.js";
 
-const intents = [
-  GatewayIntentBits.Guilds,
-  GatewayIntentBits.GuildMessages,
-  GatewayIntentBits.GuildMembers,
-  GatewayIntentBits.GuildVoiceStates,
-  GatewayIntentBits.GuildMessageReactions,
-].filter(Boolean);
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMembers,
+  ],
+});
 
-export const client = new Client({ intents: intents as any });
+asBotClient(client).commands = new Collection();
+await loadCommands(asBotClient(client).commands);
 
-client.commands = new Map();
+client.once(readyEvent.name, () => (readyEvent.execute as any)(client));
+client.on(interactionCreateEvent.name, (...args: any[]) => void (interactionCreateEvent.execute as any)(...args));
+client.on(messageCreateEvent.name, (...args: any[]) => void (messageCreateEvent.execute as any)(...args));
+client.on(voiceStateUpdateEvent.name, (...args: any[]) => void (voiceStateUpdateEvent.execute as any)(...args));
+client.on(channelDeleteEvent.name, (...args: any[]) => void (channelDeleteEvent.execute as any)(...args));
+client.on(guildMemberAddEvent.name, (...args: any[]) => void (guildMemberAddEvent.execute as any)(...args));
+client.on(guildMemberRemoveEvent.name, (...args: any[]) => void (guildMemberRemoveEvent.execute as any)(...args));
 
-(async () => {
-  try {
-    await setupDatabase();
+process.on("unhandledRejection", (error) => {
+  console.error("❌ Erreur non gérée :", error);
+});
 
-    // Charger les commandes
-    const commands = await loadCommands(client.commands as any);
-    console.log(`📦 ${commands.length} commande(s) chargée(s)`);
-
-    // Charger les événements
-    const eventsMap = new Map([
-      ["ready", { name: Events.ClientReady, once: true, execute: async (client: Client) => {
-        const { execute: readyExecute } = await import("./events/ready.ts");
-        readyExecute(client);
-      }}],
-      ["interactionCreate", { name: Events.InteractionCreate, execute: async (interaction: import("discord.js").Interaction) => {
-        const { execute: interactionExecute } = await import("./events/interactionCreate.ts");
-        interactionExecute(interaction);
-      }}],
-      ["guildMemberAdd", { name: Events.GuildMemberAdd, execute: async (member: import("discord.js").GuildMember) => {
-        const { execute: guildMemberAddExecute } = await import("./events/guildMemberAdd.ts");
-        await guildMemberAddExecute(member);
-      }}],
-      ["guildMemberRemove", { name: Events.GuildMemberRemove, execute: async (member: import("discord.js").GuildMember) => {
-        const { execute: guildMemberRemoveExecute } = await import("./events/guildMemberRemove.ts");
-        await guildMemberRemoveExecute(member);
-      }}],
-    ]);
-
-    loadEvents(client, eventsMap);
-
-    console.log("✅ Initialisation terminée");
-  } catch (err) {
-    console.error("❌ Erreur lors de l'initialisation :", err);
-    process.exit(1);
-  }
-})();
+console.log(`🚀 Démarrage de ${config.botName}…`);
+await client.login(config.token);
