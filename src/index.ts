@@ -1,4 +1,4 @@
-import { Client, Collection, GatewayIntentBits } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "./config.js";
 import { asBotClient } from "./types.js";
 import { loadCommands } from "./loaders.js";
@@ -9,6 +9,8 @@ import * as voiceStateUpdateEvent from "./events/voiceStateUpdate.js";
 import * as channelDeleteEvent from "./events/channelDelete.js";
 import * as guildMemberAddEvent from "./events/guildMemberAdd.js";
 import * as guildMemberRemoveEvent from "./events/guildMemberRemove.js";
+import * as messageReactionAddEvent from "./events/messageReactionAdd.js";
+import * as messageReactionRemoveEvent from "./events/messageReactionRemove.js";
 import { initScheduler } from "./systems/scheduler.js";
 
 const client = new (Client as any)({
@@ -18,7 +20,9 @@ const client = new (Client as any)({
     (GatewayIntentBits as any).MessageContent,
     (GatewayIntentBits as any).GuildVoiceStates,
     (GatewayIntentBits as any).GuildMembers,
+    (GatewayIntentBits as any).GuildMessageReactions,
   ],
+  partials: [(Partials as any).Message, (Partials as any).Channel, (Partials as any).Reaction],
 });
 
 asBotClient(client).commands = new (Collection as any)();
@@ -32,6 +36,8 @@ client.on(voiceStateUpdateEvent.name, (...args: any[]) => void (voiceStateUpdate
 client.on(channelDeleteEvent.name, (...args: any[]) => void (channelDeleteEvent.execute as any)(...args));
 client.on(guildMemberAddEvent.name, (...args: any[]) => void (guildMemberAddEvent.execute as any)(...args));
 client.on(guildMemberRemoveEvent.name, (...args: any[]) => void (guildMemberRemoveEvent.execute as any)(...args));
+client.on(messageReactionAddEvent.name, (...args: any[]) => void (messageReactionAddEvent.execute as any)(...args));
+client.on(messageReactionRemoveEvent.name, (...args: any[]) => void (messageReactionRemoveEvent.execute as any)(...args));
 
 process.on("unhandledRejection", (error) => {
   console.error("❌ Erreur non gérée :", error);

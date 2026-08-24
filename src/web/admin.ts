@@ -53,6 +53,8 @@ export function renderAdmin(client: Client): string {
     <button class="active" data-tab="welcome">Bienvenue</button>
     <button data-tab="goodbye">Au revoir</button>
     <button data-tab="objectifs">Objectifs</button>
+    <button data-tab="auto">Auto</button>
+    <button data-tab="logs">Logs</button>
     <button data-tab="commands">Commandes</button>
     <button data-tab="style">Apparence</button>
   </div>
@@ -91,27 +93,37 @@ export function renderAdmin(client: Client): string {
     <button class="btn primary" style="margin-top:10px;" onclick="saveGoals()">Enregistrer objectifs</button>
   </section>
 
+  <section id="panel-auto" class="card panel">
+    <h2>Automatisation</h2>
+    <p class="muted">Rôles auto, commandes perso, rôles réactions, réactions de mots — aussi via slash : <code>/autorole</code> <code>/custom</code> <code>/reactionrole</code> <code>/wordreact</code></p>
+    <div class="field"><label>Rôles automatiques à l'arrivée (IDs séparés par virgule)</label><input id="autoRoles" value="${escapeHtml((firstCfg.autoRoles||[]).join(", "))}" placeholder="123, 456"></div>
+    <div class="field"><label>Commandes personnalisées (JSON — ex: {"bonjour":{"response":"Salut {mention} !"}})</label><textarea id="customCommands" style="min-height:90px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.customCommands||{}, null, 2))}</textarea><p class="muted">Placeholders: {pseudo} {mention} {user} {server_name} {channel_name} {memberCount} {args} — déclenché par <code>!nom</code></p></div>
+    <div class="field"><label>Réactions de mots (JSON — ex: {"hello":"👋","gg":"🎉"})</label><textarea id="wordReactions" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.wordReactions||{}, null, 2))}</textarea></div>
+    <div class="field"><label>Rôles réactions (JSON — messageId → emoji→roleId)</label><textarea id="reactionRoles" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.reactionRoles||{}, null, 2))}</textarea><p class="muted">Ex: {"1234567890123":{"✅":"987654321"}} — utilise <code>/reactionrole ajouter</code> pour réagir auto</p></div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveAuto()">Enregistrer automatisation</button>
+  </section>
+
   <section id="panel-logs" class="card panel">
     <h2>Logs personnalisés</h2>
     <p class="muted">Configuration des logs par service (YouTube, Twitch, Reddit, Dealabs)</p>
     <div class="row2">
-      <div class="field"><label>YouTube — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsYouTubeColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsYouTubeColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.color))}" style="flex:1"></div></div>
-      <div class="field"><label>YouTube — Salon ID</label><input id="logsYouTubeChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.channelId))}" placeholder="123456789..."></div>
+      <div class="field"><label>YouTube — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsYouTubeColor" value="${escapeHtml(firstCfg.logs?.youtube?.color ?? "#FF0000")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsYouTubeColorText" value="${escapeHtml(firstCfg.logs?.youtube?.color ?? "#FF0000")}" style="flex:1"></div></div>
+      <div class="field"><label>YouTube — Salon ID</label><input id="logsYouTubeChannel" value="${escapeHtml(firstCfg.logs?.youtube?.channelId ?? "")}" placeholder="123456789..."></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Twitch — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsTwitchColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsTwitchColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.color))}" style="flex:1"></div></div>
-      <div class="field"><label>Twitch — Salon ID</label><input id="logsTwitchChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.twitch?.channelId))}" placeholder="123456789..."></div>
+      <div class="field"><label>Twitch — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsTwitchColor" value="${escapeHtml(firstCfg.logs?.twitch?.color ?? "#9146FF")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsTwitchColorText" value="${escapeHtml(firstCfg.logs?.twitch?.color ?? "#9146FF")}" style="flex:1"></div></div>
+      <div class="field"><label>Twitch — Salon ID</label><input id="logsTwitchChannel" value="${escapeHtml(firstCfg.logs?.twitch?.channelId ?? "")}" placeholder="123456789..."></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Reddit — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsRedditColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsRedditColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.color))}" style="flex:1"></div></div>
-      <div class="field"><label>Reddit — Salon ID</label><input id="logsRedditChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.reddit?.channelId))}" placeholder="123456789..."></div>
+      <div class="field"><label>Reddit — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsRedditColor" value="${escapeHtml(firstCfg.logs?.reddit?.color ?? "#FF4500")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsRedditColorText" value="${escapeHtml(firstCfg.logs?.reddit?.color ?? "#FF4500")}" style="flex:1"></div></div>
+      <div class="field"><label>Reddit — Salon ID</label><input id="logsRedditChannel" value="${escapeHtml(firstCfg.logs?.reddit?.channelId ?? "")}" placeholder="123456789..."></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Dealabs — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsDealabsColor" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.color))}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsDealabsColorText" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.color))}" style="flex:1"></div></div>
-      <div class="field"><label>Dealabs — Salon ID</label><input id="logsDealabsChannel" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.dealabs?.channelId))}" placeholder="123456789..."></div>
+      <div class="field"><label>Dealabs — Couleur</label><div style="display:flex;gap:8px;"><input type="color" id="logsDealabsColor" value="${escapeHtml(firstCfg.logs?.dealabs?.color ?? "#FFAA00")}" style="width:48px;height:38px;padding:2px;"><input type="text" id="logsDealabsColorText" value="${escapeHtml(firstCfg.logs?.dealabs?.color ?? "#FFAA00")}" style="flex:1"></div></div>
+      <div class="field"><label>Dealabs — Salon ID</label><input id="logsDealabsChannel" value="${escapeHtml(firstCfg.logs?.dealabs?.channelId ?? "")}" placeholder="123456789..."></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Avatar par défaut (URL)</label><input id="logsAvatarUrl" value="${escapeHtml(String(firstCfg.logs && firstCfg.logs.youtube?.avatarUrl))}" placeholder="https://..."></div>
+      <div class="field"><label>Avatar par défaut (URL)</label><input id="logsAvatarUrl" value="${escapeHtml(firstCfg.logs?.youtube?.avatarUrl ?? "")}" placeholder="https://..."></div>
     </div>
     <button class="btn primary" style="margin-top:10px;" onclick="saveLogs()">Enregistrer logs</button>
   </section>
@@ -168,6 +180,11 @@ export function renderAdmin(client: Client): string {
     document.getElementById('logsDealabsColorText').value=c.logs?.dealabs?.color||'#FFAA00';
     document.getElementById('logsDealabsChannel').value=c.logs?.dealabs?.channelId||'';
     document.getElementById('logsAvatarUrl').value=c.logs?.youtube?.avatarUrl||'';
+    document.getElementById('autoRoles').value=(c.autoRoles||[]).join(", ");
+    document.getElementById('customCommands').value=JSON.stringify(c.customCommands||{}, null, 2);
+    document.getElementById('wordReactions').value=JSON.stringify(c.wordReactions||{}, null, 2);
+    document.getElementById('reactionRoles').value=JSON.stringify(c.reactionRoles||{}, null, 2);
+    document.getElementById('embedColor').value=c.embedColor||'${config.embedColor}';
     document.getElementById('embedColorText').value=c.embedColor||'${config.embedColor}';
     document.getElementById('levelColor').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
     document.getElementById('levelColorText').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
@@ -212,6 +229,17 @@ export function renderAdmin(client: Client): string {
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Logs enregistrés ✅':'Erreur');
   }
+  async function saveAuto(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    let customCommands={}, wordReactions={}, reactionRoles={};
+    try{ customCommands=JSON.parse(document.getElementById('customCommands').value||"{}"); }catch{ return toast('JSON commandes invalide'); }
+    try{ wordReactions=JSON.parse(document.getElementById('wordReactions').value||"{}"); }catch{ return toast('JSON mots invalide'); }
+    try{ reactionRoles=JSON.parse(document.getElementById('reactionRoles').value||"{}"); }catch{ return toast('JSON rôles réactions invalide'); }
+    const autoRoles=document.getElementById('autoRoles').value.split(",").map((s)=>s.trim()).filter(Boolean);
+    const p={guildId:id, autoRoles, customCommands, wordReactions, reactionRoles};
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Automatisation enregistrée ✅':'Erreur');
+  }
   async function saveStyle(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
     const p={guildId:id, embedColor:document.getElementById('embedColor').value, levelColor:document.getElementById('levelColor').value, economyColor:document.getElementById('economyColor').value};
@@ -223,9 +251,11 @@ export function renderAdmin(client: Client): string {
     const j=await r.json(); toast(j.success?'Apparence enregistrée ✅':'Erreur');
   }
   // sync color pickers <-> text
-  [['embedColor','embedColorText'],['levelColor','levelColorText'],['economyColor','economyColorText']].forEach(([c,t])=>{
-    document.getElementById(c).addEventListener('input',e=>document.getElementById(t).value=e.target.value);
-    document.getElementById(t).addEventListener('input',e=>{ const v=e.target.value; if(/^#[0-9A-Fa-f]{6}$/.test(v)) document.getElementById(c).value=v; });
+  [['embedColor','embedColorText'],['levelColor','levelColorText'],['economyColor','economyColorText'],['logsYouTubeColor','logsYouTubeColorText'],['logsTwitchColor','logsTwitchColorText'],['logsRedditColor','logsRedditColorText'],['logsDealabsColor','logsDealabsColorText']].forEach(([c,t])=>{
+    const a=document.getElementById(c), b=document.getElementById(t);
+    if(!a||!b) return;
+    a.addEventListener('input',e=>b.value=e.target.value);
+    b.addEventListener('input',e=>{ const v=e.target.value; if(/^#[0-9A-Fa-f]{6}$/.test(v)) a.value=v; });
   });
   document.getElementById('welcomeMessage').addEventListener('input',()=>preview('welcome'));
   document.getElementById('goodbyeMessage').addEventListener('input',()=>preview('goodbye'));

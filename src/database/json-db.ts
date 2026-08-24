@@ -40,7 +40,8 @@ export function saveInventoryStore(s: InventoryStore): void { writeJSON(INVENTOR
 
 // ---------- Guilds config ----------
 export interface LogEntry { color: string; channelId: string; avatarUrl?: string; }
-export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; birthdayRoleId?: string; birthdayChannelId?: string; birthdayMessage?: string; logs: Record<string, LogEntry>; birthdays: Record<string, { month: number; day: number }>; }
+export interface CustomCommand { response: string; description?: string; allowMentions?: boolean; createdAt?: number; }
+export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; birthdayRoleId?: string; birthdayChannelId?: string; birthdayMessage?: string; logs?: Record<string, LogEntry>; birthdays?: Record<string, { month: number; day: number }>; autoRoles?: string[]; customCommands?: Record<string, CustomCommand>; reactionRoles?: Record<string, Record<string, string>>; wordReactions?: Record<string, string>; }
 type GuildsStore = Record<string, GuildConfig>;
 const GUILDS_FILE = join(DATA_DIR, "guilds.json");
 export function loadGuilds(): Map<string, GuildConfig> { return new Map(Object.entries(readJSON<GuildsStore>(GUILDS_FILE, {}))); }

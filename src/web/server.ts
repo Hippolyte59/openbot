@@ -146,6 +146,14 @@ function handleRequest(
           if (data.maxLevelRoleId !== undefined) (updates as any).maxLevelRoleId = data.maxLevelRoleId;
           if (data.privilegedRoleId !== undefined) (updates as any).privilegedRoleId = data.privilegedRoleId;
           if (data.privilegedChannelId !== undefined) (updates as any).privilegedChannelId = data.privilegedChannelId;
+          if (data.birthdayRoleId !== undefined) (updates as any).birthdayRoleId = data.birthdayRoleId;
+          if (data.birthdayChannelId !== undefined) (updates as any).birthdayChannelId = data.birthdayChannelId;
+          if (data.birthdayMessage !== undefined) (updates as any).birthdayMessage = data.birthdayMessage;
+          if (data.logs !== undefined) (updates as any).logs = data.logs;
+          if (data.autoRoles !== undefined) (updates as any).autoRoles = data.autoRoles;
+          if (data.customCommands !== undefined) (updates as any).customCommands = data.customCommands;
+          if (data.reactionRoles !== undefined) (updates as any).reactionRoles = data.reactionRoles;
+          if (data.wordReactions !== undefined) (updates as any).wordReactions = data.wordReactions;
           
           const guilds = loadGuilds();
           if (!guilds.has(guildId)) guilds.set(guildId, {} as GuildConfig);
