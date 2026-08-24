@@ -77,3 +77,24 @@ export function saveVoice(channels: Map<string, JsonVoiceChannel>): void { write
 export function replacePlaceholders(message:string, data:{pseudo:string; mention:string; serverName:string; channelName?:string; memberCount?:number}): string {
   let r=message; r=r.replace(/{pseudo}/gi,data.pseudo); r=r.replace(/{@?mention}/g,data.mention); r=r.replace(/{server_name}/g,data.serverName); if(data.channelName) r=r.replace(/{channel_name}/g,data.channelName); if(data.memberCount!==undefined) r=r.replace(/{memberCount}/g,String(data.memberCount)); return r;
 }
+
+// ---------- Messages sauvegardés ----------
+export interface SavedMessage { id:string; guildId:string; name:string; content:string; authorId:string; createdAt:number; }
+type SavedMessagesStore = Record<string, SavedMessage>;
+const SAVED_FILE = join(DATA_DIR, "saved_messages.json");
+export function loadSaved(): Map<string, SavedMessage> { return new Map(Object.entries(readJSON<SavedMessagesStore>(SAVED_FILE, {}))); }
+export function saveSaved(m: Map<string, SavedMessage>): void { writeJSON(SAVED_FILE, Object.fromEntries(m)); }
+
+// ---------- Tickets ----------
+export interface Ticket { id:string; guildId:string; channelId:string; ownerId:string; reason:string; status:"open"|"closed"; createdAt:number; }
+type TicketsStore = Record<string, Ticket>;
+const TICKETS_FILE = join(DATA_DIR, "tickets.json");
+export function loadTickets(): Map<string, Ticket> { return new Map(Object.entries(readJSON<TicketsStore>(TICKETS_FILE, {}))); }
+export function saveTickets(m: Map<string, Ticket>): void { writeJSON(TICKETS_FILE, Object.fromEntries(m)); }
+
+// ---------- Suggestions ----------
+export interface Suggestion { id:string; guildId:string; authorId:string; content:string; up:number; down:number; voters: Record<string,"up"|"down">; createdAt:number; }
+type SuggestionsStore = Record<string, Suggestion>;
+const SUGGESTIONS_FILE = join(DATA_DIR, "suggestions.json");
+export function loadSuggestions(): Map<string, Suggestion> { return new Map(Object.entries(readJSON<SuggestionsStore>(SUGGESTIONS_FILE, {}))); }
+export function saveSuggestions(m: Map<string, Suggestion>): void { writeJSON(SUGGESTIONS_FILE, Object.fromEntries(m)); }

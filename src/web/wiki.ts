@@ -6,7 +6,7 @@ import { GITHUB_URL } from "./logo.js";
 import { BASE_CSS, COPY_JS } from "./styles.js";
 
 function escapeHtml(v: string): string { return v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
-function stripEmoji(d: string): string { return d.replace(/^[^\wÀ-ÿ]+ /u, ""); }
+function stripEmoji(d: string): string { return d.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}\p{Emoji}\uFE0F]/gu, "").replace(/\s{2,}/g," ").trim(); }
 
 export function renderWiki(commands: Collection<string, Command> | Map<string, any>): string {
   const sections = CATEGORIES.map(cat => {
@@ -19,13 +19,13 @@ export function renderWiki(commands: Collection<string, Command> | Map<string, a
     if (!rows) return "";
     return `
       <section class="card" id="${cat.id}">
-        <h2>${escapeHtml(cat.title)}</h2>
-        <p class="muted">${escapeHtml(cat.description)} — ${cat.commands.length} commande(s)</p>
+        <h2>${escapeHtml(stripEmoji(cat.title))}</h2>
+        <p class="muted">${escapeHtml(stripEmoji(cat.description))} — ${cat.commands.length} commande(s)</p>
         <table><thead><tr><th>Commande</th><th>Description</th><th></th></tr></thead><tbody>${rows}</tbody></table>
       </section>`;
   }).join("\n");
 
-  const nav = CATEGORIES.filter(c => c.commands.some(n => (commands as any).has(n))).map(c => `<a href="#${c.id}">${escapeHtml(c.title)}</a>`).join("\n");
+  const nav = CATEGORIES.filter(c => c.commands.some(n => (commands as any).has(n))).map(c => `<a href="#${c.id}">${escapeHtml(stripEmoji(c.title))}</a>`).join("\n");
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -101,6 +101,33 @@ export function renderWiki(commands: Collection<string, Command> | Map<string, a
     <h2>Objectifs communauté</h2>
     <p class="muted">Donne un objectif : niveau maximum + rôle spécial et salon privilégié.</p>
     <p><code>Admin → Objectifs</code> : définis <code>maxLevel</code>, le rôle débloqué et le salon privé annoncé à l'atteinte du niveau max.</p>
+  </section>
+
+  <section class="card" id="messages-detail">
+    <h2>Messages</h2>
+    <p class="muted">Messages sauvegardés et profils de messages — pseudo et avatar personnalisé par envoi.</p>
+    <table><thead><tr><th>Commande</th><th>Effet</th></tr></thead><tbody>
+      <tr><td><code>/message sauvegarder &lt;nom&gt; &lt;contenu&gt;</code></td><td>Stocke un snippet par serveur (<code>data/saved_messages.json</code>)</td></tr>
+      <tr><td><code>/message afficher &lt;nom&gt;</code></td><td>Affiche le contenu sauvegardé</td></tr>
+      <tr><td><code>/message liste</code></td><td>Liste tous les messages du serveur</td></tr>
+      <tr><td><code>/message supprimer &lt;nom&gt;</code></td><td>Supprime l'entrée</td></tr>
+      <tr><td><code>/dire &lt;message&gt; [pseudo] [avatar]</code></td><td>Envoie via webhook avec pseudo et avatar custom — nécessite permission Gérer les webhooks</td></tr>
+    </tbody></table>
+    <p style="margin-top:10px;font-size:.9rem;">Autocomplete sur <code>nom</code> pour retrouver rapidement un message. Parfait pour regles, templates et lore.</p>
+  </section>
+
+  <section class="card" id="interactions-detail">
+    <h2>Interactions</h2>
+    <p class="muted">Boutons et sélecteur — demos et interactions avancées : rôles, tickets, suggestions, boutique et articles.</p>
+    <table><thead><tr><th>Commande / Fonction</th><th>Details</th></tr></thead><tbody>
+      <tr><td><code>/demo boutons</code></td><td>3 boutons : Valider / Annuler / Info</td></tr>
+      <tr><td><code>/demo select</code></td><td>Menu select : Roles / Tickets / Boutique</td></tr>
+      <tr><td><code>/autorole</code> <code>/reactionrole</code> <code>/wordreact</code> <code>/custom</code></td><td>Rôles auto à l'arrivée, rôles à réaction, réactions sur mots, commandes custom <code>!nom</code> — aussi dans <code>Admin → Auto</code></td></tr>
+      <tr><td><code>/ticket creer &lt;sujet&gt;</code> <code>/ticket fermer</code> <code>/ticket panel</code></td><td>Salon privé par ticket, stockage <code>data/tickets.json</code></td></tr>
+      <tr><td><code>/suggestion proposer &lt;texte&gt;</code> <code>/suggestion liste</code></td><td>Suggestions avec boutons Pour / Contre, comptage et anti double-vote, <code>data/suggestions.json</code></td></tr>
+      <tr><td><code>/boutique</code> <code>/acheter</code> <code>/inventaire</code> <code>/utiliser</code></td><td>Boutique et articles — catalogue <code>src/data/items.ts</code></td></tr>
+    </tbody></table>
+    <p class="muted" style="margin-top:10px;font-size:.9rem;">Toutes les interactions passent par <code>interactionCreate</code> avec handlers centralisés et garde-fous de permissions.</p>
   </section>
 
   ${sections}
