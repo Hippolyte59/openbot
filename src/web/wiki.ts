@@ -130,6 +130,29 @@ export function renderWiki(commands: Collection<string, Command> | Map<string, a
     <p class="muted" style="margin-top:10px;font-size:.9rem;">Toutes les interactions passent par <code>interactionCreate</code> avec handlers centralisés et garde-fous de permissions.</p>
   </section>
 
+  <section class="card" id="automod-detail">
+    <h2>Auto-Moderation</h2>
+    <p class="muted">Moderation de contenu, anti-spam, regles d'auto-sanctions et serveurs immunises — tout en <code>/automod</code> et <code>Admin → Auto-Moderation</code>.</p>
+    <table><thead><tr><th>Module</th><th>Reglage</th></tr></thead><tbody>
+      <tr><td>Vocabulaire</td><td>Liste mots interdits, sanction delete/warn/timeout/kick/ban</td></tr>
+      <tr><td>Liens</td><td>Bloque <code>http</code> sauf domaines allowlist</td></tr>
+      <tr><td>Invitations</td><td>Bloque <code>discord.gg</code> sauf codes/IDs immunises — immunises pour partenariats</td></tr>
+      <tr><td>Pings</td><td>Max mentions par message</td></tr>
+      <tr><td>Markdown</td><td>Ratio et longueur max</td></tr>
+      <tr><td>Anti-spam mentions</td><td>Max mentions sur fenetre 7s</td></tr>
+      <tr><td>Anti-spam emojis</td><td>Max emojis par message (unicode + custom)</td></tr>
+      <tr><td>Anti-spam messages</td><td>Max messages sur 5s</td></tr>
+      <tr><td>Anti-spam majuscules</td><td>% majuscules + longueur mini</td></tr>
+    </tbody></table>
+    <p style="margin-top:10px;"><code>/automod voir</code> · <code>/automod activer &lt;etat&gt;</code> · <code>/automod vocabulaire</code> · <code>/automod liens</code> · <code>/automod invitations</code> · <code>/automod antispam</code> · <code>/automod limites</code></p>
+    <table><thead><tr><th>Regle panel</th><th>Details</th></tr></thead><tbody>
+      <tr><td>Messages cible maximum</td><td><code>maxClear</code> pour <code>/clear</code> et <code>maxSave</code> pour <code>/message sauvegarder</code> — plafonne l'abus de masse</td></tr>
+      <tr><td>Serveurs immunises</td><td>Liste dans Invitations — autorise les invites de partenaires malgre le blocage global</td></tr>
+      <tr><td>Regles d'auto-sanctions</td><td>Seuil warns → sanction auto (ex: 3 warns → timeout 10min)</td></tr>
+      <tr><td>Sanctions predefinies</td><td>JSON <code>spam/vocabulaire/invite</code> → sanction + duree + raison</td></tr>
+    </tbody></table>
+  </section>
+
   ${sections}
 </main>
 <footer>${escapeHtml(config.botName)} — MIT · <a href="/">Accueil</a> · <a href="${GITHUB_URL}">GitHub</a></footer>

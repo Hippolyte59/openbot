@@ -55,6 +55,7 @@ export function renderAdmin(client: Client): string {
     <button data-tab="objectifs">Objectifs</button>
     <button data-tab="anniv">Anniversaires</button>
     <button data-tab="auto">Auto</button>
+    <button data-tab="automod">Auto-Modération</button>
     <button data-tab="logs">Logs</button>
     <button data-tab="commands">Commandes</button>
     <button data-tab="style">Apparence</button>
@@ -112,6 +113,36 @@ export function renderAdmin(client: Client): string {
     <div class="field"><label>Réactions de mots (JSON — ex: {"hello":"👋","gg":"🎉"})</label><textarea id="wordReactions" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.wordReactions||{}, null, 2))}</textarea></div>
     <div class="field"><label>Rôles réactions (JSON — messageId → emoji→roleId)</label><textarea id="reactionRoles" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.reactionRoles||{}, null, 2))}</textarea><p class="muted">Ex: {"1234567890123":{"✅":"987654321"}} — utilise <code>/reactionrole ajouter</code> pour réagir auto</p></div>
     <button class="btn primary" style="margin-top:10px;" onclick="saveAuto()">Enregistrer automatisation</button>
+  </section>
+
+  <section id="panel-automod" class="card panel">
+    <h2>Auto-Modération</h2>
+    <p class="muted">Vocabulaire, liens, invitations, pings, markdown + Anti-spam + Sanctions — aussi via <code>/automod</code></p>
+    <div class="field"><label><input type="checkbox" id="amEnabled" style="width:auto;margin-right:8px;"> Activer l'auto-moderation</label></div>
+    <div class="field"><label>Vocabulaire interdit (mots separes par virgule)</label><input id="amVocab" value="${escapeHtml((firstCfg.automod?.vocabulaire?.mots||[]).join(", "))}" placeholder="mot1, mot2"><div style="display:flex;gap:8px;margin-top:6px;"><select id="amVocabSanction" style="flex:1;background:#0f0f0f;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px;"><option value="delete" ${firstCfg.automod?.vocabulaire?.sanction==="delete"?"selected":""}>delete</option><option value="warn" ${firstCfg.automod?.vocabulaire?.sanction==="warn"?"selected":""}>warn</option><option value="timeout" ${firstCfg.automod?.vocabulaire?.sanction==="timeout"?"selected":""}>timeout</option><option value="kick" ${firstCfg.automod?.vocabulaire?.sanction==="kick"?"selected":""}>kick</option><option value="ban" ${firstCfg.automod?.vocabulaire?.sanction==="ban"?"selected":""}>ban</option></select><input id="amVocabDur" type="number" placeholder="duree sec" value="${escapeHtml(String(firstCfg.automod?.vocabulaire?.durationSec ?? ""))}" style="width:120px;"></div></div>
+    <div class="field"><label>Liens — domaines autorises (vide = tous bloques si active)</label><div style="display:flex;gap:8px;"><label style="flex:0 0 auto;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="amLiens" ${firstCfg.automod?.liens?.enabled?"checked":""} style="width:auto;"> Bloquer</label><input id="amLiensAllow" value="${escapeHtml((firstCfg.automod?.liens?.allowDomains||[]).join(", "))}" placeholder="ex: youtube.com, github.com" style="flex:1"></div></div>
+    <div class="field"><label>Invitations — serveurs immunises (codes ou IDs)</label><div style="display:flex;gap:8px;"><label style="flex:0 0 auto;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="amInvites" ${firstCfg.automod?.invitations?.enabled?"checked":""} style="width:auto;"> Bloquer</label><input id="amInvitesImmun" value="${escapeHtml((firstCfg.automod?.invitations?.immunizedGuilds||[]).join(", "))}" placeholder="ex: abc123, 123456789" style="flex:1"></div></div>
+    <div class="row2">
+      <div class="field"><label>Pings — max mentions</label><input type="number" id="amPings" value="${escapeHtml(String(firstCfg.automod?.pings?.maxMentions ?? 5))}" min="1" max="50"></div>
+      <div class="field"><label>Markdown — max chars / ratio</label><div style="display:flex;gap:8px;"><input type="number" id="amMdChars" value="${escapeHtml(String(firstCfg.automod?.markdown?.maxChars ?? 2000))}" placeholder="chars"><input type="number" step="0.1" id="amMdRatio" value="${escapeHtml(String(firstCfg.automod?.markdown?.maxMarkdownRatio ?? 0.7))}" placeholder="ratio"></div></div>
+    </div>
+    <h3 style="margin-top:16px;font-size:1rem;">Anti-spam</h3>
+    <div class="row2">
+      <div class="field"><label>Mentions — max / fenetre ms</label><div style="display:flex;gap:8px;"><input type="number" id="amAsMentionsMax" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.mentions?.max ?? 5))}"><input type="number" id="amAsMentionsWin" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.mentions?.windowMs ?? 7000))}"></div></div>
+      <div class="field"><label>Emojis — max</label><input type="number" id="amAsEmojis" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.emojis?.max ?? 10))}"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Messages — max / fenetre ms</label><div style="display:flex;gap:8px;"><input type="number" id="amAsMsgsMax" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.messages?.max ?? 5))}"><input type="number" id="amAsMsgsWin" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.messages?.windowMs ?? 5000))}"></div></div>
+      <div class="field"><label>Majuscules — % / min longueur</label><div style="display:flex;gap:8px;"><input type="number" id="amAsMajPct" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.majuscules?.percent ?? 70))}"><input type="number" id="amAsMajLen" value="${escapeHtml(String(firstCfg.automod?.antiSpam?.majuscules?.minLength ?? 10))}"></div></div>
+    </div>
+    <h3 style="margin-top:16px;font-size:1rem;">Limites & sanctions</h3>
+    <div class="row2">
+      <div class="field"><label>Messages cible max — clear</label><input type="number" id="amMaxClear" value="${escapeHtml(String(firstCfg.automod?.maxClear ?? 100))}" min="1" max="500"></div>
+      <div class="field"><label>Messages cible max — save</label><input type="number" id="amMaxSave" value="${escapeHtml(String(firstCfg.automod?.maxSave ?? 100))}" min="1" max="500"></div>
+    </div>
+    <div class="field"><label>Auto-sanctions — seuil warns → sanction (JSON)</label><textarea id="amAutoSanctions" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.automod?.autoSanctions ?? {enabled:false, warnThreshold:3, sanction:"timeout", durationSec:600}, null, 2))}</textarea></div>
+    <div class="field"><label>Sanctions predefinies (JSON)</label><textarea id="amSanctions" style="min-height:90px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.automod?.sanctionsPredefinies ?? {spam:{sanction:"timeout", durationSec:300, reason:"Spam detecte"}, vocabulaire:{sanction:"warn", reason:"Vocabulaire interdit"}, invite:{sanction:"delete", reason:"Invitation non autorisee"}}, null, 2))}</textarea></div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveAutomod()">Enregistrer auto-moderation</button>
   </section>
 
   <section id="panel-logs" class="card panel">
@@ -198,6 +229,30 @@ export function renderAdmin(client: Client): string {
     document.getElementById('customCommands').value=JSON.stringify(c.customCommands||{}, null, 2);
     document.getElementById('wordReactions').value=JSON.stringify(c.wordReactions||{}, null, 2);
     document.getElementById('reactionRoles').value=JSON.stringify(c.reactionRoles||{}, null, 2);
+    const am=c.automod||{};
+    const amEl=(id:string)=>document.getElementById(id) as any;
+    if(amEl('amEnabled')) amEl('amEnabled').checked=!!am.enabled;
+    if(amEl('amVocab')) amEl('amVocab').value=(am.vocabulaire?.mots||[]).join(", ");
+    if(amEl('amVocabSanction')) amEl('amVocabSanction').value=am.vocabulaire?.sanction||"delete";
+    if(amEl('amVocabDur')) amEl('amVocabDur').value=am.vocabulaire?.durationSec ?? "";
+    if(amEl('amLiens')) amEl('amLiens').checked=!!am.liens?.enabled;
+    if(amEl('amLiensAllow')) amEl('amLiensAllow').value=(am.liens?.allowDomains||[]).join(", ");
+    if(amEl('amInvites')) amEl('amInvites').checked=!!am.invitations?.enabled;
+    if(amEl('amInvitesImmun')) amEl('amInvitesImmun').value=(am.invitations?.immunizedGuilds||[]).join(", ");
+    if(amEl('amPings')) amEl('amPings').value=am.pings?.maxMentions ?? 5;
+    if(amEl('amMdChars')) amEl('amMdChars').value=am.markdown?.maxChars ?? 2000;
+    if(amEl('amMdRatio')) amEl('amMdRatio').value=am.markdown?.maxMarkdownRatio ?? 0.7;
+    if(amEl('amAsMentionsMax')) amEl('amAsMentionsMax').value=am.antiSpam?.mentions?.max ?? 5;
+    if(amEl('amAsMentionsWin')) amEl('amAsMentionsWin').value=am.antiSpam?.mentions?.windowMs ?? 7000;
+    if(amEl('amAsEmojis')) amEl('amAsEmojis').value=am.antiSpam?.emojis?.max ?? 10;
+    if(amEl('amAsMsgsMax')) amEl('amAsMsgsMax').value=am.antiSpam?.messages?.max ?? 5;
+    if(amEl('amAsMsgsWin')) amEl('amAsMsgsWin').value=am.antiSpam?.messages?.windowMs ?? 5000;
+    if(amEl('amAsMajPct')) amEl('amAsMajPct').value=am.antiSpam?.majuscules?.percent ?? 70;
+    if(amEl('amAsMajLen')) amEl('amAsMajLen').value=am.antiSpam?.majuscules?.minLength ?? 10;
+    if(amEl('amMaxClear')) amEl('amMaxClear').value=am.maxClear ?? 100;
+    if(amEl('amMaxSave')) amEl('amMaxSave').value=am.maxSave ?? 100;
+    if(amEl('amAutoSanctions')) amEl('amAutoSanctions').value=JSON.stringify(am.autoSanctions ?? {enabled:false, warnThreshold:3, sanction:"timeout", durationSec:600}, null, 2);
+    if(amEl('amSanctions')) amEl('amSanctions').value=JSON.stringify(am.sanctionsPredefinies ?? {spam:{sanction:"timeout", durationSec:300, reason:"Spam detecte"}}, null, 2);
     document.getElementById('embedColor').value=c.embedColor||'${config.embedColor}';
     document.getElementById('embedColorText').value=c.embedColor||'${config.embedColor}';
     document.getElementById('levelColor').value=c.levelColor||'${(config as any).levelColor ?? "#57F287"}';
@@ -259,6 +314,31 @@ export function renderAdmin(client: Client): string {
     const p={guildId:id, autoRoles, customCommands, wordReactions, reactionRoles};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Automatisation enregistrée ✅':'Erreur');
+  }
+  async function saveAutomod(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    let autoSanctions={}, sanctions={};
+    try{ autoSanctions=JSON.parse((document.getElementById('amAutoSanctions') as any).value||"{}"); }catch{ return toast('JSON auto-sanctions invalide'); }
+    try{ sanctions=JSON.parse((document.getElementById('amSanctions') as any).value||"{}"); }catch{ return toast('JSON sanctions invalide'); }
+    const p:any={ guildId:id, automod:{
+      enabled:(document.getElementById('amEnabled') as any).checked,
+      vocabulaire:{ enabled:!!(document.getElementById('amVocab') as any).value.trim(), mots:(document.getElementById('amVocab') as any).value.split(",").map((s:string)=>s.trim()).filter(Boolean), sanction:(document.getElementById('amVocabSanction') as any).value, durationSec: Number((document.getElementById('amVocabDur') as any).value)||undefined },
+      liens:{ enabled:(document.getElementById('amLiens') as any).checked, sanction:"delete", allowDomains:(document.getElementById('amLiensAllow') as any).value.split(",").map((s:string)=>s.trim()).filter(Boolean) },
+      invitations:{ enabled:(document.getElementById('amInvites') as any).checked, sanction:"delete", immunizedGuilds:(document.getElementById('amInvitesImmun') as any).value.split(",").map((s:string)=>s.trim()).filter(Boolean) },
+      pings:{ enabled:true, maxMentions:Number((document.getElementById('amPings') as any).value)||5, sanction:"delete" },
+      markdown:{ enabled:true, maxChars:Number((document.getElementById('amMdChars') as any).value)||2000, maxMarkdownRatio:Number((document.getElementById('amMdRatio') as any).value)||0.7, sanction:"delete" },
+      antiSpam:{
+        mentions:{ enabled:true, max:Number((document.getElementById('amAsMentionsMax') as any).value)||5, windowMs:Number((document.getElementById('amAsMentionsWin') as any).value)||7000, sanction:"timeout" },
+        emojis:{ enabled:true, max:Number((document.getElementById('amAsEmojis') as any).value)||10, sanction:"delete" },
+        messages:{ enabled:true, max:Number((document.getElementById('amAsMsgsMax') as any).value)||5, windowMs:Number((document.getElementById('amAsMsgsWin') as any).value)||5000, sanction:"timeout" },
+        majuscules:{ enabled:true, minLength:Number((document.getElementById('amAsMajLen') as any).value)||10, percent:Number((document.getElementById('amAsMajPct') as any).value)||70, sanction:"delete" },
+      },
+      maxClear:Number((document.getElementById('amMaxClear') as any).value)||100,
+      maxSave:Number((document.getElementById('amMaxSave') as any).value)||100,
+      autoSanctions, sanctionsPredefinies: sanctions
+    }};
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Auto-moderation enregistree':'Erreur');
   }
   async function saveStyle(){
     const id=curId(); if(!id) return toast('Choisis un serveur');

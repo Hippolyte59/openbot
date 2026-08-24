@@ -28,8 +28,15 @@ export default {
     if (!interaction.inGuild()) return;
     if (!interaction.channel?.isTextBased()) return;
 
-    const amount = interaction.options.getInteger("nombre", true);
+    let amount = interaction.options.getInteger("nombre", true);
     const target = interaction.options.getUser("membre");
+    // respect maxClear from automod
+    try {
+      const { loadGuilds, defaultAutomod } = await import("../database/json-db.js");
+      const cfg = loadGuilds().get(interaction.guildId!)?.automod ?? defaultAutomod();
+      const max = cfg.maxClear ?? 100;
+      if (amount > max) amount = max;
+    } catch {}
 
     await interaction.deferReply({ ephemeral: true });
 

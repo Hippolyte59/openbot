@@ -9,6 +9,7 @@ import {
 import { createEmbed } from "../utils/embeds.js";
 import { randomInt } from "../utils/random.js";
 import { handleInterserverMessage } from "../systems/interserver.js";
+import { handleAutomod } from "../systems/automod.js";
 
 export const name = Events.MessageCreate;
 
@@ -24,6 +25,7 @@ function pruneCooldowns(now: number): void {
 export async function execute(message: any): Promise<void> {
   void handleInterserverMessage(message).catch(()=>{});
   if (!message.guild || message.author.bot) return;
+  try { if (await handleAutomod(message)) return; } catch {}
 
   // Commandes personnalisées (préfixe !) + mentions {pseudo} {mention} etc.
   try{

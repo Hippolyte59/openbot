@@ -41,7 +41,50 @@ export function saveInventoryStore(s: InventoryStore): void { writeJSON(INVENTOR
 // ---------- Guilds config ----------
 export interface LogEntry { color: string; channelId: string; avatarUrl?: string; }
 export interface CustomCommand { response: string; description?: string; allowMentions?: boolean; createdAt?: number; }
-export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; birthdayRoleId?: string; birthdayChannelId?: string; birthdayMessage?: string; logs?: Record<string, LogEntry>; birthdays?: Record<string, { month: number; day: number }>; autoRoles?: string[]; customCommands?: Record<string, CustomCommand>; reactionRoles?: Record<string, Record<string, string>>; wordReactions?: Record<string, string>; }
+export type AutomodSanction = "none" | "warn" | "timeout" | "kick" | "ban" | "delete";
+export interface AutomodConfig {
+  enabled: boolean;
+  vocabulaire: { enabled: boolean; mots: string[]; sanction: AutomodSanction; durationSec?: number };
+  liens: { enabled: boolean; sanction: AutomodSanction; allowDomains: string[]; durationSec?: number };
+  invitations: { enabled: boolean; sanction: AutomodSanction; immunizedGuilds: string[]; durationSec?: number };
+  pings: { enabled: boolean; maxMentions: number; sanction: AutomodSanction; durationSec?: number };
+  markdown: { enabled: boolean; maxChars?: number; maxMarkdownRatio?: number; sanction: AutomodSanction; durationSec?: number };
+  antiSpam: {
+    mentions: { enabled: boolean; max: number; windowMs: number; sanction: AutomodSanction; durationSec?: number };
+    emojis: { enabled: boolean; max: number; sanction: AutomodSanction; durationSec?: number };
+    messages: { enabled: boolean; max: number; windowMs: number; sanction: AutomodSanction; durationSec?: number };
+    majuscules: { enabled: boolean; minLength: number; percent: number; sanction: AutomodSanction; durationSec?: number };
+  };
+  maxClear: number;
+  maxSave: number;
+  autoSanctions: { enabled: boolean; warnThreshold: number; sanction: AutomodSanction; durationSec?: number };
+  sanctionsPredefinies: Record<string, { sanction: AutomodSanction; durationSec?: number; reason: string }>;
+}
+export function defaultAutomod(): AutomodConfig {
+  return {
+    enabled: false,
+    vocabulaire: { enabled:false, mots:[], sanction:"delete" },
+    liens: { enabled:false, sanction:"delete", allowDomains:[] },
+    invitations: { enabled:false, sanction:"delete", immunizedGuilds:[] },
+    pings: { enabled:false, maxMentions:5, sanction:"delete" },
+    markdown: { enabled:false, maxMarkdownRatio:0.7, sanction:"delete" },
+    antiSpam: {
+      mentions: { enabled:false, max:5, windowMs:7000, sanction:"timeout", durationSec:60 },
+      emojis: { enabled:false, max:10, sanction:"delete" },
+      messages: { enabled:false, max:5, windowMs:5000, sanction:"timeout", durationSec:60 },
+      majuscules: { enabled:false, minLength:10, percent:70, sanction:"delete" },
+    },
+    maxClear: 100,
+    maxSave: 100,
+    autoSanctions: { enabled:false, warnThreshold:3, sanction:"timeout", durationSec:600 },
+    sanctionsPredefinies: {
+      spam:{ sanction:"timeout", durationSec:300, reason:"Spam detecte" },
+      vocabulaire:{ sanction:"warn", reason:"Vocabulaire interdit" },
+      invite:{ sanction:"delete", reason:"Invitation non autorisee" },
+    },
+  };
+}
+export interface GuildConfig { welcomeChannel?: string; goodbyeChannel?: string; welcomeMessage?: string; goodbyeMessage?: string; welcomeBanner?: string; goodbyeBanner?: string; levelColor?: string; economyColor?: string; embedColor?: string; maxLevel?: number; maxLevelRoleId?: string; privilegedRoleId?: string; privilegedChannelId?: string; birthdayRoleId?: string; birthdayChannelId?: string; birthdayMessage?: string; logs?: Record<string, LogEntry>; birthdays?: Record<string, { month: number; day: number }>; autoRoles?: string[]; customCommands?: Record<string, CustomCommand>; reactionRoles?: Record<string, Record<string, string>>; wordReactions?: Record<string, string>; automod?: AutomodConfig; }
 type GuildsStore = Record<string, GuildConfig>;
 const GUILDS_FILE = join(DATA_DIR, "guilds.json");
 export function loadGuilds(): Map<string, GuildConfig> { return new Map(Object.entries(readJSON<GuildsStore>(GUILDS_FILE, {}))); }

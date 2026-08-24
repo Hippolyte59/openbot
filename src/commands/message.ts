@@ -22,6 +22,13 @@ export default {
       const contenu = interaction.options.getString("contenu", true);
       const key = `${guildId}:${nom}`;
       if (store.has(key)) { await interaction.reply({ content: `Un message nomme \`${nom}\` existe deja.`, ephemeral:true }); return; }
+      try {
+        const { loadGuilds, defaultAutomod } = await import("../database/json-db.js");
+        const cfg = loadGuilds().get(guildId)?.automod ?? defaultAutomod();
+        const max = cfg.maxSave ?? 100;
+        const count = [...store.values()].filter(m=>m.guildId===guildId).length;
+        if (count >= max) { await interaction.reply({ content:`Limite atteinte: ${max} messages sauvegardes max.`, ephemeral:true }); return; }
+      } catch {}
       store.set(key, { id:key, guildId, name:nom, content:contenu, authorId: interaction.user.id, createdAt: Date.now() });
       saveSaved(store);
       await interaction.reply({ embeds:[createEmbed().setTitle("Message sauvegarde").setDescription(`\`${nom}\` enregistre.`)] , ephemeral:true});

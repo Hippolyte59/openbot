@@ -68,6 +68,12 @@ OpenBot brings the classic progression bot experience to any Discord server: mem
 - `/clear`, `/kick`, `/ban`, `/timeout`, `/slowmode`, `/warn` with hierarchy guards
 - `/admin` delegated via roles
 
+**Auto-Moderation**
+- Content moderation: vocabulary, links, invitations, pings, markdown
+- Anti-spam: mentions, emojis, messages, caps (percent + min length)
+- Auto-sanction rules, predefined sanctions, max targets for clear/save, immunized guilds for invites
+- Panel `Admin -> Auto-Moderation` + `/automod voir/activer/vocabulaire/liens/invitations/antispam/limites`
+
 **Platform**
 - Built-in website: landing `/`, wiki `/wiki` with search and copy, `/api/commands`, `/logo.svg`, admin `/admin`
 - Clean embeds with configurable color, consistent footer and timestamps
@@ -75,7 +81,7 @@ OpenBot brings the classic progression bot experience to any Discord server: mem
 
 ### Commands
 
-37 slash commands, grouped by category:
+38 slash commands, grouped by category:
 
 | Command | Description |
 |---|---|
@@ -110,6 +116,7 @@ OpenBot brings the classic progression bot experience to any Discord server: mem
 | `/piece` | Coin flip |
 | `/de [faces]` | Dice |
 | `/clear` / `/kick` / `/ban` / `/timeout` / `/slowmode` / `/warn` | Moderation |
+| `/automod voir/activer/vocabulaire/liens/invitations/antispam/limites` | Auto-moderation |
 | `/admin ...` | Game administration |
 | `/aide` / `/ping` / `/wiki` | Utilities |
 
@@ -122,8 +129,8 @@ OpenBot brings the classic progression bot experience to any Discord server: mem
 | Route | Description |
 |---|---|
 | `/` | Landing with feature grid, comparison, quick start, author |
-| `/wiki` | Dark wiki, auto-generated from live commands, search and copy, deep sections (voice, birthdays, logs, objectives, messages, interactions) |
-| `/admin` | Per-guild panel: welcome/goodbye, objectives, birthdays, logs, auto, appearance |
+| `/wiki` | Dark wiki, auto-generated from live commands, search and copy, deep sections (voice, birthdays, logs, objectives, messages, interactions, auto-moderation) |
+| `/admin` | Per-guild panel: welcome/goodbye, objectives, birthdays, logs, auto, auto-moderation, appearance |
 | `/api/commands` | JSON list |
 | `/logo.svg` | SVG logo |
 | `/health` | Probe |
@@ -201,11 +208,13 @@ OpenBot apporte l'experience complete progression a ton serveur: pieces, XP, com
 
 **Moderation et administration** — `/clear` `/kick` `/ban` `/timeout` `/slowmode` `/warn` avec garde-fous, `/admin` delegue par roles.
 
+**Auto-Moderation** — Moderation de contenu (vocabulaire, liens, invitations, pings, markdown), anti-spam (mentions, emojis, messages, majuscules), regles d'auto-sanctions, sanctions predefinies, messages cible maximum pour clear/save, serveurs immunises pour les invitations. Panel `Admin -> Auto-Moderation` + `/automod`.
+
 **Plateforme** — Site integre: accueil, wiki avec recherche et copie, `/api/commands`, `/logo.svg`, panel `/admin`. Embeds coherents, zero config DB.
 
 ### Commandes
 
-37 commandes slash reparties par categorie (voir tableau anglais pour la liste detaillee).
+38 commandes slash reparties par categorie (voir tableau anglais pour la liste detaillee).
 
 ### Salons vocaux personnels
 
@@ -216,8 +225,8 @@ Meme fonctionnement que decrit en anglais: hub unique, creation instantanee, pan
 | Route | Description |
 |---|---|
 | `/` | Accueil sans emojis, grille des fonctionnalites, comparatif, demarrage eclair, auteur |
-| `/wiki` | Wiki sombre sans emojis, genere depuis les commandes live, recherche, copie en un clic, sections detaillees (vocaux, anniversaires, logs, objectifs, messages, interactions) |
-| `/admin` | Panel par serveur: bienvenue/au revoir, objectifs, anniversaires, auto, logs, apparence |
+| `/wiki` | Wiki sombre sans emojis, genere depuis les commandes live, recherche, copie en un clic, sections detaillees (vocaux, anniversaires, logs, objectifs, messages, interactions, auto-moderation) |
+| `/admin` | Panel par serveur: bienvenue/au revoir, objectifs, anniversaires, auto, auto-moderation, logs, apparence |
 | `/api/commands` | JSON |
 | `/logo.svg` | Logo SVG |
 | `/health` | Sonde |

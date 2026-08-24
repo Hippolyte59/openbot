@@ -154,6 +154,7 @@ function handleRequest(
           if (data.customCommands !== undefined) (updates as any).customCommands = data.customCommands;
           if (data.reactionRoles !== undefined) (updates as any).reactionRoles = data.reactionRoles;
           if (data.wordReactions !== undefined) (updates as any).wordReactions = data.wordReactions;
+          if (data.automod !== undefined) (updates as any).automod = data.automod;
           
           const guilds = loadGuilds();
           if (!guilds.has(guildId)) guilds.set(guildId, {} as GuildConfig);
