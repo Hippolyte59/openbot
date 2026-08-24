@@ -53,6 +53,7 @@ export function renderAdmin(client: Client): string {
     <button class="active" data-tab="welcome">Bienvenue</button>
     <button data-tab="goodbye">Au revoir</button>
     <button data-tab="objectifs">Objectifs</button>
+    <button data-tab="anniv">Anniversaires</button>
     <button data-tab="auto">Auto</button>
     <button data-tab="logs">Logs</button>
     <button data-tab="commands">Commandes</button>
@@ -91,6 +92,16 @@ export function renderAdmin(client: Client): string {
       <div class="field"><label>Salon privilégié (ID)</label><input id="privilegedChannelId" value="${escapeHtml(firstCfg.privilegedChannelId ?? "")}" placeholder="123456789..."></div>
     </div>
     <button class="btn primary" style="margin-top:10px;" onclick="saveGoals()">Enregistrer objectifs</button>
+  </section>
+
+  <section id="panel-anniv" class="card panel">
+    <h2>Chaque anniversaire est unique</h2>
+    <p class="muted">Message d'annonce personnalisé pour chaque membre ou rôle — placeholders : <code>{pseudo}</code> <code>{mention}</code> <code>{age}</code> <code>{date}</code> <code>{server_name}</code></p>
+    <div class="field"><label>Salon d'annonce (ID)</label><input id="birthdayChannelId" value="${escapeHtml(firstCfg.birthdayChannelId ?? "")}" placeholder="123456789..."></div>
+    <div class="field"><label>Rôle offert le jour J (ID)</label><input id="birthdayRoleId" value="${escapeHtml(firstCfg.birthdayRoleId ?? "")}" placeholder="123456789..."></div>
+    <div class="field"><label>Message d'annonce</label><textarea id="birthdayMessage">${escapeHtml(firstCfg.birthdayMessage ?? "Joyeux anniversaire {mention} ! 🎂 Aujourd'hui tu as {age} — toute la commu te fête !")}</textarea></div>
+    <button class="btn primary" style="margin-top:10px;" onclick="saveAnniv()">Enregistrer anniversaires</button>
+    <p class="muted" style="margin-top:8px;">Les membres font <code>/anniv set &lt;mois&gt; &lt;jour&gt;</code>. Le bot poste dans le salon configuré et attribue le rôle.</p>
   </section>
 
   <section id="panel-auto" class="card panel">
@@ -167,6 +178,9 @@ export function renderAdmin(client: Client): string {
     document.getElementById('maxLevelRoleId').value=c.maxLevelRoleId||'';
     document.getElementById('privilegedRoleId').value=c.privilegedRoleId||'';
     document.getElementById('privilegedChannelId').value=c.privilegedChannelId||'';
+    document.getElementById('birthdayChannelId').value=c.birthdayChannelId||'';
+    document.getElementById('birthdayRoleId').value=c.birthdayRoleId||'';
+    document.getElementById('birthdayMessage').value=c.birthdayMessage||'Joyeux anniversaire {mention} ! Aujourd\\'hui tu as {age} — toute la commu te fête !';
     document.getElementById('logsYouTubeColor').value=c.logs?.youtube?.color||'#FF0000';
     document.getElementById('logsYouTubeColorText').value=c.logs?.youtube?.color||'#FF0000';
     document.getElementById('logsYouTubeChannel').value=c.logs?.youtube?.channelId||'';
@@ -217,6 +231,12 @@ export function renderAdmin(client: Client): string {
     const p={guildId:id, maxLevel: Number(document.getElementById('maxLevel').value)||100, maxLevelRoleId: document.getElementById('maxLevelRoleId').value.trim(), privilegedRoleId: document.getElementById('privilegedRoleId').value.trim(), privilegedChannelId: document.getElementById('privilegedChannelId').value.trim()};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     const j=await r.json(); toast(j.success?'Objectifs enregistrés ✅':'Erreur');
+  }
+  async function saveAnniv(){
+    const id=curId(); if(!id) return toast('Choisis un serveur');
+    const p={guildId:id, birthdayChannelId: document.getElementById('birthdayChannelId').value.trim(), birthdayRoleId: document.getElementById('birthdayRoleId').value.trim(), birthdayMessage: document.getElementById('birthdayMessage').value};
+    const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    const j=await r.json(); toast(j.success?'Anniversaires enregistrés ✅':'Erreur');
   }
   async function saveLogs(){
     const id=curId(); if(!id) return toast('Choisis un serveur');

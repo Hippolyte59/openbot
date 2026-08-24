@@ -4,12 +4,13 @@ import { AUTHOR_URL, GITHUB_URL, LOGO_SVG } from "./logo.js";
 import { BASE_CSS } from "./styles.js";
 
 function escapeHtml(v: string): string { return v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
+function stripEmojiHome(v: string): string { return v.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, "").replace(/\s{2,}/g," ").trim(); }
 
 const FEATURES = CATEGORIES.map(c => `
   <section class="card" style="position:relative; overflow:hidden;">
     <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, #5865F2, #57F287);"></div>
-    <h2 style="display:flex; align-items:center; gap:10px;">${escapeHtml(c.title)}</h2>
-    <p class="muted" style="min-height:44px;">${escapeHtml(c.description)}</p>
+    <h2 style="display:flex; align-items:center; gap:10px;">${escapeHtml(stripEmojiHome(c.title))}</h2>
+    <p class="muted" style="min-height:44px;">${escapeHtml(stripEmojiHome(c.description))}</p>
     <div style="margin-top:12px; font-size:.85rem; color:var(--text-muted);">${c.commands.slice(0,3).map(n=>`<code>/${n}</code>`).join(" ")} ${c.commands.length>3?`+${c.commands.length-3}`:""}</div>
   </section>`).join("\n");
 
@@ -57,12 +58,12 @@ export function renderHome(commandCount: number): string {
   <div class="stats">
     <div class="stat"><b>${commandCount}</b><span>commandes slash</span></div>
     <div class="stat"><b>14</b><span>discord.js v14</span></div>
-    <div class="stat"><b>⚡</b><span>SQLite instantanée</span></div>
+    <div class="stat"><b>Instantanée</b><span>SQLite locale</span></div>
     <div class="stat"><b>MIT</b><span>libre pour toujours</span></div>
   </div>
 
   <div class="highlight">
-    <h3>💡 Pourquoi OpenBot ?</h3>
+    <h3>Pourquoi OpenBot ?</h3>
     <table class="compare">
       <thead><tr><th></th><th>OpenBot</th><th>Bots hébergés</th></tr></thead>
       <tbody>
@@ -80,7 +81,7 @@ ${FEATURES}
   </div>
 
   <section class="card">
-    <h2>⚡ Démarrage éclair</h2>
+    <h2>Démarrage éclair</h2>
     <p class="muted">En 3 commandes, ton bot est en ligne.</p>
     <div style="background:#0f0f0f;border:1px solid var(--border);border-radius:10px;padding:16px;font-family:ui-monospace,monospace;font-size:.9rem;overflow-x:auto;">
       <div><span style="color:#9a9a9a;">$</span> git clone https://github.com/Hippolyte59/openbot.git</div>

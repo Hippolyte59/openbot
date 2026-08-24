@@ -69,6 +69,40 @@ export function renderWiki(commands: Collection<string, Command> | Map<string, a
       <tr><td><code>Fermer</code></td><td>Supprime</td></tr>
     </tbody></table>
   </section>
+
+  <section class="card" id="anniversaires-detail">
+    <h2>Chaque anniversaire est unique</h2>
+    <p class="muted">Message d'annonce personnalisé pour chaque membre ou rôle — le bot n'envoie jamais deux fois le même message.</p>
+    <p><code>/anniv set &lt;mois&gt; &lt;jour&gt;</code> enregistre ta date. <code>/anniv serveur</code> configure le salon, le rôle et le modèle.</p>
+    <table><thead><tr><th>Placeholder</th><th>Remplacé par</th></tr></thead><tbody>
+      <tr><td><code>{pseudo}</code></td><td>Pseudo du membre</td></tr>
+      <tr><td><code>{mention}</code></td><td>Mention &lt;@id&gt;</td></tr>
+      <tr><td><code>{age}</code></td><td>Ancienneté approximative</td></tr>
+      <tr><td><code>{date}</code></td><td>Date jj/mm</td></tr>
+      <tr><td><code>{server_name}</code></td><td>Nom du serveur</td></tr>
+    </tbody></table>
+    <p style="margin-top:10px;font-size:.9rem;">Panel <a href="/admin">Admin → Anniversaires</a> : salon d'annonce, rôle offert le jour J, message custom. Commandes : <code>/anniv list</code> <code>/anniv remove</code>.</p>
+  </section>
+
+  <section class="card" id="logs-detail">
+    <h2>Logs customisés</h2>
+    <p class="muted">Photo de profil et couleur personnalisée pour chaque type de log — lisible en un coup d'œil.</p>
+    <table><thead><tr><th>Type</th><th>Couleur par défaut</th><th>Usage</th></tr></thead><tbody>
+      <tr><td>YouTube</td><td><code>#FF0000</code></td><td>Nouvelle vidéo / notif</td></tr>
+      <tr><td>Twitch</td><td><code>#9146FF</code></td><td>Live en cours</td></tr>
+      <tr><td>Reddit</td><td><code>#FF4500</code></td><td>Nouveau post</td></tr>
+      <tr><td>Dealabs</td><td><code>#FFAA00</code></td><td>Bon plan</td></tr>
+    </tbody></table>
+    <p style="margin-top:10px;">Panel <a href="/admin">Admin → Logs</a> : couleur, salon cible et avatar par service. Plusieurs canaux possibles (un par service). Commande : <code>/log &lt;service&gt; &lt;titre&gt; &lt;description&gt;</code>.</p>
+    <p class="muted" style="font-size:.9rem;">Astuce "Soyez de bons fans" : active les notifs sociales YouTube / Twitch / Reddit / Dealabs et centralise-les via les logs customisés — chaque service a son salon, sa couleur et sa photo.</p>
+  </section>
+
+  <section class="card" id="objectifs-detail">
+    <h2>Objectifs communauté</h2>
+    <p class="muted">Donne un objectif : niveau maximum + rôle spécial et salon privilégié.</p>
+    <p><code>Admin → Objectifs</code> : définis <code>maxLevel</code>, le rôle débloqué et le salon privé annoncé à l'atteinte du niveau max.</p>
+  </section>
+
   ${sections}
 </main>
 <footer>${escapeHtml(config.botName)} — MIT · <a href="/">Accueil</a> · <a href="${GITHUB_URL}">GitHub</a></footer>
