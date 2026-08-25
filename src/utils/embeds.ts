@@ -37,9 +37,9 @@ export function levelEmbed(description: string, guildId?: string): any { return 
 export function economyEmbed(description: string, guildId?: string): any { return createEmbed("economy", guildId).setDescription(description); }
 
 export function errorEmbed(description: string): any {
-  return createEmbed("error").setDescription(`❌ ${description}`);
+  return createEmbed("error").setDescription(`${description}`);
 }
 
 export function successEmbed(description: string): any {
-  return createEmbed("success").setDescription(`✅ ${description}`);
+  return createEmbed("success").setDescription(`${description}`);
 }

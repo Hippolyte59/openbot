@@ -27,7 +27,7 @@ export default {
       const message=interaction.options.getString("message") ?? titre;
       const endsAt=Date.now()+duree*60*1000;
       const ev=createEvent({ guildId, channelId, type:"reminder", title:titre, description: message, createdBy: interaction.user.id, endsAt });
-      return interaction.reply({ content: `⏰ Rappel **${titre}** créé ! ID \`${ev.id}\` • Dans ${formatDuration(duree*60*1000)}`, ephemeral:true });
+      return interaction.reply({ content: `Rappel **${titre}** créé ! ID \`${ev.id}\` • Dans ${formatDuration(duree*60*1000)}`, ephemeral:true });
     }
     if(sub==="lister"){
       const list=getAllEvents(guildId).filter(e=>e.type==="reminder" && e.createdBy===interaction.user.id);

@@ -29,8 +29,8 @@ export default {
       const salon=interaction.options.getChannel("salon") ?? interaction.channel;
       const endsAt=Date.now()+duree*60*1000;
       const ev=createEvent({ guildId, channelId: salon.id, type:"giveaway", title:titre, description, createdBy: interaction.user.id, endsAt });
-      await interaction.reply({ content: `🎉 Giveaway **${titre}** créé ! ID: \`${ev.id}\` • Fin dans ${formatDuration(duree*60*1000)} dans ${salon} • Participants : faites \`/giveaway participer\` ou cliquez 🎉`, ephemeral:false });
-      await salon.send(`🎉 **GIVEAWAY** : **${titre}** — ${description}\nFin <t:${Math.floor(endsAt/1000)}:R> • ID \`${ev.id}\` • Réagissez 🎉 pour participer !`);
+      await interaction.reply({ content: `Giveaway **${titre}** créé ! ID: \`${ev.id}\` • Fin dans ${formatDuration(duree*60*1000)} dans ${salon} • Participants : faites \`/giveaway participer\` ou cliquez`, ephemeral:false });
+      await salon.send(`**GIVEAWAY** : **${titre}** — ${description}\nFin <t:${Math.floor(endsAt/1000)}:R> • ID \`${ev.id}\` • Réagissez pour participer !`);
       return;
     }
     if(sub==="lister"){

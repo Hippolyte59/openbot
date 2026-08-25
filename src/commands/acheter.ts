@@ -14,7 +14,7 @@ import { config } from "../config.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("acheter")
-    .setDescription("🛍️ Achète un objet de la boutique")
+    .setDescription("Achète un objet de la boutique")
     .addStringOption((option) =>
       option
         .setName("objet")
@@ -102,7 +102,7 @@ export default {
     await interaction.reply({
       embeds: [
         successEmbed(
-          `${item.emoji} Tu as acheté ${quantity > 1 ? `x${quantity} **${item.name}**` : `**${item.name}**`} pour **${formatNumber(total)} ${config.currency}**.\n\n💡 Utilise \`/utiliser\` pour t'en servir !`,
+          `${item.emoji} Tu as acheté ${quantity > 1 ? `x${quantity} **${item.name}**` : `**${item.name}**`} pour **${formatNumber(total)} ${config.currency}**.\n\n Utilise \`/utiliser\` pour t'en servir !`,
         ),
       ],
     });

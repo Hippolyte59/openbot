@@ -15,7 +15,7 @@ export async function execute(interaction: any): Promise<void> {
       const consumed = await handleVocalButton(interaction);
       if (consumed) return;
     } catch (error) {
-      console.error("❌ Erreur dans un bouton du panneau vocal :", error);
+      console.error("Erreur dans un bouton du panneau vocal :", error);
     }
     // Demo / ticket / suggestion
     try {
@@ -84,7 +84,7 @@ export async function execute(interaction: any): Promise<void> {
     try {
       await handleVocalModal(interaction);
     } catch (error) {
-      console.error("❌ Erreur dans une modale :", error);
+      console.error("Erreur dans une modale :", error);
       const payload = {
         embeds: [errorEmbed("Une erreur est survenue.")],
         ephemeral: true,
@@ -104,7 +104,7 @@ export async function execute(interaction: any): Promise<void> {
     interaction.commandName,
   );
   if (!command) {
-    console.warn(`⚠️  Commande inconnue reçue : /${interaction.commandName}`);
+    console.warn(` Commande inconnue reçue : /${interaction.commandName}`);
     return;
   }
 
@@ -119,7 +119,7 @@ export async function execute(interaction: any): Promise<void> {
   try {
     await command.execute(interaction);
   } catch (error) {
-    console.error(`❌ Erreur dans /${interaction.commandName} :`, error);
+    console.error(`Erreur dans /${interaction.commandName} :`, error);
 
     const payload = {
       embeds: [

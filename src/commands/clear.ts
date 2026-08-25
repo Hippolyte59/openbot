@@ -6,7 +6,7 @@ import { createEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("clear")
-    .setDescription("🧹 Supprime des messages en masse dans ce salon")
+    .setDescription("Supprime des messages en masse dans ce salon")
     .addIntegerOption((option) =>
       option
         .setName("nombre")
@@ -47,7 +47,7 @@ export default {
         : deleted;
 
       const description = [
-        `🧹 **${filtered.size}** message(s) supprimé(s).`,
+        `**${filtered.size}** message(s) supprimé(s).`,
         target ? `Filtre : messages de ${target}.` : null,
         "_Les messages de plus de 14 jours ne peuvent pas être supprimés en masse._",
       ]
@@ -61,7 +61,7 @@ export default {
       setTimeout(() => interaction.deleteReply().catch(() => {}), 5000);
     } catch {
       await interaction.editReply({
-        embeds: [createEmbed("error").setDescription("❌ Impossible de supprimer les messages — vérifie mes permissions.")],
+        embeds: [createEmbed("error").setDescription("Impossible de supprimer les messages — vérifie mes permissions.")],
       });
     }
   },

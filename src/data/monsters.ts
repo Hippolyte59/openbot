@@ -15,7 +15,7 @@ export interface Monster {
 export const MONSTERS: Monster[] = [
   {
     name: "Slime gluant",
-    emoji: "🟢",
+    emoji: "",
     minLevel: 1,
     baseHp: 25,
     attack: [2, 5],
@@ -24,7 +24,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Rat géant",
-    emoji: "🐀",
+    emoji: "",
     minLevel: 2,
     baseHp: 35,
     attack: [3, 6],
@@ -33,7 +33,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Loup affamé",
-    emoji: "🐺",
+    emoji: "",
     minLevel: 4,
     baseHp: 45,
     attack: [4, 8],
@@ -42,7 +42,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Gobelin voleur",
-    emoji: "👺",
+    emoji: "",
     minLevel: 7,
     baseHp: 60,
     attack: [5, 10],
@@ -51,7 +51,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Squelette maudit",
-    emoji: "💀",
+    emoji: "",
     minLevel: 11,
     baseHp: 75,
     attack: [7, 12],
@@ -60,7 +60,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Orc brutal",
-    emoji: "👹",
+    emoji: "",
     minLevel: 16,
     baseHp: 95,
     attack: [9, 15],
@@ -69,7 +69,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Golem de pierre",
-    emoji: "🗿",
+    emoji: "",
     minLevel: 22,
     baseHp: 120,
     attack: [11, 18],
@@ -78,7 +78,7 @@ export const MONSTERS: Monster[] = [
   },
   {
     name: "Dragonnet",
-    emoji: "🐉",
+    emoji: "",
     minLevel: 30,
     baseHp: 160,
     attack: [14, 22],

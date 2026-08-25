@@ -10,7 +10,7 @@ import { getPlayer } from "../database/players.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("inventaire")
-    .setDescription("🎒 Affiche ton inventaire d'objets"),
+    .setDescription("Affiche ton inventaire d'objets"),
 
   async execute(interaction) {
     if (!interaction.inGuild()) return;
@@ -23,7 +23,7 @@ export default {
         ? [
             "_Ton inventaire est vide…_",
             "",
-            "💡 Fais `/boutique` puis `/acheter` pour commencer ta collection !",
+            "Fais `/boutique` puis `/acheter` pour commencer ta collection !",
           ]
         : inventory.map((row) => {
             const item = getShopItem(row.item_id);
@@ -32,10 +32,10 @@ export default {
           });
 
     const embed = createEmbed()
-      .setTitle(`🎒 Inventaire de ${interaction.user.username}`)
+      .setTitle(`Inventaire de ${interaction.user.username}`)
       .setDescription(lines.join("\n"))
       .addFields({
-        name: "💰 Argent",
+        name: "Argent",
         value: `${formatNumber(player.balance)} ${config.currency}`,
         inline: true,
       });

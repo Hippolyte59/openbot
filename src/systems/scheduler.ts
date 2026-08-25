@@ -95,15 +95,15 @@ async function execute(event: ScheduledEvent): Promise<void> {
     if (event.type === "giveaway") {
       const participants = event.participants ?? [];
       if (participants.length === 0) {
-        await channel.send(`🎉 Giveaway **${event.title}** terminé — aucun participant.`);
+        await channel.send(`Giveaway **${event.title}** terminé — aucun participant.`);
       } else {
         const winner = participants[Math.floor(Math.random() * participants.length)];
-        await channel.send(`🎉 Giveaway **${event.title}** terminé ! Gagnant : <@${winner}> (${participants.length} participants) — ${event.description ?? ""}`);
+        await channel.send(`Giveaway **${event.title}** terminé ! Gagnant : <@${winner}> (${participants.length} participants) — ${event.description ?? ""}`);
       }
     } else if (event.type === "reminder") {
-      await channel.send(`⏰ Rappel : **${event.title}** — ${event.description ?? ""} <@${event.createdBy}>`);
+      await channel.send(`Rappel : **${event.title}** — ${event.description ?? ""} <@${event.createdBy}>`);
     } else {
-      await channel.send(`📅 Évènement **${event.title}** — ${event.description ?? ""}`);
+      await channel.send(`Évènement **${event.title}** — ${event.description ?? ""}`);
     }
   } catch {}
 }
@@ -112,7 +112,7 @@ export function initScheduler(client: Client): void {
   // Restore timers on startup
   for (const ev of load()) schedule(ev);
   // Also handle giveaway button interactions elsewhere
-  console.log(`⏰ Scheduler prêt — ${load().length} évènement(s) en attente`);
+  console.log(`Scheduler prêt — ${load().length} évènement(s) en attente`);
 }
 
 export function formatDuration(ms: number): string {

@@ -21,7 +21,7 @@ const JOBS = [
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("travail")
-    .setDescription("💼 Travaille pour gagner quelques pièces"),
+    .setDescription("Travaille pour gagner quelques pièces"),
 
   async execute(interaction) {
     if (!interaction.inGuild()) return;
@@ -52,14 +52,14 @@ export default {
     });
 
     const embed = createEmbed("success")
-      .setTitle("💼 Fiche de paie")
+      .setTitle("Fiche de paie")
       .setDescription(
         [
           `${JOBS[job]}… et tu reçois ton salaire !`,
           "",
-          `💰 Salaire : **+${formatNumber(salary)} ${config.currency}**`,
+          `Salaire : **+${formatNumber(salary)} ${config.currency}**`,
           bonus > 0
-            ? `\n🐾 Ton animal t'a bien aidé : **+${bonus} ${config.currency}** de bonus.`
+            ? `\n Ton animal t'a bien aidé : **+${bonus} ${config.currency}** de bonus.`
             : "",
         ]
           .filter(Boolean)

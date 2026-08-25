@@ -2,12 +2,12 @@ import { SlashCommandBuilder } from "discord.js";
 import type { Command } from "../types.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
 
-const POLL_EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣"];
+const POLL_EMOJIS = ["1", "2", "3", "4"];
 
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("sondage")
-    .setDescription("📊 Lance un sondage dans le salon")
+    .setDescription("Lance un sondage dans le salon")
     .addStringOption((option) =>
       option
         .setName("question")
@@ -53,7 +53,7 @@ export default {
       await interaction.reply({
         embeds: [
           errorEmbed(
-            "Pour un sondage à options, donne au moins 2 choix — ou aucun pour un vote 👍/👎.",
+            "Pour un sondage à options, donne au moins 2 choix — ou aucun pour un vote /.",
           ),
         ],
         ephemeral: true,
@@ -63,7 +63,7 @@ export default {
 
     if (choices.length === 0) {
       const embed = createEmbed()
-        .setTitle("📊 Sondage")
+        .setTitle("Sondage")
         .setDescription(
           `**${question}**\n\n_Vote avec les réactions ci-dessous._`,
         )
@@ -72,8 +72,8 @@ export default {
         });
 
       const message = await interaction.reply({ embeds: [embed], fetchReply: true });
-      await message.react("👍");
-      await message.react("👎");
+      await message.react("");
+      await message.react("");
       return;
     }
 
@@ -82,7 +82,7 @@ export default {
     );
 
     const embed = createEmbed()
-      .setTitle("📊 Sondage")
+      .setTitle("Sondage")
       .setDescription(
         `**${question}**\n\n${lines.join("\n")}\n\n_Vote avec les réactions ci-dessous._`,
       )

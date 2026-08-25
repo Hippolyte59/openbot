@@ -10,7 +10,7 @@ export default {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .addSubcommand(s=>s.setName("ajouter").setDescription("Lier emoji → rôle sur un message")
       .addStringOption(o=>o.setName("message_id").setDescription("ID du message").setRequired(true))
-      .addStringOption(o=>o.setName("emoji").setDescription("Emoji (ex: ✅ ou <:custom:123>)").setRequired(true))
+      .addStringOption(o=>o.setName("emoji").setDescription("Emoji (ex: ou <:custom:123>)").setRequired(true))
       .addRoleOption(o=>o.setName("role").setDescription("Rôle à donner").setRequired(true))
       .addChannelOption(o=>o.setName("salon").setDescription("Salon du message")))
     .addSubcommand(s=>s.setName("retirer").setDescription("Retirer un emoji d'un message")
@@ -44,7 +44,7 @@ export default {
       const key = emojiRaw; // store raw for lookup; normalisation done in event
       cfg.reactionRoles[messageId][key]=role.id;
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`✅ ${emojiRaw} → ${role} sur message \`${messageId}\``, ephemeral:true});
+      return interaction.reply({content:`${emojiRaw} → ${role} sur message \`${messageId}\``, ephemeral:true});
     }
     if(sub==="retirer"){
       const messageId=interaction.options.getString("message_id",true);
@@ -55,7 +55,7 @@ export default {
       for(const k of Object.keys(cfg.reactionRoles[messageId])){ if(k===emojiRaw) delete cfg.reactionRoles[messageId][k]; }
       if(!Object.keys(cfg.reactionRoles[messageId]).length) delete cfg.reactionRoles[messageId];
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`🗑️ Retiré ${emojiRaw} du message \`${messageId}\``, ephemeral:true});
+      return interaction.reply({content:`Retiré ${emojiRaw} du message \`${messageId}\``, ephemeral:true});
     }
     if(sub==="liste"){
       const entries=Object.entries(cfg.reactionRoles as Record<string,Record<string,string>>);
@@ -70,7 +70,7 @@ export default {
       const messageId=interaction.options.getString("message_id",true);
       delete cfg.reactionRoles[messageId];
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`✅ Config du message \`${messageId}\` vidée.`, ephemeral:true});
+      return interaction.reply({content:`Config du message \`${messageId}\` vidée.`, ephemeral:true});
     }
   }
 } satisfies Command;

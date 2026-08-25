@@ -7,7 +7,7 @@ import { createEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("slowmode")
-    .setDescription("🐢 Définit le mode lent du salon actuel")
+    .setDescription("Définit le mode lent du salon actuel")
     .addIntegerOption((option) =>
       option
         .setName("secondes")
@@ -27,7 +27,7 @@ export default {
       !hasModAccess(interaction, PermissionFlagsBits.ManageChannels)
     ) {
       await interaction.reply({
-        embeds: [createEmbed("error").setDescription("❌ Tu n'as pas la permission de gérer les salons.")],
+        embeds: [createEmbed("error").setDescription("Tu n'as pas la permission de gérer les salons.")],
         ephemeral: true,
       });
       return;
@@ -38,7 +38,7 @@ export default {
 
     if (!channel || !("setRateLimitPerUser" in channel)) {
       await interaction.reply({
-        embeds: [createEmbed("error").setDescription("❌ Ce salon ne supporte pas le mode lent.")],
+        embeds: [createEmbed("error").setDescription("Ce salon ne supporte pas le mode lent.")],
         ephemeral: true,
       });
       return;
@@ -53,8 +53,8 @@ export default {
       embeds: [
         createEmbed("success").setDescription(
           seconds === 0
-            ? "✅ Mode lent **désactivé**."
-            : `✅ Mode lent réglé sur **${seconds} seconde(s)**.`,
+            ? "Mode lent **désactivé**."
+            : `Mode lent réglé sur **${seconds} seconde(s)**.`,
         ),
       ],
       ephemeral: true,

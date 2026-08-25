@@ -20,44 +20,44 @@ OpenBot is a self-hostable Discord bot written in TypeScript that brings a "prog
 
 ```
 src/
-├── index.ts              # Entry point: client, intents, events, login
-├── deploy.ts             # Slash command deployment script
-├── config.ts             # Environment variables & settings
-├── loaders.ts            # Automatic command loading
-├── types.ts              # Shared types (Command interface)
-├── commands/             # One command = one file (auto-loaded)
-├── events/               # ready, interactions, message XP, voice lifecycle
-├── systems/
-│   ├── adventure.ts      # Battle engine (monsters, loot, HP)
-│   └── vocal.ts          # Personal voice channels + control panel
-├── database/
-│   ├── db.ts             # SQLite connection, schema & migrations
-│   ├── players.ts        # Balance, XP, levels, equipment, pets
-│   ├── inventory.ts      # Player inventories
-│   ├── guilds.ts         # Per-guild settings (admin roles)
-│   ├── warnings.ts       # Moderation warnings
-│   └── voice.ts          # Managed voice channels
-├── data/
-│   ├── categories.ts     # Command categories shared with the wiki
-│   ├── items.ts          # Shop catalog
-│   ├── animals.ts        # Pet catalog & coin bonuses
-│   └── monsters.ts       # Adventure monsters
-├── web/
-│   ├── server.ts         # Embedded HTTP server (home, wiki, logo, API)
-│   ├── home.ts           # Landing page generator
-│   ├── wiki.ts           # Wiki page generator (dark theme, copyable commands)
-│   ├── styles.ts         # Shared CSS and copy-to-clipboard script
-│   └── logo.ts           # SVG logo, GitHub/author URLs
-├── utils/
-│   ├── embeds.ts         # Embed creation and formatting
-│   ├── formatting.ts     # Randomness, formatting, moderation guards
-│   └── moderation.ts     # Permission checks, error handling
-└── constants.ts          # Constant values and emoji mappings
+index.ts              # Entry point: client, intents, events, login
+deploy.ts             # Slash command deployment script
+config.ts             # Environment variables & settings
+loaders.ts            # Automatic command loading
+types.ts              # Shared types (Command interface)
+commands/             # One command = one file (auto-loaded)
+events/               # ready, interactions, message XP, voice lifecycle
+systems/
+  adventure.ts      # Battle engine (monsters, loot, HP)
+  vocal.ts          # Personal voice channels + control panel
+database/
+  db.ts             # SQLite connection, schema & migrations
+  players.ts        # Balance, XP, levels, equipment, pets
+  inventory.ts      # Player inventories
+  guilds.ts         # Per-guild settings (admin roles)
+  warnings.ts       # Moderation warnings
+  voice.ts          # Managed voice channels
+data/
+  categories.ts     # Command categories shared with the wiki
+  items.ts          # Shop catalog
+  animals.ts        # Pet catalog & coin bonuses
+  monsters.ts       # Adventure monsters
+web/
+  server.ts         # Embedded HTTP server (home, wiki, logo, API)
+  home.ts           # Landing page generator
+  wiki.ts           # Wiki page generator (dark theme, copyable commands)
+  styles.ts         # Shared CSS and copy-to-clipboard script
+  logo.ts           # SVG logo, GitHub/author URLs
+utils/
+  embeds.ts         # Embed creation and formatting
+  formatting.ts     # Randomness, formatting, moderation guards
+  moderation.ts     # Permission checks, error handling
+constants.ts          # Constant values and emoji mappings
 
 dist/
-├── index.js              # Compiled entry point
-├── deploy.js             # Compiled deploy script
-└── *.js                  # Other compiled files
+index.js              # Compiled entry point
+deploy.js             # Compiled deploy script
+*.js                  # Other compiled files
 
 .gitignore
 .env                    # Actual environment variables (NOT committed)
@@ -87,7 +87,7 @@ import { SlashCommandBuilder } from "discord.js";
 
 export const command = new SlashCommandBuilder()
   .setName("nom_de_la_commande")
-  .setDescription("🎯 Description avec emoji")
+  .setDescription("Description avec emoji")
   .addStringOption(option =>
     option.setName("paramètre")
       .setDescription("Description du paramètre")

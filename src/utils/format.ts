@@ -12,7 +12,7 @@ export function progressBar(
   const ratio = max <= 0 ? 0 : Math.min(1, current / max);
   const filled = Math.round(ratio * size);
   const empty = Math.max(0, size - filled);
-  return "▰".repeat(filled) + "▱".repeat(empty);
+  return "".repeat(filled) + "".repeat(empty);
 }
 
 export function formatDuration(ms: number): string {

@@ -5,15 +5,15 @@ import { createEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("piece")
-    .setDescription("🪙 Lance une pièce (pile ou face)"),
+    .setDescription("Lance une pièce (pile ou face)"),
 
   async execute(interaction) {
     await interaction.deferReply();
 
-    const result = Math.random() < 0.5 ? "**Pile** 🪙" : "**Face** 🎯";
+    const result = Math.random() < 0.5 ? "**Pile**" : "**Face**";
 
     const embed = createEmbed()
-      .setTitle("🪙 Pile ou face")
+      .setTitle("Pile ou face")
       .setDescription(`La pièce tourne, tourne… et c'est : ${result} !`);
 
     await interaction.editReply({ embeds: [embed] });

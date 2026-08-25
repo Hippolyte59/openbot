@@ -10,16 +10,16 @@ import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("animal")
-    .setDescription("🐾 Gère ton animal de compagnie")
+    .setDescription("Gère ton animal de compagnie")
     .addSubcommand((sub) =>
       sub
         .setName("voir")
-        .setDescription("👀 Affiche ton animal de compagnie"),
+        .setDescription("Affiche ton animal de compagnie"),
     )
     .addSubcommand((sub) =>
       sub
         .setName("acheter")
-        .setDescription("🛒 Achète un animal de compagnie")
+        .setDescription("Achète un animal de compagnie")
         .addStringOption((option) =>
           option
             .setName("type")
@@ -36,7 +36,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("nommer")
-        .setDescription("✏️ Renomme ton animal de compagnie")
+        .setDescription("Renomme ton animal de compagnie")
         .addStringOption((option) =>
           option
             .setName("nom")
@@ -50,7 +50,7 @@ export default {
       sub
         .setName("relacher")
         .setDescription(
-          "🕊️ Relâche ton animal (remboursement de 50 % de son prix)",
+          "Relâche ton animal (remboursement de 50 % de son prix)",
         ),
     ),
 
@@ -109,7 +109,7 @@ export default {
         await interaction.reply({
           embeds: [
             errorEmbed(
-              `Il te manque **${animal.price - player.balance} 🪙** pour adopter ${animal.emoji} ${animal.name}.`,
+              `Il te manque **${animal.price - player.balance} ** pour adopter ${animal.emoji} ${animal.name}.`,
             ),
           ],
           ephemeral: true,
@@ -129,7 +129,7 @@ export default {
             `Bienvenue à ton nouveau compagnon ${animal.emoji} **${animal.name}** ! Il te rapportera désormais **+${animal.bonus}%** de pièces.`,
           ).addFields({
             name: "Coût",
-            value: `${animal.price} 🪙`,
+            value: `${animal.price}`,
             inline: true,
           }),
         ],
@@ -173,7 +173,7 @@ export default {
     await interaction.reply({
       embeds: [
         createEmbed("warning").setDescription(
-          `${animal.emoji} **${player.animal_name ?? animal.name}** est retourné à la vie sauvage.\n> Remboursement : **${refund} 🪙**`,
+          `${animal.emoji} **${player.animal_name ?? animal.name}** est retourné à la vie sauvage.\n> Remboursement : **${refund} **`,
         ),
       ],
     });

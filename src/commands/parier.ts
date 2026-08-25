@@ -5,12 +5,12 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatNumber } from "../utils/format.js";
 import { config } from "../config.js";
 
-const FACES = ["Pile 🪙", "Face 🎯"];
+const FACES = ["Pile", "Face"];
 
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("parier")
-    .setDescription("🎲 Pile ou face : double la mise ou tout perd")
+    .setDescription("Pile ou face : double la mise ou tout perd")
     .addIntegerOption((option) =>
       option
         .setName("montant")
@@ -45,12 +45,12 @@ export default {
       addBalance(interaction.guildId, interaction.user.id, amount * 2);
 
       const embed = createEmbed("success")
-        .setTitle("🎲 La pièce tourne…")
+        .setTitle("La pièce tourne…")
         .setDescription(
           [
             `Résultat : **${face}**`,
             "",
-            `🎉 Gagné ! Tu doubles ta mise et remportes **+${formatNumber(amount)} ${config.currency}** !`,
+            `Gagné ! Tu doubles ta mise et remportes **+${formatNumber(amount)} ${config.currency}** !`,
           ].join("\n"),
         );
       await interaction.reply({ embeds: [embed] });
@@ -58,12 +58,12 @@ export default {
     }
 
     const embed = createEmbed("error")
-      .setTitle("🎲 La pièce tourne…")
+      .setTitle("La pièce tourne…")
       .setDescription(
         [
           `Résultat : **${face === FACES[0] ? FACES[1] : FACES[0]}**`,
           "",
-          `😢 Perdu… Tu perds ta mise de **${formatNumber(amount)} ${config.currency}**.`,
+          `Perdu… Tu perds ta mise de **${formatNumber(amount)} ${config.currency}**.`,
         ].join("\n"),
       );
     await interaction.reply({ embeds: [embed] });

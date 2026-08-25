@@ -10,7 +10,7 @@ export async function execute(member: any): Promise<void> {
   if (cfg.welcomeChannel) {
     const channel = member.guild.channels.cache.get(cfg.welcomeChannel);
     if (channel?.isTextBased()) {
-      const template = cfg.welcomeMessage ?? "🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.";
+      const template = cfg.welcomeMessage ?? "Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.";
       const text = replacePlaceholders(template, {
         pseudo: member.user.username,
         mention: `<@${member.id}>`,

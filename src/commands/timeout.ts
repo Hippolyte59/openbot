@@ -19,7 +19,7 @@ const DURATIONS = [
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("timeout")
-    .setDescription("🔇 Rend un membre muet temporairement")
+    .setDescription("Rend un membre muet temporairement")
     .addUserOption((option) =>
       option
         .setName("membre")
@@ -94,7 +94,7 @@ export default {
 
     await interaction.reply({
       embeds: [
-        createEmbed("warning").setTitle("🔇 Membre rendu muet").setDescription(
+        createEmbed("warning").setTitle("Membre rendu muet").setDescription(
           [
             `**${targetUser.tag}** est muet pendant **${label}**.`,
             `> Raison : ${reason}`,

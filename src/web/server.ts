@@ -184,7 +184,7 @@ export function startWebServer(client: Client): void {
 
   server.on("error", async (error: any) => {
     if (error?.code === "EADDRINUSE") {
-      console.error(`❌ Port ${config.webPort} déjà utilisé — libération...`);
+      console.error(`Port ${config.webPort} déjà utilisé — libération...`);
       try {
         const { execSync } = await import("node:child_process");
         execSync(`npx --yes kill-port ${config.webPort}`, { stdio: "ignore" });
@@ -192,11 +192,11 @@ export function startWebServer(client: Client): void {
         return;
       } catch {}
     }
-    console.error("❌ Serveur web :", error.message);
+    console.error("Serveur web :", error.message);
   });
 
   server.listen(config.webPort, () => {
-    console.log(`🌐 Site et wiki disponibles sur ${config.publicUrl} (port ${config.webPort})`);
-    console.log(`🛠️ Panneau admin : http://localhost:${config.webPort}/admin`);
+    console.log(`Site et wiki disponibles sur ${config.publicUrl} (port ${config.webPort})`);
+    console.log(`Panneau admin : http://localhost:${config.webPort}/admin`);
   });
 }

@@ -67,7 +67,7 @@ export function renderAdmin(client: Client): string {
     <div class="field"><label>Salon ID</label><input id="welcomeChannel" value="${escapeHtml(firstCfg.welcomeChannel ?? "")}" placeholder="123456789..."></div>
     <div class="field"><label>Bannière URL</label><input id="welcomeBanner" value="${escapeHtml(firstCfg.welcomeBanner ?? "")}" placeholder="https://..."></div>
     <div class="banner" id="welcomeBannerPreview"><span>Aperçu</span></div>
-    <div class="field"><label>Message</label><textarea id="welcomeMessage">${escapeHtml(firstCfg.welcomeMessage ?? "🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.")}</textarea></div>
+    <div class="field"><label>Message</label><textarea id="welcomeMessage">${escapeHtml(firstCfg.welcomeMessage ?? "Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.")}</textarea></div>
     <div class="preview"><div class="msg" id="welcomePreview"></div></div>
     <button class="btn primary" style="margin-top:10px;" onclick="save('welcome')">Enregistrer</button>
   </section>
@@ -76,7 +76,7 @@ export function renderAdmin(client: Client): string {
     <h2>Au revoir</h2>
     <div class="field"><label>Salon ID</label><input id="goodbyeChannel" value="${escapeHtml(firstCfg.goodbyeChannel ?? "")}"></div>
     <div class="field"><label>Bannière URL</label><input id="goodbyeBanner" value="${escapeHtml(firstCfg.goodbyeBanner ?? "")}"></div>
-    <div class="field"><label>Message</label><textarea id="goodbyeMessage">${escapeHtml(firstCfg.goodbyeMessage ?? "👋 Au revoir {pseudo}, on espère te revoir sur **{server_name}** !")}</textarea></div>
+    <div class="field"><label>Message</label><textarea id="goodbyeMessage">${escapeHtml(firstCfg.goodbyeMessage ?? "Au revoir {pseudo}, on espère te revoir sur **{server_name}** !")}</textarea></div>
     <div class="preview"><div class="msg" id="goodbyePreview"></div></div>
     <button class="btn primary" style="margin-top:10px;" onclick="save('goodbye')">Enregistrer</button>
   </section>
@@ -100,7 +100,7 @@ export function renderAdmin(client: Client): string {
     <p class="muted">Message d'annonce personnalisé pour chaque membre ou rôle — placeholders : <code>{pseudo}</code> <code>{mention}</code> <code>{age}</code> <code>{date}</code> <code>{server_name}</code></p>
     <div class="field"><label>Salon d'annonce (ID)</label><input id="birthdayChannelId" value="${escapeHtml(firstCfg.birthdayChannelId ?? "")}" placeholder="123456789..."></div>
     <div class="field"><label>Rôle offert le jour J (ID)</label><input id="birthdayRoleId" value="${escapeHtml(firstCfg.birthdayRoleId ?? "")}" placeholder="123456789..."></div>
-    <div class="field"><label>Message d'annonce</label><textarea id="birthdayMessage">${escapeHtml(firstCfg.birthdayMessage ?? "Joyeux anniversaire {mention} ! 🎂 Aujourd'hui tu as {age} — toute la commu te fête !")}</textarea></div>
+    <div class="field"><label>Message d'annonce</label><textarea id="birthdayMessage">${escapeHtml(firstCfg.birthdayMessage ?? "Joyeux anniversaire {mention} ! Aujourd'hui tu as {age} — toute la commu te fête !")}</textarea></div>
     <button class="btn primary" style="margin-top:10px;" onclick="saveAnniv()">Enregistrer anniversaires</button>
     <p class="muted" style="margin-top:8px;">Les membres font <code>/anniv set &lt;mois&gt; &lt;jour&gt;</code>. Le bot poste dans le salon configuré et attribue le rôle.</p>
   </section>
@@ -110,8 +110,8 @@ export function renderAdmin(client: Client): string {
     <p class="muted">Rôles auto, commandes perso, rôles réactions, réactions de mots — aussi via slash : <code>/autorole</code> <code>/custom</code> <code>/reactionrole</code> <code>/wordreact</code></p>
     <div class="field"><label>Rôles automatiques à l'arrivée (IDs séparés par virgule)</label><input id="autoRoles" value="${escapeHtml((firstCfg.autoRoles||[]).join(", "))}" placeholder="123, 456"></div>
     <div class="field"><label>Commandes personnalisées (JSON — ex: {"bonjour":{"response":"Salut {mention} !"}})</label><textarea id="customCommands" style="min-height:90px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.customCommands||{}, null, 2))}</textarea><p class="muted">Placeholders: {pseudo} {mention} {user} {server_name} {channel_name} {memberCount} {args} — déclenché par <code>!nom</code></p></div>
-    <div class="field"><label>Réactions de mots (JSON — ex: {"hello":"👋","gg":"🎉"})</label><textarea id="wordReactions" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.wordReactions||{}, null, 2))}</textarea></div>
-    <div class="field"><label>Rôles réactions (JSON — messageId → emoji→roleId)</label><textarea id="reactionRoles" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.reactionRoles||{}, null, 2))}</textarea><p class="muted">Ex: {"1234567890123":{"✅":"987654321"}} — utilise <code>/reactionrole ajouter</code> pour réagir auto</p></div>
+    <div class="field"><label>Réactions de mots (JSON — ex: {"hello":"","gg":""})</label><textarea id="wordReactions" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.wordReactions||{}, null, 2))}</textarea></div>
+    <div class="field"><label>Rôles réactions (JSON — messageId → emoji→roleId)</label><textarea id="reactionRoles" style="min-height:70px;font-family:monospace;font-size:.85rem;">${escapeHtml(JSON.stringify(firstCfg.reactionRoles||{}, null, 2))}</textarea><p class="muted">Ex: {"1234567890123":{"":"987654321"}} — utilise <code>/reactionrole ajouter</code> pour réagir auto</p></div>
     <button class="btn primary" style="margin-top:10px;" onclick="saveAuto()">Enregistrer automatisation</button>
   </section>
 
@@ -200,10 +200,10 @@ export function renderAdmin(client: Client): string {
     const r=await fetch('/admin/api/guilds'); const d=await r.json();
     const c=(d.find(x=>x[0]===id)||[])[1]||{};
     document.getElementById('welcomeChannel').value=c.welcomeChannel||'';
-    document.getElementById('welcomeMessage').value=c.welcomeMessage||'🎉 Bienvenue {pseudo} sur **{server_name}** !\\n\\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N\\'hésite pas à te présenter dans {channel_name}.';
+    document.getElementById('welcomeMessage').value=c.welcomeMessage||'Bienvenue {pseudo} sur **{server_name}** !\\n\\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N\\'hésite pas à te présenter dans {channel_name}.';
     document.getElementById('welcomeBanner').value=c.welcomeBanner||'';
     document.getElementById('goodbyeChannel').value=c.goodbyeChannel||'';
-    document.getElementById('goodbyeMessage').value=c.goodbyeMessage||'👋 Au revoir {pseudo}, on espère te revoir sur **{server_name}** !';
+    document.getElementById('goodbyeMessage').value=c.goodbyeMessage||'Au revoir {pseudo}, on espère te revoir sur **{server_name}** !';
     document.getElementById('goodbyeBanner').value=c.goodbyeBanner||'';
     document.getElementById('maxLevel').value=c.maxLevel||100;
     document.getElementById('maxLevelRoleId').value=c.maxLevelRoleId||'';
@@ -279,19 +279,19 @@ export function renderAdmin(client: Client): string {
     if(t==='welcome'){p.welcomeChannel=document.getElementById('welcomeChannel').value.trim(); p.welcomeMessage=document.getElementById('welcomeMessage').value; p.welcomeBanner=document.getElementById('welcomeBanner').value.trim();}
     if(t==='goodbye'){p.goodbyeChannel=document.getElementById('goodbyeChannel').value.trim(); p.goodbyeMessage=document.getElementById('goodbyeMessage').value; p.goodbyeBanner=document.getElementById('goodbyeBanner').value.trim();}
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Enregistré ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Enregistré':'Erreur');
   }
   async function saveGoals(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
     const p={guildId:id, maxLevel: Number(document.getElementById('maxLevel').value)||100, maxLevelRoleId: document.getElementById('maxLevelRoleId').value.trim(), privilegedRoleId: document.getElementById('privilegedRoleId').value.trim(), privilegedChannelId: document.getElementById('privilegedChannelId').value.trim()};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Objectifs enregistrés ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Objectifs enregistrés':'Erreur');
   }
   async function saveAnniv(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
     const p={guildId:id, birthdayChannelId: document.getElementById('birthdayChannelId').value.trim(), birthdayRoleId: document.getElementById('birthdayRoleId').value.trim(), birthdayMessage: document.getElementById('birthdayMessage').value};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Anniversaires enregistrés ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Anniversaires enregistrés':'Erreur');
   }
   async function saveLogs(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
@@ -302,7 +302,7 @@ export function renderAdmin(client: Client): string {
       dealabs: { color: document.getElementById('logsDealabsColor').value, channelId: document.getElementById('logsDealabsChannel').value.trim() }
     }};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Logs enregistrés ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Logs enregistrés':'Erreur');
   }
   async function saveAuto(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
@@ -313,7 +313,7 @@ export function renderAdmin(client: Client): string {
     const autoRoles=document.getElementById('autoRoles').value.split(",").map((s)=>s.trim()).filter(Boolean);
     const p={guildId:id, autoRoles, customCommands, wordReactions, reactionRoles};
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Automatisation enregistrée ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Automatisation enregistrée':'Erreur');
   }
   async function saveAutomod(){
     const id=curId(); if(!id) return toast('Choisis un serveur');
@@ -348,7 +348,7 @@ export function renderAdmin(client: Client): string {
     document.getElementById('levelColorText').value=p.levelColor;
     document.getElementById('economyColorText').value=p.economyColor;
     const r=await fetch('/admin/api/guilds',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    const j=await r.json(); toast(j.success?'Apparence enregistrée ✅':'Erreur');
+    const j=await r.json(); toast(j.success?'Apparence enregistrée':'Erreur');
   }
   // sync color pickers <-> text
   [['embedColor','embedColorText'],['levelColor','levelColorText'],['economyColor','economyColorText'],['logsYouTubeColor','logsYouTubeColorText'],['logsTwitchColor','logsTwitchColorText'],['logsRedditColor','logsRedditColorText'],['logsDealabsColor','logsDealabsColorText']].forEach(([c,t])=>{
@@ -372,7 +372,7 @@ export function renderAdmin(client: Client): string {
   loadGuild();
   fetch('/api/commands').then(r=>r.json()).then(j=>{
     const el=document.getElementById('commandsList');
-    el.innerHTML=j.commands.map(c=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;"><span><b>/'+c.name+'</b> <span style="color:var(--text-muted)">'+c.description.slice(0,60)+'</span></span><span style="color:#57f287">● actif</span></div>').join('');
+    el.innerHTML=j.commands.map(c=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;"><span><b>/'+c.name+'</b> <span style="color:var(--text-muted)">'+c.description.slice(0,60)+'</span></span><span style="color:#57f287">actif</span></div>').join('');
   });
   bannerPreview(); preview('welcome'); preview('goodbye');
 </script>

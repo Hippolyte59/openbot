@@ -5,22 +5,22 @@ import { createEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("ping")
-    .setDescription("🏓 Affiche la latence du bot"),
+    .setDescription("Affiche la latence du bot"),
 
   async execute(interaction) {
     await interaction.deferReply();
 
     const wsPing = Math.max(0, Math.round(interaction.client.ws.ping));
     const embed = createEmbed()
-      .setTitle("🏓 Pong !")
+      .setTitle("Pong !")
       .addFields(
         {
-          name: "📡 Latence WebSocket",
+          name: "Latence WebSocket",
           value: `\`${wsPing} ms\``,
           inline: true,
         },
         {
-          name: "💬 Latence API",
+          name: "Latence API",
           value: `\`${Date.now() - interaction.createdTimestamp} ms\``,
           inline: true,
         },

@@ -21,7 +21,7 @@ const POTION_HEAL = 40;
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("utiliser")
-    .setDescription("✨ Utilise un objet de ton inventaire")
+    .setDescription("Utilise un objet de ton inventaire")
     .addStringOption((option) =>
       option
         .setName("objet")
@@ -66,9 +66,9 @@ export default {
         const coins = randomInt(50, 500);
         addBalance(interaction.guildId, interaction.user.id, coins);
         embed = createEmbed("success")
-          .setTitle("🎁 Boîte mystère")
+          .setTitle("Boîte mystère")
           .setDescription(
-            `Tu ouvres la boîte avec précaution…\n\n🎉 Contenu : **+${formatNumber(coins)} ${config.currency}** !`,
+            `Tu ouvres la boîte avec précaution…\n\n Contenu : **+${formatNumber(coins)} ${config.currency}** !`,
           );
         break;
       }
@@ -77,19 +77,19 @@ export default {
         if (Math.random() < LOTTERY_CHANCE) {
           addBalance(interaction.guildId, interaction.user.id, LOTTERY_JACKPOT);
           embed = createEmbed("success")
-            .setTitle("🎟️ Tirage de la loterie")
+            .setTitle("Tirage de la loterie")
             .setDescription(
               [
-                "Les numéros tombent… **C'EST GAGNÉ !** 🎊",
+                "Les numéros tombent… **C'EST GAGNÉ !**",
                 "",
-                `💰 Jackpot : **+${formatNumber(LOTTERY_JACKPOT)} ${config.currency}**`,
+                `Jackpot : **+${formatNumber(LOTTERY_JACKPOT)} ${config.currency}**`,
               ].join("\n"),
             );
         } else {
           embed = createEmbed()
-            .setTitle("🎟️ Tirage de la loterie")
+            .setTitle("Tirage de la loterie")
             .setDescription(
-              "Les numéros tombent… Pas cette fois. 😢 Tente ta chance à nouveau !",
+              "Les numéros tombent… Pas cette fois. Tente ta chance à nouveau !",
             );
         }
         break;
@@ -101,7 +101,7 @@ export default {
 
         if (player.hp >= hpMax) {
           embed = createEmbed("warning").setDescription(
-            `❤️ Tu es déjà en pleine forme (**${player.hp}/${hpMax} PV**). La potion est perdue…`,
+            `Tu es déjà en pleine forme (**${player.hp}/${hpMax} PV**). La potion est perdue…`,
           );
           break;
         }
@@ -110,7 +110,7 @@ export default {
         setHp(interaction.guildId, interaction.user.id, healed);
 
         embed = createEmbed("success")
-          .setTitle("🧪 Potion de soin")
+          .setTitle("Potion de soin")
           .setDescription(
             `Glou glou… Tu récupères **+${healed - player.hp} PV** !\n\n${progressBar(healed, hpMax)} **${healed} / ${hpMax}** PV`,
           );
@@ -120,11 +120,11 @@ export default {
       case "cafe": {
         const result = addXp(interaction.guildId, interaction.user.id, 50);
         embed = createEmbed("success")
-          .setTitle("☕ Pause café")
+          .setTitle("Pause café")
           .setDescription(
             result.leveledUp
-              ? `Mmmh, ça réveille ! **+50 XP** — et tu passes au niveau **${result.level}** ! 🎉`
-              : "Mmmh, ça réveille ! **+50 XP** ⚡",
+              ? `Mmmh, ça réveille ! **+50 XP** — et tu passes au niveau **${result.level}** !`
+              : "Mmmh, ça réveille ! **+50 XP**",
           );
         break;
       }

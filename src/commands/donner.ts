@@ -8,7 +8,7 @@ import { config } from "../config.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("donner")
-    .setDescription("🎁 Donne des pièces à un autre membre")
+    .setDescription("Donne des pièces à un autre membre")
     .addUserOption((option) =>
       option
         .setName("membre")
@@ -31,7 +31,7 @@ export default {
 
     if (target.bot) {
       await interaction.reply({
-        embeds: [errorEmbed("Les bots n'ont pas besoin de pièces ! 🤖")],
+        embeds: [errorEmbed("Les bots n'ont pas besoin de pièces !")],
       });
       return;
     }
@@ -58,7 +58,7 @@ export default {
     addBalance(interaction.guildId, target.id, amount);
 
     const embed = createEmbed()
-      .setTitle("🎁 Don réussi")
+      .setTitle("Don réussi")
       .setDescription(
         `${interaction.user} a donné **${formatNumber(amount)} ${config.currency}** à ${target} !`,
       );

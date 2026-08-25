@@ -42,111 +42,111 @@ PUBLIC_URL=https://your-domain.com
   "commands": [
     {
       "name": "/profil",
-      "description": "👤 View a member's level, XP, balance, badges and more"
+      "description": "View a member's level, XP, balance, badges and more"
     },
     {
       "name": "/classement",
-      "description": "🏆 Server top 10 (balance / level / XP)"
+      "description": "Server top 10 (balance / level / XP)"
     },
     {
       "name": "/quotidien",
-      "description": "🎁 Claim your daily reward (streak bonus)"
+      "description": "Claim your daily reward (streak bonus)"
     },
     {
       "name": "/travail",
-      "description": "💼 Earn coins once per hour"
+      "description": "Earn coins once per hour"
     },
     {
       "name": "/parier",
-      "description": "🎲 Coin flip bet: double or lose"
+      "description": "Coin flip bet: double or lose"
     },
     {
       "name": "/donner",
-      "description": "🎁 Give coins to another member"
+      "description": "Give coins to another member"
     },
     {
       "name": "/boutique",
-      "description": "🛒 Browse the shop"
+      "description": "Browse the shop"
     },
     {
       "name": "/acheter",
-      "description": "🛍️ Purchase an item"
+      "description": "Purchase an item"
     },
     {
       "name": "/inventaire",
-      "description": "🎒 View your items"
+      "description": "View your items"
     },
     {
       "name": "/utiliser",
-      "description": "✨ Use an item (mystery box, lottery, potion…)"
+      "description": "Use an item (mystery box, lottery, potion…)"
     },
     {
       "name": "/aventure",
-      "description": "🌲 Fight a monster in a button-driven battle"
+      "description": "Fight a monster in a button-driven battle"
     },
     {
       "name": "/duel",
-      "description": "⚔️ Challenge a member to a wagered duel"
+      "description": "Challenge a member to a wagered duel"
     },
     {
       "name": "/pfc",
-      "description": "🪨 Rock-paper-scissors against the bot"
+      "description": "Rock-paper-scissors against the bot"
     },
     {
       "name": "/animal",
-      "description": "🐾 Adopt and care for a pet that boosts your earnings"
+      "description": "Adopt and care for a pet that boosts your earnings"
     },
     {
       "name": "/mariage",
-      "description": "💍 Propose to another member (buttons)"
+      "description": "Propose to another member (buttons)"
     },
     {
       "name": "/sondage",
-      "description": "📊 Create a reaction poll"
+      "description": "Create a reaction poll"
     },
     {
       "name": "/vocal",
-      "description": "🔊 Manage your personal voice channel"
+      "description": "Manage your personal voice channel"
     },
     {
       "name": "/piece",
-      "description": "🪙 Flip a coin"
+      "description": "Flip a coin"
     },
     {
       "name": "/de",
-      "description": "🎲 Roll a dice"
+      "description": "Roll a dice"
     },
     {
       "name": "/clear",
-      "description": "🧹 Bulk delete messages"
+      "description": "Bulk delete messages"
     },
     {
       "name": "/kick",
-      "description": "👢 Kick a member"
+      "description": "Kick a member"
     },
     {
       "name": "/ban",
-      "description": "🔨 Ban a member"
+      "description": "Ban a member"
     },
     {
       "name": "/timeout",
-      "description": "🔇 Temporarily mute a member"
+      "description": "Temporarily mute a member"
     },
     {
       "name": "/slowmode",
-      "description": "🐢 Set the current channel's slowmode"
+      "description": "Set the current channel's slowmode"
     },
     {
       "name": "/warn",
-      "description": "⚠️ Manage a member's warnings"
+      "description": "Manage a member's warnings"
     },
     {
       "name": "/admin",
-      "description": "🛠️ Role-based game administration (below)"
+      "description": "Role-based game administration (below)"
     },
     {
       "name": "/aide",
-      "description": "📖 Open the site and the wiki (embed with logo and quick links)"
+      "description": "Open the site and the wiki (embed with logo and quick links)"
     }
   ]
 }

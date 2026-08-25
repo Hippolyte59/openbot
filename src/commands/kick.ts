@@ -10,7 +10,7 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("kick")
-    .setDescription("👢 Expulse un membre du serveur")
+    .setDescription("Expulse un membre du serveur")
     .addUserOption((option) =>
       option
         .setName("membre")
@@ -66,7 +66,7 @@ export default {
 
     try {
       await targetMember!.send(
-        `👢 Tu as été expulsé de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
+        `Tu as été expulsé de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
       );
     } catch {
 
@@ -77,7 +77,7 @@ export default {
     await interaction.reply({
       embeds: [
         createEmbed("warning")
-          .setTitle("👢 Membre expulsé")
+          .setTitle("Membre expulsé")
           .setDescription(
             `**${targetUser.tag}** a été expulsé.\n> Raison : ${reason}`,
           ),

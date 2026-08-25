@@ -4,21 +4,21 @@ import { getLeaderboard } from "../database/players.js";
 import { createEmbed, errorEmbed } from "../utils/embeds.js";
 import { formatNumber } from "../utils/format.js";
 
-const MEDALS = ["🥇", "🥈", "🥉"];
+const MEDALS = ["", "", ""];
 
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("classement")
-    .setDescription("🏆 Affiche le top 10 du serveur")
+    .setDescription("Affiche le top 10 du serveur")
     .addStringOption((option) =>
       option
         .setName("type")
         .setDescription("Classement à afficher")
         .setRequired(true)
         .addChoices(
-          { name: "💰 Argent", value: "balance" },
-          { name: "⭐ Niveau", value: "level" },
-          { name: "📈 XP totale", value: "xp" },
+          { name: "Argent", value: "balance" },
+          { name: "Niveau", value: "level" },
+          { name: "XP totale", value: "xp" },
         ),
     ),
 
@@ -36,9 +36,9 @@ export default {
     }
 
     const titles: Record<string, string> = {
-      balance: "💰 Les plus riches",
-      level: "⭐ Les plus expérimentés (niveau)",
-      xp: "📈 Les plus actifs (XP totale)",
+      balance: "Les plus riches",
+      level: "Les plus expérimentés (niveau)",
+      xp: "Les plus actifs (XP totale)",
     };
 
     const lines = rows.map((row, index) => {
@@ -51,7 +51,7 @@ export default {
     });
 
     const embed = createEmbed()
-      .setTitle(`🏆 ${titles[column]}`)
+      .setTitle(`${titles[column]}`)
       .setDescription(lines.join("\n"));
 
     await interaction.reply({ embeds: [embed] });

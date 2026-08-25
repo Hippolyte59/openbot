@@ -51,7 +51,7 @@ function panelEmbed(
     channel.userLimit === 0 ? "Illimité" : `${channel.userLimit} personne(s)`;
 
   return createEmbed()
-    .setTitle(`🎛️ Panneau — ${channel.name}`)
+    .setTitle(`Panneau — ${channel.name}`)
     .setDescription(
       [
         `> Propriétaire : <@${ownerId}>`,
@@ -61,9 +61,9 @@ function panelEmbed(
       ].join("\n"),
     )
     .addFields(
-      { name: "🔓 Accès", value: ACCESS_LABELS[access], inline: true },
-      { name: "👥 Places", value: limit, inline: true },
-      { name: "🗑️ Fermeture", value: "Automatique si vide", inline: true },
+      { name: "Accès", value: ACCESS_LABELS[access], inline: true },
+      { name: "Places", value: limit, inline: true },
+      { name: "Fermeture", value: "Automatique si vide", inline: true },
     );
 }
 
@@ -72,27 +72,27 @@ function panelRow(): any {
     new ButtonBuilder()
       .setCustomId("vc-lock")
       .setLabel("Verrouiller")
-      .setEmoji("🔒")
+      
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("vc-hide")
       .setLabel("Cacher")
-      .setEmoji("🙈")
+      
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("vc-limit")
       .setLabel("Places")
-      .setEmoji("👥")
+      
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("vc-name")
       .setLabel("Renommer")
-      .setEmoji("✏️")
+      
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("vc-close")
       .setLabel("Fermer")
-      .setEmoji("🗑️")
+      
       .setStyle(ButtonStyle.Danger),
   );
 }

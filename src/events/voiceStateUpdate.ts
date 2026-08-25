@@ -10,6 +10,6 @@ export async function execute(
   try {
     await handleVoiceStateUpdate(oldState, newState);
   } catch (error) {
-    console.error("❌ Erreur dans voiceStateUpdate :", error);
+    console.error("Erreur dans voiceStateUpdate :", error);
   }
 }

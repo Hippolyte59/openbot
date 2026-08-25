@@ -62,7 +62,7 @@ export async function handleLevelUpRewards(guildId: string, userId: string, newL
       if (channelId) {
         const channel: any = guild.channels.cache.get(channelId);
         if (channel?.isTextBased?.()) {
-          await channel.send(`🎉 <@${userId}> a atteint le **niveau ${maxLevel}** et a débloqué l'accès au salon privilégié ${channel} !`).catch(()=>{});
+          await channel.send(`<@${userId}> a atteint le **niveau ${maxLevel}** et a débloqué l'accès au salon privilégié ${channel} !`).catch(()=>{});
         }
       }
     }

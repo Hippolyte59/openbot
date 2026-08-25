@@ -10,7 +10,7 @@ import { createEmbed, errorEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("ban")
-    .setDescription("🔨 Bannit un membre du serveur")
+    .setDescription("Bannit un membre du serveur")
     .addUserOption((option) =>
       option
         .setName("membre")
@@ -54,7 +54,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed("error")
-            .setTitle("🔨 Membre banni")
+            .setTitle("Membre banni")
             .setDescription(
               `**${targetUser.tag}** a été banni (il avait déjà quitté le serveur).\n> Raison : ${reason}`,
             ),
@@ -74,7 +74,7 @@ export default {
 
     try {
       await targetMember.send(
-        `🔨 Tu as été banni de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
+        `Tu as été banni de **${interaction.guild!.name}**.\n> Raison : ${reason}`,
       );
     } catch {
 
@@ -88,7 +88,7 @@ export default {
     await interaction.reply({
       embeds: [
         createEmbed("error")
-          .setTitle("🔨 Membre banni")
+          .setTitle("Membre banni")
           .setDescription(
             `**${targetUser.tag}** a été banni (messages des dernières 24 h supprimés).\n> Raison : ${reason}`,
           ),

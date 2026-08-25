@@ -6,7 +6,7 @@ import { randomInt } from "../utils/random.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("de")
-    .setDescription("🎲 Lance un dé à X faces")
+    .setDescription("Lance un dé à X faces")
     .addIntegerOption((option) =>
       option
         .setName("faces")
@@ -20,8 +20,8 @@ export default {
     const faces = interaction.options.getInteger("faces") ?? 6;
     const roll = randomInt(1, faces);
 
-    const diceEmojis = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-    const emoji = faces === 6 ? diceEmojis[roll - 1] : "🎲";
+    const diceEmojis = ["", "", "", "", "", ""];
+    const emoji = faces === 6 ? diceEmojis[roll - 1] : "";
 
     const embed = createEmbed()
       .setTitle(`${emoji} Lancer de dé (${faces} faces)`)

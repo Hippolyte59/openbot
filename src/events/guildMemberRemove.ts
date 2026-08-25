@@ -9,7 +9,7 @@ export async function execute(member: any): Promise<void> {
   if (!cfg?.goodbyeChannel) return;
   const channel = member.guild.channels.cache.get(cfg.goodbyeChannel);
   if (!channel || !channel.isTextBased()) return;
-  const template = cfg.goodbyeMessage ?? "👋 Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !";
+  const template = cfg.goodbyeMessage ?? "Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !";
   const text = replacePlaceholders(template, {
     pseudo: member.user.username,
     mention: `<@${member.id}>`,

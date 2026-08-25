@@ -11,7 +11,7 @@ const STREAK_WINDOW = 2 * config.cooldowns.daily;
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("quotidien")
-    .setDescription("🎁 Récupère ta récompense quotidienne"),
+    .setDescription("Récupère ta récompense quotidienne"),
 
   async execute(interaction) {
     if (!interaction.inGuild()) return;
@@ -47,16 +47,16 @@ export default {
     });
 
     const embed = createEmbed("success")
-      .setTitle("🎁 Récompense quotidienne")
+      .setTitle("Récompense quotidienne")
       .setDescription(
         [
           `Tu récupères **+${formatNumber(reward)} ${config.currency}** !`,
           bonus > 0
-            ? `\n🐾 Ton animal ajoute **+${bonus} ${config.currency}** de bonus.`
+            ? `\n Ton animal ajoute **+${bonus} ${config.currency}** de bonus.`
             : "",
           "",
-          `🔥 Série : **${streak}** jour(s) — continue chaque jour pour augmenter le bonus !`,
-          `⏳ Prochaine récompense dans 24 h.`,
+          `Série : **${streak}** jour(s) — continue chaque jour pour augmenter le bonus !`,
+          `Prochaine récompense dans 24 h.`,
         ]
           .filter(Boolean)
           .join("\n"),

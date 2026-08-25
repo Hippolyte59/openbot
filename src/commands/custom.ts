@@ -27,7 +27,7 @@ export default {
     cfg.customCommands = cfg.customCommands ?? {};
 
     if(sub==="creer"){
-      if(!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) return interaction.reply({content:"❌ Besoin de **Gérer le serveur**.", ephemeral:true});
+      if(!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) return interaction.reply({content:"Besoin de **Gérer le serveur**.", ephemeral:true});
       const raw=interaction.options.getString("nom",true);
       const name=sanitizeName(raw);
       if(!name) return interaction.reply({content:"Nom invalide.", ephemeral:true});
@@ -37,21 +37,21 @@ export default {
       if(response.length>1800) return interaction.reply({content:"Réponse trop longue (max 1800).", ephemeral:true});
       cfg.customCommands[name]={ response, description, allowMentions:true, createdAt:Date.now() };
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`✅ Commande personnalisée \`!${name}\` créée → \`${response.slice(0,120)}\` — mentions supportées: {mention} {pseudo} {user}.`, ephemeral:true});
+      return interaction.reply({content:`Commande personnalisée \`!${name}\` créée → \`${response.slice(0,120)}\` — mentions supportées: {mention} {pseudo} {user}.`, ephemeral:true});
     }
     if(sub==="supprimer"){
       const name=sanitizeName(interaction.options.getString("nom",true));
       if(!cfg.customCommands[name]) return interaction.reply({content:"Commande introuvable.", ephemeral:true});
       delete cfg.customCommands[name];
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`🗑️ Commande \`!${name}\` supprimée.`, ephemeral:true});
+      return interaction.reply({content:`Commande \`!${name}\` supprimée.`, ephemeral:true});
     }
     if(sub==="liste"){
       const keys=Object.keys(cfg.customCommands);
       if(!keys.length) return interaction.reply({content:"Aucune commande personnalisée. Crée avec `/custom creer`.", ephemeral:true});
       const lines=keys.map(k=>{
         const c=cfg.customCommands[k];
-        const mentionHint = c.response.includes("{mention}")||c.response.includes("{user}") ? " • mentions ✅" : "";
+        const mentionHint = c.response.includes("{mention}")||c.response.includes("{user}") ? " • mentions" : "";
         return `• \`!${k}\` — ${c.description||c.response.slice(0,60)}${mentionHint}`;
       }).join("\n");
       return interaction.reply({content:lines, ephemeral:true});

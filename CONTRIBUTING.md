@@ -197,4 +197,4 @@ pnpm run deploy
 
 ---
 
-**Thank you for contributing to OpenBot!** 🎉
+**Thank you for contributing to OpenBot!** 

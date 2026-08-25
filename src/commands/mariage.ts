@@ -12,11 +12,11 @@ const DIVORCE_COST = 500;
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("mariage")
-    .setDescription("💍 Gère ta vie de couple")
+    .setDescription("Gère ta vie de couple")
     .addSubcommand((sub) =>
       sub
         .setName("proposer")
-        .setDescription("💌 Demande un membre en mariage")
+        .setDescription("Demande un membre en mariage")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -27,13 +27,13 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("statut")
-        .setDescription("💕 Affiche ta situation amoureuse"),
+        .setDescription("Affiche ta situation amoureuse"),
     )
     .addSubcommand((sub) =>
       sub
         .setName("divorcer")
         .setDescription(
-          `💔 Divorce (frais : ${DIVORCE_COST} pièces)`,
+          `Divorce (frais : ${DIVORCE_COST} pièces)`,
         ),
     ),
 
@@ -56,7 +56,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed()
-            .setTitle("💍 Mariage")
+            .setTitle("Mariage")
             .setDescription(
               `Tu es marié(e) avec <@${player.partner}> depuis le <t:${Math.floor(Date.now() / 1000)}:D>.`,
             ),
@@ -78,7 +78,7 @@ export default {
         await interaction.reply({
           embeds: [
             errorEmbed(
-              `Le divorce coûte **${DIVORCE_COST} 🪙** (avocat compris) et tu n'as que **${player.balance} 🪙**.`,
+              `Le divorce coûte **${DIVORCE_COST} ** (avocat compris) et tu n'as que **${player.balance} **.`,
             ),
           ],
           ephemeral: true,
@@ -99,10 +99,10 @@ export default {
 
       await interaction.reply({
         embeds: [
-          createEmbed("warning").setTitle("💔 Divorce").setDescription(
+          createEmbed("warning").setTitle("Divorce").setDescription(
             [
               `${interaction.user} a divorcé de <@${partnerId}>.`,
-              `> Frais d'avocat : **${DIVORCE_COST} 🪙**`,
+              `> Frais d'avocat : **${DIVORCE_COST} **`,
             ].join("\n"),
           ),
         ],
@@ -157,7 +157,7 @@ export default {
     const row = new (ActionRowBuilder as any)().addComponents(
       new ButtonBuilder()
         .setCustomId(`mari:${target.id}:accept`)
-        .setLabel("Oui ! 💍")
+        .setLabel("Oui !")
         .setStyle(ButtonStyle.Success),
       new ButtonBuilder()
         .setCustomId(`mari:${target.id}:refuse`)
@@ -168,7 +168,7 @@ export default {
     await interaction.reply({
       embeds: [
         createEmbed()
-          .setTitle("💌 Demande en mariage")
+          .setTitle("Demande en mariage")
           .setDescription(
             `${target}, ${interaction.user} te demande en mariage !\n\nAcceptes-tu de passer la vie ensemble (et de partager les bonus) ?`,
           ),
@@ -204,7 +204,7 @@ export default {
         await componentInteraction.update({
           embeds: [
             successEmbed(
-              `🎉 ${interaction.user} et ${target} sont maintenant mariés ! Que la fête commence.`,
+              `${interaction.user} et ${target} sont maintenant mariés ! Que la fête commence.`,
             ),
           ],
           components: [],
@@ -213,7 +213,7 @@ export default {
         await componentInteraction.update({
           embeds: [
             createEmbed("error").setDescription(
-              `💔 ${target} a refusé la demande de ${interaction.user}. Le cœur brisé se soigne avec le temps...`,
+              `${target} a refusé la demande de ${interaction.user}. Le cœur brisé se soigne avec le temps...`,
             ),
           ],
           components: [],

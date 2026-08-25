@@ -40,8 +40,8 @@ client.on(messageReactionAddEvent.name, (...args: any[]) => void (messageReactio
 client.on(messageReactionRemoveEvent.name, (...args: any[]) => void (messageReactionRemoveEvent.execute as any)(...args));
 
 process.on("unhandledRejection", (error) => {
-  console.error("❌ Erreur non gérée :", error);
+  console.error("Erreur non gérée :", error);
 });
 
-console.log(`🚀 Démarrage de ${config.botName}…`);
+console.log(`Démarrage de ${config.botName}…`);
 await client.login(config.token);

@@ -4,15 +4,15 @@ import type { Command } from "../types.js";
 import { createEmbed } from "../utils/embeds.js";
 
 const CHOICES = [
-  { id: "pierre", label: "Pierre", emoji: "🪨", beats: "ciseaux" },
-  { id: "papier", label: "Papier", emoji: "📄", beats: "pierre" },
-  { id: "ciseaux", label: "Ciseaux", emoji: "✂️", beats: "papier" },
+  { id: "pierre", label: "Pierre", emoji: "", beats: "ciseaux" },
+  { id: "papier", label: "Papier", emoji: "", beats: "pierre" },
+  { id: "ciseaux", label: "Ciseaux", emoji: "", beats: "papier" },
 ] as const;
 
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("pfc")
-    .setDescription("🪨 Pierre-feuille-ciseaux contre le bot"),
+    .setDescription("Pierre-feuille-ciseaux contre le bot"),
 
   async execute(interaction) {
     const userId = interaction.user.id;
@@ -29,7 +29,7 @@ export default {
     );
 
     const embed = createEmbed()
-      .setTitle("🪨 Papier-ciseaux… euh, pierre-feuille-ciseaux !")
+      .setTitle("Papier-ciseaux… euh, pierre-feuille-ciseaux !")
       .setDescription("Fais ton choix, je joue en même temps que toi.");
 
     const reply = await interaction.reply({
@@ -60,14 +60,14 @@ export default {
 
       let outcome: string;
       if (playerChoice.id === botChoice.id) {
-        outcome = `🤝 **Égalité !** Nous avons tous les deux joué ${playerChoice.emoji} ${playerChoice.label}.`;
+        outcome = `**Égalité !** Nous avons tous les deux joué ${playerChoice.emoji} ${playerChoice.label}.`;
       } else if (
         CHOICES.find((c) => c.id === playerChoice.id)?.beats ===
         botChoice.id
       ) {
-        outcome = `🎉 **Tu gagnes !** Ton ${playerChoice.emoji} ${playerChoice.label} bat mon ${botChoice.emoji} ${botChoice.label}.`;
+        outcome = `**Tu gagnes !** Ton ${playerChoice.emoji} ${playerChoice.label} bat mon ${botChoice.emoji} ${botChoice.label}.`;
       } else {
-        outcome = `😈 **Je gagne !** Mon ${botChoice.emoji} ${botChoice.label} bat ton ${playerChoice.emoji} ${playerChoice.label}.`;
+        outcome = `**Je gagne !** Mon ${botChoice.emoji} ${botChoice.label} bat ton ${playerChoice.emoji} ${playerChoice.label}.`;
       }
 
       const disabledRow =
@@ -80,7 +80,7 @@ export default {
       await button.update({
         embeds: [
           createEmbed()
-            .setTitle("🪨 Pierre-feuille-ciseaux")
+            .setTitle("Pierre-feuille-ciseaux")
             .setDescription(
               [
                 `Toi : ${playerChoice.emoji} — Moi : ${botChoice.emoji}`,
@@ -100,7 +100,7 @@ export default {
           await interaction.editReply({
             embeds: [
               createEmbed("warning").setDescription(
-                "⌛ Trop de réflexion ! Partie expirée.",
+                "Trop de réflexion ! Partie expirée.",
               ),
             ],
             components: [],

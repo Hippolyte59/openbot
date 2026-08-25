@@ -12,7 +12,7 @@ if (!applicationId) {
     id: string;
   };
   applicationId = app.id;
-  console.log(`ℹ️  CLIENT_ID déduit automatiquement : ${applicationId}`);
+  console.log(` CLIENT_ID déduit automatiquement : ${applicationId}`);
 }
 
 const commands = await loadCommands(new (Collection as any)());
@@ -23,16 +23,16 @@ try {
     const route = Routes.applicationGuildCommands(applicationId, config.guildId);
     await rest.put(route, { body });
     console.log(
-      `✅ ${body.length} commande(s) déployée(s) sur le serveur de test (${config.guildId}).`,
+      `${body.length} commande(s) déployée(s) sur le serveur de test (${config.guildId}).`,
     );
   } else {
     const route = Routes.applicationCommands(applicationId);
     await rest.put(route, { body });
     console.log(
-      `✅ ${body.length} commande(s) déployée(s) globalement (jusqu'à 1 h de propagation).`,
+      `${body.length} commande(s) déployée(s) globalement (jusqu'à 1 h de propagation).`,
     );
   }
 } catch (error) {
-  console.error("❌ Échec du déploiement des commandes :", error);
+  console.error("Échec du déploiement des commandes :", error);
   process.exitCode = 1;
 }

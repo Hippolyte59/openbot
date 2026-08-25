@@ -27,13 +27,13 @@ export default {
       if(!role.editable) return interaction.reply({content:`Je ne peux pas gérer ${role} (hiérarchie).`, ephemeral:true});
       cfg.autoRoles.push(role.id);
       guilds.set(guildId, cfg); saveGuilds(guilds);
-      return interaction.reply({content:`✅ ${role} sera donné automatiquement à l'arrivée.`, ephemeral:false});
+      return interaction.reply({content:`${role} sera donné automatiquement à l'arrivée.`, ephemeral:false});
     }
     if(sub==="retirer"){
       const role=interaction.options.getRole("role",true);
       cfg.autoRoles = cfg.autoRoles.filter((id:string)=>id!==role.id);
       guilds.set(guildId, cfg); saveGuilds(guilds);
-      return interaction.reply({content:`🗑️ ${role} retiré des rôles automatiques.`, ephemeral:true});
+      return interaction.reply({content:`${role} retiré des rôles automatiques.`, ephemeral:true});
     }
     if(sub==="liste"){
       if(!cfg.autoRoles.length) return interaction.reply({content:"Aucun rôle automatique configuré.", ephemeral:true});
@@ -42,7 +42,7 @@ export default {
     if(sub==="clear"){
       cfg.autoRoles=[];
       guilds.set(guildId, cfg); saveGuilds(guilds);
-      return interaction.reply({content:"✅ Rôles automatiques vidés.", ephemeral:true});
+      return interaction.reply({content:"Rôles automatiques vidés.", ephemeral:true});
     }
   }
 } satisfies Command;

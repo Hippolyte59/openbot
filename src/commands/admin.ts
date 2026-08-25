@@ -33,16 +33,16 @@ export default {
   data: new (SlashCommandBuilder as any)()
     .setName("admin")
     .setDescription(
-      "🛠️ Commandes d'administration (admins et rôles autorisés uniquement)",
+      "Commandes d'administration (admins et rôles autorisés uniquement)",
     )
     .addSubcommandGroup((group) =>
       group
         .setName("roles")
-        .setDescription("🔐 Gère les rôles autorisés à utiliser /admin")
+        .setDescription("Gère les rôles autorisés à utiliser /admin")
         .addSubcommand((sub) =>
           sub
             .setName("ajouter")
-            .setDescription("✅ Autorise un rôle à utiliser les commandes admin")
+            .setDescription("Autorise un rôle à utiliser les commandes admin")
             .addRoleOption((option) =>
               option
                 .setName("role")
@@ -53,7 +53,7 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("retirer")
-            .setDescription("⛔ Retire l'accès admin d'un rôle")
+            .setDescription("Retire l'accès admin d'un rôle")
             .addRoleOption((option) =>
               option
                 .setName("role")
@@ -64,17 +64,17 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("liste")
-            .setDescription("📋 Liste les rôles ayant accès aux commandes admin"),
+            .setDescription("Liste les rôles ayant accès aux commandes admin"),
         ),
     )
     .addSubcommandGroup((group) =>
       group
         .setName("argent")
-        .setDescription("💰 Gère l'économie du serveur")
+        .setDescription("Gère l'économie du serveur")
         .addSubcommand((sub) =>
           sub
             .setName("donner")
-            .setDescription("➕ Crée et donne des pièces à un membre")
+            .setDescription("Crée et donne des pièces à un membre")
             .addUserOption((option) =>
               option
                 .setName("membre")
@@ -92,7 +92,7 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("retirer")
-            .setDescription("➖ Retire des pièces à un membre")
+            .setDescription("Retire des pièces à un membre")
             .addUserOption((option) =>
               option
                 .setName("membre")
@@ -111,7 +111,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("reinitialiser")
-        .setDescription("♻️ Remet à zéro le profil complet d'un membre")
+        .setDescription("Remet à zéro le profil complet d'un membre")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -122,7 +122,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("annoncer")
-        .setDescription("📢 Publie une annonce officielle dans un salon")
+        .setDescription("Publie une annonce officielle dans un salon")
         .addStringOption((option) =>
           option
             .setName("titre")
@@ -162,7 +162,7 @@ export default {
             [
               "Cette commande est réservée aux **administrateurs** et aux **rôles autorisés**.",
               "",
-              "💡 Un administrateur peut accorder l'accès avec `/admin roles ajouter`.",
+              "Un administrateur peut accorder l'accès avec `/admin roles ajouter`.",
             ].join("\n"),
           ),
         ],
@@ -192,8 +192,8 @@ export default {
 
         const label =
           sub === "ajouter"
-            ? `✅ Le rôle ${role} peut désormais utiliser les commandes admin.`
-            : `✅ Le rôle ${role} n'a plus accès aux commandes admin.`;
+            ? `Le rôle ${role} peut désormais utiliser les commandes admin.`
+            : `Le rôle ${role} n'a plus accès aux commandes admin.`;
 
         await interaction.reply({
           embeds: [createEmbed(changed ? "success" : "warning").setDescription(label)],
@@ -210,7 +210,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed()
-            .setTitle("🔐 Rôles autorisés (/admin)")
+            .setTitle("Rôles autorisés (/admin)")
             .setDescription(lines),
         ],
         ephemeral: true,
@@ -239,10 +239,10 @@ export default {
 
       const description =
         sub === "donner"
-          ? `💰 **+${formatNumber(amount)} ${config.currency}** créés pour ${target}.`
+          ? `**+${formatNumber(amount)} ${config.currency}** créés pour ${target}.`
           : applied
-            ? `📉 **-${formatNumber(amount)} ${config.currency}** retirés à ${target}.`
-            : `⚠️ ${target} n'avait que **${formatNumber(getPlayer(guildId, target.id).balance)} ${config.currency}** : solde ramené au maximum possible.`;
+            ? `**-${formatNumber(amount)} ${config.currency}** retirés à ${target}.`
+            : `${target} n'avait que **${formatNumber(getPlayer(guildId, target.id).balance)} ${config.currency}** : solde ramené au maximum possible.`;
 
       await interaction.reply({
         embeds: [createEmbed(applied || sub === "donner" ? "success" : "warning").setDescription(description)],
@@ -266,7 +266,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed("success").setDescription(
-            `♻️ Profil de ${target} entièrement réinitialisé (argent, XP, niveau, PV, inventaire).`,
+            `Profil de ${target} entièrement réinitialisé (argent, XP, niveau, PV, inventaire).`,
           ),
         ],
         ephemeral: true,
@@ -290,7 +290,7 @@ export default {
       }
 
       const embed = createEmbed("primary")
-        .setTitle(`📢 ${titre}`)
+        .setTitle(`${titre}`)
         .setDescription(message)
         .setAuthor({
           name: `Annonce de ${interaction.user.username}`,
@@ -305,7 +305,7 @@ export default {
         await interaction.reply({
           embeds: [
             createEmbed("success").setDescription(
-              `✅ Annonce publiée dans ${salon}.`,
+              `Annonce publiée dans ${salon}.`,
             ),
           ],
           ephemeral: true,

@@ -21,20 +21,20 @@ function badgesFor(player: {
   animal: string | null;
 }): string[] {
   const badges: string[] = [];
-  if (player.level >= 5) badges.push("🌱 Débutant");
-  if (player.level >= 20) badges.push("⭐ Vétéran");
-  if (player.balance >= 5_000) badges.push("💰 Riche");
-  if (player.wins >= 1) badges.push("⚔️ Combattant");
-  if (player.wins >= 25) badges.push("🏆 Héros");
-  if (player.partner) badges.push("💍 Marié");
-  if (player.animal) badges.push("🐾 Dresseur");
+  if (player.level >= 5) badges.push("Débutant");
+  if (player.level >= 20) badges.push("Vétéran");
+  if (player.balance >= 5_000) badges.push("Riche");
+  if (player.wins >= 1) badges.push("Combattant");
+  if (player.wins >= 25) badges.push("Héros");
+  if (player.partner) badges.push("Marié");
+  if (player.animal) badges.push("Dresseur");
   return badges;
 }
 
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("profil")
-    .setDescription("👤 Affiche le profil d'un membre")
+    .setDescription("Affiche le profil d'un membre")
     .addUserOption((option) =>
       option
         .setName("membre")
@@ -66,64 +66,64 @@ export default {
     );
 
     const animalLabel = player.animal
-      ? `${getAnimal(player.animal)?.emoji ?? "🐾"} ${player.animal_name ?? getAnimal(player.animal)?.name}`
+      ? `${getAnimal(player.animal)?.emoji ?? ""} ${player.animal_name ?? getAnimal(player.animal)?.name}`
       : "_Aucun_";
 
     embed.addFields(
       {
-        name: "💰 Argent",
+        name: "Argent",
         value: `${formatNumber(player.balance)} ${config.currency}`,
         inline: true,
       },
       {
-        name: "⭐ Niveau",
+        name: "Niveau",
         value: `${player.level}`,
         inline: true,
       },
       {
-        name: "🔥 Série quotidienne",
+        name: "Série quotidienne",
         value: `${player.daily_streak} jour(s)`,
         inline: true,
       },
       {
-        name: "❤️ Points de vie",
+        name: "Points de vie",
         value: `${progressBar(player.hp, hpMax)}\n**${player.hp} / ${hpMax}** PV`,
       },
       {
-        name: "⚔️ Arme",
+        name: "Arme",
         value: equipmentLabel(player.weapon),
         inline: true,
       },
       {
-        name: "🛡️ Armure",
+        name: "Armure",
         value: equipmentLabel(player.armor),
         inline: true,
       },
       {
-        name: "🏆 Victoires d'aventure",
+        name: "Victoires d'aventure",
         value: `${player.wins}`,
         inline: true,
       },
       {
-        name: "💍 Conjoint",
+        name: "Conjoint",
         value: player.partner ? `<@${player.partner}>` : "_Célibataire_",
         inline: true,
       },
       {
-        name: "🐾 Animal",
+        name: "Animal",
         value: animalLabel,
         inline: true,
       },
     );
 
     if (target.bot && target.id !== interaction.client.user.id) {
-      embed.setDescription("🤖 C'est un bot… il n'a pas besoin de pièces !");
+      embed.setDescription("C'est un bot… il n'a pas besoin de pièces !");
       await interaction.reply({ embeds: [embed] });
       return;
     }
 
     embed.addFields({
-      name: "📈 XP",
+      name: "XP",
       value: `${progressBar(player.xp, needed)}\n**${formatNumber(player.xp)} / ${formatNumber(needed)}** XP`,
     });
 

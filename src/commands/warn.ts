@@ -15,11 +15,11 @@ import { createEmbed, errorEmbed, successEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("warn")
-    .setDescription("⚠️ Gère les avertissements d'un membre")
+    .setDescription("Gère les avertissements d'un membre")
     .addSubcommand((sub) =>
       sub
         .setName("ajouter")
-        .setDescription("⚠️ Avertit un membre")
+        .setDescription("Avertit un membre")
         .addUserOption((option) =>
           option.setName("membre").setDescription("Le membre à avertir").setRequired(true),
         )
@@ -34,7 +34,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("liste")
-        .setDescription("📋 Affiche les avertissements d'un membre")
+        .setDescription("Affiche les avertissements d'un membre")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -45,7 +45,7 @@ export default {
     .addSubcommand((sub) =>
       sub
         .setName("retirer")
-        .setDescription("🗑️ Retire un avertissement par son numéro")
+        .setDescription("Retire un avertissement par son numéro")
         .addUserOption((option) =>
           option
             .setName("membre")
@@ -95,12 +95,12 @@ export default {
       const count = getWarnings(guildId, target.id).length;
       await interaction.reply({
         embeds: [
-          createEmbed("warning").setTitle("⚠️ Avertissement").setDescription(
+          createEmbed("warning").setTitle("Avertissement").setDescription(
             [
               `${target} a reçu un avertissement.`,
               `> Raison : ${reason}`,
               "",
-              `📊 Total : **${count}** avertissement(s).`,
+              `Total : **${count}** avertissement(s).`,
             ].join("\n"),
           ),
         ],
@@ -123,7 +123,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed()
-            .setTitle(`⚠️ Avertissements de ${target.username}`)
+            .setTitle(`Avertissements de ${target.username}`)
             .setDescription(lines.join("\n")),
         ],
         ephemeral: true,
@@ -145,7 +145,7 @@ export default {
     await interaction.reply({
       embeds: [
         successEmbed(
-          `✅ Avertissement **#${numero}** retiré à ${target}.`,
+          `Avertissement **#${numero}** retiré à ${target}.`,
         ),
       ],
       ephemeral: true,

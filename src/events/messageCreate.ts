@@ -97,13 +97,13 @@ export async function execute(message: any): Promise<void> {
 
   try {
     const embed = createEmbed()
-      .setTitle("🎉 Niveau supérieur !")
+      .setTitle("Niveau supérieur !")
       .setDescription(
         [
           `Bravo ${message.author}, tu passes au niveau **${result.level}** !`,
           "",
-          `💰 Bonus : **+${bonus}** pièces`,
-          `📈 Encore **${xpNeededFor(result.level)} XP** avant le prochain niveau`,
+          `Bonus : **+${bonus}** pièces`,
+          `Encore **${xpNeededFor(result.level)} XP** avant le prochain niveau`,
         ].join("\n"),
       );
 

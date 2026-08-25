@@ -7,7 +7,7 @@ import { createEmbed } from "../utils/embeds.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("anniv")
-    .setDescription("🎂 Gérer les anniversaires")
+    .setDescription("Gérer les anniversaires")
     .addSubcommand((sub) =>
       sub
         .setName("set")
@@ -50,13 +50,13 @@ export default {
       const month = interaction.options.getNumber("month")!;
       const day = interaction.options.getNumber("day")!;
       setBirthday(guildId, userId, month, day);
-      await interaction.reply({ content: `✅ Ton anniversaire est enregistré le ${month}/${day} !`, ephemeral: true });
+      await interaction.reply({ content: `Ton anniversaire est enregistré le ${month}/${day} !`, ephemeral: true });
       return;
     }
 
     if (sub === "serveur") {
       if (!interaction.memberPermissions?.has("ManageGuild")) {
-        await interaction.reply({ content: "❌ Tu as besoin de la permission **Gérer le serveur**.", ephemeral: true });
+        await interaction.reply({ content: "Tu as besoin de la permission **Gérer le serveur**.", ephemeral: true });
         return;
       }
       const s = loadGuilds().get(guildId) || {} as GuildConfig;
@@ -70,7 +70,7 @@ export default {
         s.birthdayChannelId = interaction.options.getChannel("channel")!.id;
       }
       saveGuilds(new Map([[guildId, s]]));
-      await interaction.reply({ content: "✅ Configuration serveur mise à jour.", ephemeral: true });
+      await interaction.reply({ content: "Configuration serveur mise à jour.", ephemeral: true });
       return;
     }
 
@@ -89,7 +89,7 @@ export default {
     if (sub === "remove") {
       const targetUser = interaction.options.getUser("membre") || interaction.user;
       deleteBirthday(guildId, targetUser.id);
-      await interaction.reply({ content: `✅ L'anniversaire de ${targetUser.username} a été supprimé.`, ephemeral: true });
+      await interaction.reply({ content: `L'anniversaire de ${targetUser.username} a été supprimé.`, ephemeral: true });
       return;
     }
 

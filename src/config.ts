@@ -4,7 +4,7 @@ const token = process.env.DISCORD_TOKEN;
 
 if (!token) {
   console.error(
-    "❌ DISCORD_TOKEN manquant !\n" +
+    "DISCORD_TOKEN manquant !\n" +
       "   1. Copie le fichier .env.example vers .env\n" +
       "   2. Renseigne ton token : https://discord.com/developers/applications",
   );
@@ -19,7 +19,7 @@ export const config = {
   levelColor: process.env.LEVEL_COLOR ?? "#57F287",
   economyColor: process.env.ECONOMY_COLOR ?? "#FEE75C",
   botName: process.env.BOT_NAME ?? "OpenBot",
-  currency: "🪙",
+  currency: "coins",
 
   webPort: Number(process.env.WEB_PORT ?? 3000),
 
@@ -39,11 +39,11 @@ export const config = {
   welcome: {
     enabled: process.env.WELCOME_ENABLED === "true",
     channelId: process.env.WELCOME_CHANNEL_ID ?? "",
-    message: process.env.WELCOME_MESSAGE ?? "🎉 Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.",
+    message: process.env.WELCOME_MESSAGE ?? "Bienvenue {pseudo} sur **{server_name}** !\n\nTu es notre {memberCount}ème membre — merci de nous rejoindre ! N'hésite pas à te présenter dans {channel_name}.",
   },
   goodbye: {
     enabled: process.env.GOODBYE_ENABLED === "true",
     channelId: process.env.GOODBYE_CHANNEL_ID ?? "",
-    message: process.env.GOODBYE_MESSAGE ?? "👋 Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !",
+    message: process.env.GOODBYE_MESSAGE ?? "Au revoir {pseudo}, on espère te revoir bientôt sur **{server_name}** !",
   },
 };

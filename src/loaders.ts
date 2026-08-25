@@ -22,7 +22,7 @@ export async function loadCommands(
     const command = (module.default ?? module) as Command;
 
     if (!command?.data || typeof command.execute !== "function") {
-      console.warn(`⚠️  La commande "${file}" est invalide (data/execute manquants).`);
+      console.warn(` La commande "${file}" est invalide (data/execute manquants).`);
       continue;
     }
 
@@ -30,6 +30,6 @@ export async function loadCommands(
     jsonCommands.push(command.data);
   }
 
-  console.log(`📦 ${collection.size} commande(s) chargée(s).`);
+  console.log(`${collection.size} commande(s) chargée(s).`);
   return jsonCommands;
 }

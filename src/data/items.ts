@@ -16,7 +16,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "boite-mystere",
     name: "Boîte mystère",
-    emoji: "🎁",
+    emoji: "",
     price: 250,
     description:
       "Une boîte qui contient entre 50 et 500 pièces. Tente ta chance !",
@@ -25,7 +25,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "ticket-loterie",
     name: "Ticket de loterie",
-    emoji: "🎟️",
+    emoji: "",
     price: 100,
     description: "10 % de chance de remporter le jackpot : 1 000 pièces !",
     kind: "consumable",
@@ -33,7 +33,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "cafe",
     name: "Café",
-    emoji: "☕",
+    emoji: "",
     price: 50,
     description: "Un bon café chaud pour se booster (+50 XP).",
     kind: "consumable",
@@ -41,7 +41,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "potion",
     name: "Potion de soin",
-    emoji: "🧪",
+    emoji: "",
     price: 150,
     description: "Restaure 40 PV. Indispensable pour l'aventure !",
     kind: "consumable",
@@ -50,7 +50,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "epee-bois",
     name: "Épée en bois",
-    emoji: "🗡️",
+    emoji: "",
     price: 400,
     description: "+4 dégâts lors des aventures.",
     kind: "weapon",
@@ -59,7 +59,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "epee-fer",
     name: "Épée en fer",
-    emoji: "⚔️",
+    emoji: "",
     price: 1200,
     description: "+9 dégâts lors des aventures.",
     kind: "weapon",
@@ -68,7 +68,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "armure-cuir",
     name: "Armure en cuir",
-    emoji: "🧥",
+    emoji: "",
     price: 350,
     description: "-2 dégâts subis lors des aventures.",
     kind: "armor",
@@ -77,7 +77,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   {
     id: "armure-fer",
     name: "Armure de fer",
-    emoji: "🛡️",
+    emoji: "",
     price: 1100,
     description: "-5 dégâts subis lors des aventures.",
     kind: "armor",

@@ -68,19 +68,19 @@ function buildButtons(fight: ActiveFight, disabled = false): any {
     new ButtonBuilder()
       .setCustomId(`adv:${fight.userId}:attack`)
       .setLabel("Attaquer")
-      .setEmoji("⚔️")
+      
       .setStyle(ButtonStyle.Danger)
       .setDisabled(disabled),
     new ButtonBuilder()
       .setCustomId(`adv:${fight.userId}:potion`)
       .setLabel(`Potion (${potions})`)
-      .setEmoji("🧪")
+      
       .setStyle(ButtonStyle.Success)
       .setDisabled(disabled || potions === 0),
     new ButtonBuilder()
       .setCustomId(`adv:${fight.userId}:flee`)
       .setLabel("Fuir")
-      .setEmoji("🏃")
+      
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(disabled),
   );
@@ -123,15 +123,15 @@ async function finishFight(
     const xpResult = addXp(fight.guildId, fight.userId, xpGain);
     incrementWins(fight.guildId, fight.userId);
 
-    outro = `\n🏆 **Victoire !** Tu remportes **+${coins} ${config.currency}** et **+${xpGain} XP** !`;
+    outro = `\n **Victoire !** Tu remportes **+${coins} ${config.currency}** et **+${xpGain} XP** !`;
 
     if (Math.random() < DROP_CHANCE) {
       addItem(fight.guildId, fight.userId, "potion");
-      outro += `\n🎁 Le monstre a lâché une 🧪 **Potion de soin** !`;
+      outro += `\n Le monstre a lâché une **Potion de soin** !`;
     }
 
     if (xpResult.leveledUp) {
-      outro += `\n🎉 Niveau **${xpResult.level}** atteint ! Tes PV maximum augmentent.`;
+      outro += `\n Niveau **${xpResult.level}** atteint ! Tes PV maximum augmentent.`;
       fight.playerMaxHp = maxHp(xpResult.level);
     }
   } else if (outcome === "defeat") {
@@ -143,10 +143,10 @@ async function finishFight(
     addBalance(fight.guildId, fight.userId, -lost);
     setHp(fight.guildId, fight.userId, 0);
 
-    outro = `\n💀 **K.O.** Le ${fight.name} t'a mis au sol… Tu perds **${lost} ${config.currency}** en fuyant en boitant.`;
+    outro = `\n **K.O.** Le ${fight.name} t'a mis au sol… Tu perds **${lost} ${config.currency}** en fuyant en boitant.`;
     fight.playerHp = 0;
   } else {
-    outro = `\n🏃 Tu prends la fuite et te mets à l'abri. Aucune récompense cette fois.`;
+    outro = `\n Tu prends la fuite et te mets à l'abri. Aucune récompense cette fois.`;
   }
 
   updatePlayer(fight.guildId, fight.userId, {
@@ -176,8 +176,8 @@ function playerAttack(fight: ActiveFight): void {
   pushLog(
     fight,
     critical
-      ? `⚡ **Coup critique !** Tu infliges **${damage}** dégâts.`
-      : `⚔️ Tu infliges **${damage}** dégâts.`,
+      ? `**Coup critique !** Tu infliges **${damage}** dégâts.`
+      : `Tu infliges **${damage}** dégâts.`,
   );
 }
 
@@ -198,7 +198,7 @@ export async function startAdventure(
 
   if (activeFights.has(userId)) {
     await interaction.reply({
-      embeds: [createEmbed("error").setDescription("❌ Termine d'abord ton combat en cours !")],
+      embeds: [createEmbed("error").setDescription("Termine d'abord ton combat en cours !")],
       ephemeral: true,
     });
     return;
@@ -213,7 +213,7 @@ export async function startAdventure(
     await interaction.reply({
       embeds: [
         createEmbed("error").setDescription(
-          `❌ Ton équipement doit être réparé : reviens dans **${minutesLeft} min**.`,
+          `Ton équipement doit être réparé : reviens dans **${minutesLeft} min**.`,
         ),
       ],
       ephemeral: true,
@@ -227,9 +227,9 @@ export async function startAdventure(
       embeds: [
         createEmbed("error").setDescription(
           [
-            `❌ Tu es trop faible pour partir à l'aventure (**${player.hp}/${hpMax} PV**).`,
+            `Tu es trop faible pour partir à l'aventure (**${player.hp}/${hpMax} PV**).`,
             "",
-            "💡 Repose-toi (régénération automatique) ou bois une 🧪 potion de la boutique.",
+            "Repose-toi (régénération automatique) ou bois une potion de la boutique.",
           ].join("\n"),
         ),
       ],
@@ -257,8 +257,8 @@ export async function startAdventure(
     playerHp: player.hp,
     playerMaxHp: hpMax,
     log: [
-      `🌲 Tu explores les environs et tombes sur un **${monster.name}** !`,
-      `🗡️ Arme : ${equipmentLabel(player.weapon)} • Armure : ${equipmentLabel(player.armor)}`,
+      `Tu explores les environs et tombes sur un **${monster.name}** !`,
+      `Arme : ${equipmentLabel(player.weapon)} • Armure : ${equipmentLabel(player.armor)}`,
     ],
     messageId: "",
     ended: false,
@@ -282,7 +282,7 @@ export async function startAdventure(
 
     if (ownerId !== userId) {
       await button.reply({
-        embeds: [createEmbed("error").setDescription("❌ Ce combat n'est pas le tien !")],
+        embeds: [createEmbed("error").setDescription("Ce combat n'est pas le tien !")],
         ephemeral: true,
       });
       return;
@@ -303,7 +303,7 @@ export async function startAdventure(
       const consumed = consumeItem(guildId, userId, "potion");
       if (!consumed) {
         await button.reply({
-          embeds: [createEmbed("error").setDescription("❌ Tu n'as plus de potion !")],
+          embeds: [createEmbed("error").setDescription("Tu n'as plus de potion !")],
           ephemeral: true,
         });
         return;
@@ -314,7 +314,7 @@ export async function startAdventure(
       );
       pushLog(
         fight,
-        `🧪 Tu bois une potion : **+${healed - fight.playerHp} PV**.`,
+        `Tu bois une potion : **+${healed - fight.playerHp} PV**.`,
       );
       fight.playerHp = healed;
       monsterAttack(fight);
@@ -325,7 +325,7 @@ export async function startAdventure(
         collector.stop("ended");
         return;
       }
-      pushLog(fight, `🏃 La fuite a échoué !`);
+      pushLog(fight, `La fuite a échoué !`);
       monsterAttack(fight);
     }
 
@@ -354,7 +354,7 @@ export async function startAdventure(
     const embed = buildEmbed(fight);
     embed.setDescription(
       (embed.data.description ?? "") +
-        "\n\n⌛ Trop lent ! Le monstre s'est enfui dans les bois.",
+        "\n\n Trop lent ! Le monstre s'est enfui dans les bois.",
     );
 
     try {

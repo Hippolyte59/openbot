@@ -6,7 +6,7 @@ import { loadGuilds } from "../database/json-db.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("log")
-    .setDescription("📢 Poster un message dans les logs personnalisés")
+    .setDescription("Poster un message dans les logs personnalisés")
     .addStringOption((opt) => opt.setName("service").setDescription("Service").setRequired(true).addChoices(
       { name: "YouTube", value: "youtube" },
       { name: "Twitch", value: "twitch" },
@@ -26,13 +26,13 @@ export default {
 
     const serviceConfig = logs[asService(service)];
     if (!serviceConfig?.channelId) {
-      await interaction.reply({ content: `❌ Salon de logs non configuré pour **${service}**. Utilise le panneau admin.`, ephemeral: true });
+      await interaction.reply({ content: `Salon de logs non configuré pour **${service}**. Utilise le panneau admin.`, ephemeral: true });
       return;
     }
 
     const channel = interaction.guild.channels.cache.get(serviceConfig.channelId);
     if (!channel || !channel.isTextBased()) {
-      await interaction.reply({ content: "❌ Salon introuvable.", ephemeral: true });
+      await interaction.reply({ content: "Salon introuvable.", ephemeral: true });
       return;
     }
 
@@ -41,13 +41,13 @@ export default {
 
     const embed = new EmbedBuilder()
       .setColor(color)
-      .setTitle(`📢 ${service.toUpperCase()}`)
+      .setTitle(`${service.toUpperCase()}`)
       .setDescription(`**${titre}**\n${description}`)
       .setThumbnail(avatarUrl)
       .setTimestamp();
 
     await channel.send({ embeds: [embed] });
-    await interaction.reply({ content: `✅ Log ${service} posté dans ${channel}.`, ephemeral: true });
+    await interaction.reply({ content: `Log ${service} posté dans ${channel}.`, ephemeral: true });
   },
 };
 

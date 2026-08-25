@@ -28,14 +28,14 @@ export default {
       if(mot.length<2||mot.length>32) return interaction.reply({content:"Mot entre 2 et 32 caractères.", ephemeral:true});
       cfg.wordReactions[mot]=emoji;
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`✅ Quand quelqu'un écrit \`${mot}\` → réaction ${emoji}`, ephemeral:true});
+      return interaction.reply({content:`Quand quelqu'un écrit \`${mot}\` → réaction ${emoji}`, ephemeral:true});
     }
     if(sub==="retirer"){
       const mot=interaction.options.getString("mot",true).toLowerCase().trim();
       if(!cfg.wordReactions[mot]) return interaction.reply({content:"Mot introuvable.", ephemeral:true});
       delete cfg.wordReactions[mot];
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:`🗑️ \`${mot}\` retiré.`, ephemeral:true});
+      return interaction.reply({content:`\`${mot}\` retiré.`, ephemeral:true});
     }
     if(sub==="liste"){
       const entries=Object.entries(cfg.wordReactions as Record<string,string>);
@@ -45,7 +45,7 @@ export default {
     if(sub==="clear"){
       cfg.wordReactions={};
       guilds.set(guildId,cfg); saveGuilds(guilds);
-      return interaction.reply({content:"✅ Réactions de mots vidées.", ephemeral:true});
+      return interaction.reply({content:"Réactions de mots vidées.", ephemeral:true});
     }
   }
 } satisfies Command;

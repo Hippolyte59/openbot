@@ -16,7 +16,7 @@ const WIN_LINES = [
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("duel")
-    .setDescription("⚔️ Défie un autre membre en duel pour une mise")
+    .setDescription("Défie un autre membre en duel pour une mise")
     .addUserOption((option) =>
       option
         .setName("adversaire")
@@ -68,23 +68,23 @@ export default {
       new ButtonBuilder()
         .setCustomId(`duel:${opponent.id}:accept`)
         .setLabel("Accepter")
-        .setEmoji("⚔️")
+        
         .setStyle(ButtonStyle.Danger),
       new ButtonBuilder()
         .setCustomId(`duel:${opponent.id}:reject`)
         .setLabel("Refuser")
-        .setEmoji("🛡️")
+        
         .setStyle(ButtonStyle.Secondary),
     );
 
     const embed = createEmbed("primary")
-      .setTitle("⚔️ Défi en duel !")
+      .setTitle("Défi en duel !")
       .setDescription(
         [
           `${challenger} défie ${opponent} !`,
           "",
-          `💰 Mise : **${formatNumber(stake)} ${config.currency}** de chaque côté`,
-          `🏆 Le vainqueur remporte le pot : **${formatNumber(stake * 2)} ${config.currency}**`,
+          `Mise : **${formatNumber(stake)} ${config.currency}** de chaque côté`,
+          `Le vainqueur remporte le pot : **${formatNumber(stake * 2)} ${config.currency}**`,
           "",
           `${opponent}, à toi de jouer…`,
         ].join("\n"),
@@ -121,7 +121,7 @@ export default {
 
       if (reason === "reject") {
         const declined = createEmbed("warning").setDescription(
-          `🛡️ ${opponent} a refusé le duel. ${challenger}, tu garderas ta mise… cette fois.`,
+          `${opponent} a refusé le duel. ${challenger}, tu garderas ta mise… cette fois.`,
         );
         await collected
           .first()!
@@ -131,7 +131,7 @@ export default {
 
       if (reason !== "accept") {
         const expired = createEmbed("warning").setDescription(
-          `⌛ ${opponent} n'a pas répondu à temps. Duel annulé.`,
+          `${opponent} n'a pas répondu à temps. Duel annulé.`,
         );
         try {
           await interaction.editReply({
@@ -166,12 +166,12 @@ export default {
 
       const line = WIN_LINES[Math.floor(Math.random() * WIN_LINES.length)];
       const result = createEmbed(challengerWins ? "success" : "error")
-        .setTitle("⚔️ Duel terminé !")
+        .setTitle("Duel terminé !")
         .setDescription(
           [
-            `🎉 **${winner}** ${line} et remporte **${formatNumber(stake * 2)} ${config.currency}** !`,
+            `**${winner}** ${line} et remporte **${formatNumber(stake * 2)} ${config.currency}** !`,
             "",
-            `📊 Probabilités : ${challenger} **${Math.round(chance * 100)} %** — ${opponent} **${Math.round((1 - chance) * 100)} %**`,
+            `Probabilités : ${challenger} **${Math.round(chance * 100)} %** — ${opponent} **${Math.round((1 - chance) * 100)} %**`,
           ].join("\n"),
         );
 

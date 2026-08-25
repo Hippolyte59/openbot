@@ -26,28 +26,28 @@ const ACCESS_LABELS = {
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("vocal")
-    .setDescription("🔊 Gère ton salon vocal personnel")
+    .setDescription("Gère ton salon vocal personnel")
     .addSubcommandGroup((group) =>
       group
         .setName("hub")
         .setDescription(
-          "📡 Configure le salon « rejoindre pour créer » du serveur",
+          "Configure le salon « rejoindre pour créer » du serveur",
         )
         .addSubcommand((sub) =>
           sub
             .setName("creer")
-            .setDescription("➕ Crée le salon hub : y entrer ouvre un vocal perso")
+            .setDescription("Crée le salon hub : y entrer ouvre un vocal perso")
             .addStringOption((option) =>
               option
                 .setName("nom")
-                .setDescription("Nom du hub (défaut : « ➕ Créer un salon »)")
+                .setDescription("Nom du hub (défaut : « Créer un salon »)")
                 .setMaxLength(32),
             ),
         )
         .addSubcommand((sub) =>
           sub
             .setName("definir")
-            .setDescription("📍 Désigne un salon vocal existant comme hub")
+            .setDescription("Désigne un salon vocal existant comme hub")
             .addChannelOption((option) =>
               option
                 .setName("salon")
@@ -59,13 +59,13 @@ export default {
         .addSubcommand((sub) =>
           sub
             .setName("retirer")
-            .setDescription("🚫 Désactive le « rejoindre pour créer »"),
+            .setDescription("Désactive le « rejoindre pour créer »"),
         ),
     )
     .addSubcommand((sub) =>
       sub
         .setName("creer")
-        .setDescription("🎤 Crée ton propre salon vocal avec panneau de contrôle")
+        .setDescription("Crée ton propre salon vocal avec panneau de contrôle")
         .addStringOption((option) =>
           option
             .setName("nom")
@@ -74,12 +74,12 @@ export default {
         ),
     )
     .addSubcommand((sub) =>
-      sub.setName("info").setDescription("📊 Affiche l'état de ton salon vocal"),
+      sub.setName("info").setDescription("Affiche l'état de ton salon vocal"),
     )
     .addSubcommand((sub) =>
       sub
         .setName("supprimer")
-        .setDescription("🗑️ Supprime ton salon vocal personnel"),
+        .setDescription("Supprime ton salon vocal personnel"),
     ),
 
   async execute(interaction) {
@@ -127,7 +127,7 @@ export default {
       await interaction.reply({
         embeds: [
           createEmbed()
-            .setTitle("🔊 Ton salon vocal")
+            .setTitle("Ton salon vocal")
             .addFields(
               { name: "Salon", value: `${channel}`, inline: true },
               {
@@ -198,7 +198,7 @@ async function handleHub(
 
   if (sub === "creer") {
     const name =
-      interaction.options.getString("nom") ?? "➕ Créer un salon";
+      interaction.options.getString("nom") ?? "Créer un salon";
 
     const channel = await interaction.guild!.channels.create({
       name: name.slice(0, 32),

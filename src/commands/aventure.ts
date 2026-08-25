@@ -5,7 +5,7 @@ import { startAdventure } from "../systems/adventure.js";
 export default {
   data: new (SlashCommandBuilder as any)()
     .setName("aventure")
-    .setDescription("🌲 Pars à l'aventure et affronte un monstre"),
+    .setDescription("Pars à l'aventure et affronte un monstre"),
 
   async execute(interaction) {
     await startAdventure(interaction);
